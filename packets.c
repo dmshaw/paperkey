@@ -66,11 +66,11 @@ skip_packet(FILE *input)
 
 }
 
-unsigned char *
+struct packet *
 parse(FILE *input,unsigned char want,unsigned char stop)
 {
   int byte;
-  unsigned char *packet=NULL;
+  struct packet *packet=NULL;
 
   while((byte=fgetc(input))!=EOF)
     {
@@ -185,11 +185,20 @@ parse(FILE *input,unsigned char want,unsigned char stop)
 
       if(type==want)
 	{
-	  packet=malloc(length);
+	  packet=malloc(sizeof(*packet));
 	  if(!packet)
 	    goto fail;
 
-	  fread(packet,1,length,input);
+	  packet->buf=malloc(length);
+	  if(!packet->buf)
+	    {
+	      free(packet);
+	      goto fail;
+	    }
+
+	  packet->len=length;
+
+	  fread(packet->buf,1,packet->len,input);
 	  break;
 	}
       else if(type==stop)
@@ -210,22 +219,28 @@ parse(FILE *input,unsigned char want,unsigned char stop)
   return NULL;
 }
 
-static size_t
-mpi_length(unsigned char *header)
+void
+free_packet(struct packet *packet)
 {
-  return (((header[0]<<8 | header[1]) + 7) / 8) + 2;
+  free(packet->buf);
+  free(packet);
 }
 
-size_t
-extract_secrets(unsigned char *packet)
+#define MPI_LENGTH(_start) (((((_start)[0]<<8 | (_start)[1]) + 7) / 8) + 2)
+
+ssize_t
+extract_secrets(struct packet *packet)
 {
-  size_t offset=0;
+  ssize_t offset=0;
+
+  if(packet->len==0)
+    return -1;
 
   /* Secret keys consist of a public key with some secret material
      stuck on the end.  To get to the secrets, we have to skip the
      public stuff. */
 
-  if(packet[0]==3)
+  if(packet->buf[0]==3)
     {
       /*
 	Jump 7 bytes in.  That gets us past 1 byte of version, 4 bytes
@@ -233,52 +248,89 @@ extract_secrets(unsigned char *packet)
       */
 
       offset=7;
-
-      if(packet[offset]==1)
-	{
-	  /* Skip 2 MPIs */
-	  offset+=mpi_length(&packet[offset]);
-	  offset+=mpi_length(&packet[offset]);
-	}
-      else
-	; /* It isn't RSA? */
     }
-  else if(packet[0]==4)
+  else if(packet->buf[0]==4)
     {
       /* Jump 5 bytes in.  That gets us past 1 byte of version, and 4
 	 bytes of timestamp. */
 
       offset=5;
+    }
 
-      switch(packet[offset])
-	{
-	case 1: /* RSA */
-	  /* Skip 2 MPIs */
-	  offset+=mpi_length(&packet[offset]);
-	  offset+=mpi_length(&packet[offset]);
-	  break;
+  if(packet->len<=offset)
+    return -1;
 
-	case 2: /* DSA */
-	  /* Skip 4 MPIs */
-	  offset+=mpi_length(&packet[offset]);
-	  offset+=mpi_length(&packet[offset]);
-	  offset+=mpi_length(&packet[offset]);
-	  offset+=mpi_length(&packet[offset]);
-	  break;
+  switch(packet->buf[offset++])
+    {
+    case 1: /* RSA */
+      /* Skip 2 MPIs */
+      offset+=MPI_LENGTH(&packet->buf[offset]);
+      if(packet->len<=offset)
+	return -1;
+      offset+=MPI_LENGTH(&packet->buf[offset]);
+      if(packet->len<=offset)
+	return -1;
+      break;
 
-	case 3: /* Elgamal */
-	  /* Skip 3 MPIs */
-	  offset+=mpi_length(&packet[offset]);
-	  offset+=mpi_length(&packet[offset]);
-	  offset+=mpi_length(&packet[offset]);
-	  break;
+    case 16: /* Elgamal */
+      /* Skip 3 MPIs */
+      offset+=MPI_LENGTH(&packet->buf[offset]);
+      if(packet->len<=offset)
+	return -1;
+      offset+=MPI_LENGTH(&packet->buf[offset]);
+      if(packet->len<=offset)
+	return -1;
+      offset+=MPI_LENGTH(&packet->buf[offset]);
+      if(packet->len<=offset)
+	return -1;
+      break;
 
-	default:
-	  /* What algorithm? */
-	  break;
-	}
+    case 17: /* DSA */
+      /* Skip 4 MPIs */
+      offset+=MPI_LENGTH(&packet->buf[offset]);
+      if(packet->len<=offset)
+	return -1;
+      offset+=MPI_LENGTH(&packet->buf[offset]);
+      if(packet->len<=offset)
+	return -1;
+      offset+=MPI_LENGTH(&packet->buf[offset]);
+      if(packet->len<=offset)
+	return -1;
+      offset+=MPI_LENGTH(&packet->buf[offset]);
+      if(packet->len<=offset)
+	return -1;
+      break;
+
+    default:
+      /* What algorithm? */
+      fprintf(stderr,"Unable to parse algorithm %u\n",packet->buf[offset-1]);
+      return -1;
     }
 
   return offset;
 }
 
+void
+print_packet(struct packet *packet,ssize_t offset)
+{
+  ssize_t i;
+  size_t line=0;
+  size_t checksum=0;
+
+  printf("Here it comes");
+
+  for(i=0;i+offset<packet->len;i++)
+    {
+      if(i%20==0)
+	{
+	  if(line)
+	    printf("%04X",checksum);
+	  printf("\n%u:",++line);
+	  checksum=0;
+	}
+      printf(" %02X",packet->buf[i+offset]);
+      checksum+=packet->buf[i+offset];
+    }
+
+  printf("\n");
+}

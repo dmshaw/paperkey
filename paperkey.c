@@ -35,6 +35,8 @@ main(int argc,char *argv[])
 {
   int arg;
   FILE *file;
+  struct packet *packet;
+  ssize_t offset;
 
   while((arg=getopt_long(argc,argv,"h",long_options,NULL))!=-1)
     switch(arg)
@@ -47,7 +49,10 @@ main(int argc,char *argv[])
       }
 
   file=fopen("key.gpg","r");
-  parse(file,5,5);
+  packet=parse(file,5,0);
+  offset=extract_secrets(packet);
+
+  print_packet(packet,offset);
 
   //parse(stdin,0,0);
 

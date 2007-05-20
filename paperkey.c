@@ -4,10 +4,12 @@ static const char RCSID[]="$Id$";
 #include <stdio.h>
 #include <getopt.h>
 #include <stdlib.h>
-#include <inttypes.h>
+#include <stdint.h>
 #include "packets.h"
+#include "output.h"
 
 int verbose=0;
+size_t line_items=21;
 
 enum options
   {
@@ -47,6 +49,8 @@ main(int argc,char *argv[])
 
   file=fopen("key.gpg","r");
 
+  output_start();
+
   packet=parse(file,5,0);
   offset=extract_secrets(packet);
 
@@ -55,7 +59,15 @@ main(int argc,char *argv[])
 
   printf("fpr is %s\n",find_fingerprint(packet,offset));
 
-  print_packet(packet,offset);
+  output_fingerprint(packet,offset);
+
+  //  print_packet(packet,offset);
+
+  output(&packet->buf[offset],packet->len-offset);
+
+
+  output_finish();
+
   free_packet(packet);
 
   return 0;

@@ -4,6 +4,7 @@ static const char RCSID[]="$Id$";
 #include <stdio.h>
 #include <stdlib.h>
 #include "sha1.h"
+#include "output.h"
 #include "packets.h"
 
 extern int verbose;
@@ -205,6 +206,34 @@ find_fingerprint(struct packet *packet,size_t public_len)
 
   return fpr;
 }
+
+void
+output_fingerprint(struct packet *packet,size_t public_len)
+{
+  if(packet->buf[0]==3)
+    {
+      
+    }
+  else if(packet->buf[0]==4)
+    {
+      SHA1Context sha;
+      unsigned char head[3],fingerprint[20];
+
+      if(SHA1Reset(&sha))
+	abort();
+
+      head[0]=0x99;
+      head[1]=public_len>>8;
+      head[2]=public_len&0xFF;
+
+      SHA1Input(&sha,head,3);
+      SHA1Input(&sha,packet->buf,public_len);
+      SHA1Result(&sha,fingerprint);
+
+      output(fingerprint,20);
+    }
+}
+
 
 #define MPI_LENGTH(_start) (((((_start)[0]<<8 | (_start)[1]) + 7) / 8) + 2)
 

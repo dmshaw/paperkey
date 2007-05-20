@@ -2,4 +2,4 @@
 
 bin_PROGRAMS=paperkey
 
-paperkey_SOURCES=paperkey.c packets.c packets.h
+paperkey_SOURCES=paperkey.c packets.c packets.h sha1.c sha1.h

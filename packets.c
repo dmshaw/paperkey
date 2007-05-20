@@ -3,7 +3,10 @@ static const char RCSID[]="$Id$";
 #include <config.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include "sha1.h"
 #include "packets.h"
+
+extern int verbose;
 
 #if 0
     Note that the most significant bit is the left-most bit, called bit
@@ -36,35 +39,6 @@ static const char RCSID[]="$Id$";
           Bits 5-0 -- packet tag
 
 #endif
-
-static void
-decode_ptag(unsigned char ptag)
-{
-  unsigned char type;
-
-  if(ptag&0x80)
-    {
-      type=ptag&0x3F;
-
-      if(!(ptag&0x40))
-	type>>2;
-    }
-}
-
-unsigned char
-next_packet(FILE *input)
-{
-  
-
-
-}
-
-void
-skip_packet(FILE *input)
-{
-
-
-}
 
 struct packet *
 parse(FILE *input,unsigned char want,unsigned char stop)
@@ -172,15 +146,18 @@ parse(FILE *input,unsigned char want,unsigned char stop)
 		  break;
 
 		default:
-		  break;
+		  fprintf(stderr,"Error: unable to parse old-style length\n");
+		  goto fail;
 		}
 	    }
 
-	  printf("I see type %d length %d\n",type,length);
+	  if(verbose)
+	    fprintf(stderr,"Found packet of type %d, length %d\n",type,length);
 	}
       else
 	{
-	  /* error - can't parse */
+	  fprintf(stderr,"Error: unable to parse OpenPGP packets\n");
+	  goto fail;
 	}
 
       if(type==want)
@@ -210,12 +187,9 @@ parse(FILE *input,unsigned char want,unsigned char stop)
 	}
     }
 
-  printf("done\n");
-
   return packet;
 
  fail:
-  printf("fail\n");
   return NULL;
 }
 
@@ -224,6 +198,44 @@ free_packet(struct packet *packet)
 {
   free(packet->buf);
   free(packet);
+}
+
+char *
+find_fingerprint(struct packet *packet,size_t public_len)
+{
+  char *fpr=NULL;
+
+  if(packet->buf[0]==3)
+    {
+      
+    }
+  else if(packet->buf[0]==4)
+    {
+      SHA1Context sha;
+      unsigned char head[3],fingerprint[20];
+
+      if(SHA1Reset(&sha))
+	return NULL;
+
+      head[0]=0x99;
+      head[1]=public_len>>8;
+      head[2]=public_len&0xFF;
+
+      SHA1Input(&sha,head,3);
+      SHA1Input(&sha,packet->buf,public_len);
+      SHA1Result(&sha,fingerprint);
+
+      fpr=malloc(41);
+      if(fpr)
+	{
+	  int i;
+
+	  for(i=0;i<20;i++)
+	    sprintf(&fpr[i*2],"%02X",fingerprint[i]);
+	}
+    }
+
+  return fpr;
 }
 
 #define MPI_LENGTH(_start) (((((_start)[0]<<8 | (_start)[1]) + 7) / 8) + 2)
@@ -256,6 +268,8 @@ extract_secrets(struct packet *packet)
 
       offset=5;
     }
+  else
+    return -1;
 
   if(packet->len<=offset)
     return -1;
@@ -317,19 +331,42 @@ print_packet(struct packet *packet,ssize_t offset)
   size_t line=0;
   size_t checksum=0;
 
-  printf("Here it comes");
-
   for(i=0;i+offset<packet->len;i++)
     {
       if(i%20==0)
 	{
 	  if(line)
 	    printf("%04X",checksum);
-	  printf("\n%u:",++line);
+	  printf("\n%2u:",++line);
 	  checksum=0;
 	}
+
       printf(" %02X",packet->buf[i+offset]);
       checksum+=packet->buf[i+offset];
+    }
+
+  printf("\n");
+}
+
+void
+print_packet_until(struct packet *packet,ssize_t offset)
+{
+  ssize_t i;
+  size_t line=0;
+  size_t checksum=0;
+
+  for(i=0;i<offset;i++)
+    {
+      if(i%20==0)
+	{
+	  if(line)
+	    printf("%04X",checksum);
+	  printf("\n%2u:",++line);
+	  checksum=0;
+	}
+
+      printf(" %02X",packet->buf[i]);
+      checksum+=packet->buf[i];
     }
 
   printf("\n");

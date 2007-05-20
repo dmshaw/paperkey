@@ -8,38 +8,6 @@ static const char RCSID[]="$Id$";
 
 extern int verbose;
 
-#if 0
-    Note that the most significant bit is the left-most bit, called bit
-    7. A mask for this bit is 0x80 in hexadecimal.
-
-               +---------------+
-          PTag |7 6 5 4 3 2 1 0|
-               +---------------+
-          Bit 7 -- Always one
-          Bit 6 -- New packet format if set
-
-    PGP 2.6.x only uses old format packets. Thus, software that
-    interoperates with those versions of PGP must only use old format
-    packets. If interoperability is not an issue, the new packet format
-    is preferred. Note that old format packets have four bits of packet
-    tags, and new format packets have six; some features cannot be used
-    and still be backward-compatible.
-
-    Also note that packets with a tag greater than or equal to 16 MUST
-    use new format packets. The old format packets can only express tags
-    less than or equal to 15.
-
-    Old format packets contain:
-
-          Bits 5-2 -- packet tag
-          Bits 1-0 - length-type
-
-    New format packets contain:
-
-          Bits 5-0 -- packet tag
-
-#endif
-
 struct packet *
 parse(FILE *input,unsigned char want,unsigned char stop)
 {
@@ -343,30 +311,6 @@ print_packet(struct packet *packet,ssize_t offset)
 
       printf(" %02X",packet->buf[i+offset]);
       checksum+=packet->buf[i+offset];
-    }
-
-  printf("\n");
-}
-
-void
-print_packet_until(struct packet *packet,ssize_t offset)
-{
-  ssize_t i;
-  size_t line=0;
-  size_t checksum=0;
-
-  for(i=0;i<offset;i++)
-    {
-      if(i%20==0)
-	{
-	  if(line)
-	    printf("%04X",checksum);
-	  printf("\n%2u:",++line);
-	  checksum=0;
-	}
-
-      printf(" %02X",packet->buf[i]);
-      checksum+=packet->buf[i];
     }
 
   printf("\n");

@@ -13,6 +13,7 @@ AM_INIT_AUTOMAKE([std-options])
 AC_PROG_CC
 
 # Checks for libraries.
+GNUPG_CHECK_READLINE
 
 # Checks for header files.
 

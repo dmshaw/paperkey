@@ -21,8 +21,7 @@ AC_TYPE_SIZE_T
 AC_TYPE_UINT8_T
 AC_TYPE_UINT32_T
 AC_CHECK_TYPE([int_least16_t],,
-   AC_DEFINE_UNQUOTED(int_least16_t,uint32_t,
-	[An integer type with at least 16 bits]))
+   AC_DEFINE(int_least16_t,uint32_t,[An integer type with at least 16 bits]))
 
 # Checks for library functions.
 AC_FUNC_MALLOC

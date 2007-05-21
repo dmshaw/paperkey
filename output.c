@@ -117,11 +117,11 @@ read_secrets_file(FILE *secrets)
 {
   struct packet *packet=NULL;
   char line[1024];
-  int next_linenum=0;
+  unsigned int next_linenum=0;
 
   while(fgets(line,1024,secrets))
     {
-      int linenum;
+      unsigned int linenum;
       char *ptr=line,*tok;
 
       if(line[0]=='#')
@@ -130,7 +130,7 @@ read_secrets_file(FILE *secrets)
       linenum=atoi(ptr);
       if(linenum!=next_linenum)
 	{
-	  fprintf(stderr,"Error: missing line number %d\n",next_linenum);
+	  fprintf(stderr,"Error: missing line number %u\n",next_linenum);
 	  free_packet(packet);
 	  return NULL;
 	}
@@ -175,7 +175,7 @@ read_secrets_file(FILE *secrets)
 	}
       else
 	{
-	  fprintf(stderr,"No colon ':' found in line %d\n",linenum);
+	  fprintf(stderr,"No colon ':' found in line %u\n",linenum);
 	  free_packet(packet);
 	  return NULL;
 	}

@@ -59,7 +59,7 @@ static void
 extract(FILE *input)
 {
   struct packet *packet;
-  ssize_t offset;
+  int offset;
   unsigned char fingerprint[20];
 
   packet=parse(input,5,0);\

@@ -14,7 +14,7 @@ extern FILE *output;
 static size_t line_items;
 
 static void
-print_hex(const uint8_t *buf,size_t length)
+print_hex(const unsigned char *buf,size_t length)
 {
   static size_t checksum=0;
 
@@ -46,7 +46,7 @@ print_hex(const uint8_t *buf,size_t length)
 }
 
 void
-print_bytes(FILE *stream,const uint8_t *buf,size_t length)
+print_bytes(FILE *stream,const unsigned char *buf,size_t length)
 {
   size_t i;
 
@@ -73,7 +73,7 @@ output_start(unsigned char fingerprint[20])
 }
 
 void
-output_bytes(const uint8_t *buf,size_t length)
+output_bytes(const unsigned char *buf,size_t length)
 {
   print_hex(buf,length);
 }

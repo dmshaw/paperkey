@@ -23,7 +23,7 @@ AC_TYPE_SIZE_T
 AC_FUNC_MALLOC
 
 if test "$GCC" = yes; then
-   CFLAGS="$CFLAGS -Wall -pedantic"
+   CFLAGS="$CFLAGS -Wall -W -pedantic"
 fi
 
 AC_CONFIG_FILES([Makefile])

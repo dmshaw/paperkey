@@ -45,11 +45,11 @@ parse(FILE *input,unsigned char want,unsigned char stop)
 	  if(byte&0x40)
 	    {
 	      /* New-style packets */
-	      length=fgetc(input);
-	      if(length==EOF)
+	      byte=fgetc(input);
+	      if(byte==EOF)
 		goto fail;
 
-	      if(length==255)
+	      if(byte==255)
 		{
 		  /* 4-byte length */
 		  tmp=fgetc(input);
@@ -69,21 +69,23 @@ parse(FILE *input,unsigned char want,unsigned char stop)
 		    goto fail;
 		  length|=tmp;
 		}
-	      else if(length>=224)
+	      else if(byte>=224)
 		{
 		  /* Partial body length, so fail (keys can't use
 		     partial body) */
 		  fprintf(stderr,"Invalid partial packet encoding\n");
 		  goto fail;
 		}
-	      else if(length>=192)
+	      else if(byte>=192)
 		{
 		  /* 2-byte length */
 		  tmp=fgetc(input);
 		  if(tmp==EOF)
 		    goto fail;
-		  length=((length-192)<<8)+tmp+192;
+		  length=((byte-192)<<8)+tmp+192;
 		}
+	      else
+		length=byte;
 	    }
 	  else
 	    {
@@ -94,20 +96,21 @@ parse(FILE *input,unsigned char want,unsigned char stop)
 		{
 		case 0:
 		  /* 1-byte length */
-		  length=fgetc(input);
-		  if(length==EOF)
+		  byte=fgetc(input);
+		  if(byte==EOF)
 		    goto fail;
+		  length=byte;
 		  break;
 
 		case 1:
 		  /* 2-byte length */
-		  length=fgetc(input);
-		  if(length==EOF)
+		  byte=fgetc(input);
+		  if(byte==EOF)
 		    goto fail;
 		  tmp=fgetc(input);
 		  if(tmp==EOF)
 		    goto fail;
-		  length<<=8;
+		  length=byte<<8;
 		  length|=tmp;
 		  break;
 
@@ -163,7 +166,7 @@ parse(FILE *input,unsigned char want,unsigned char stop)
 	     here since the input might be on stdin and that isn't
 	     seekable. */
 
-	  int i;
+	  size_t i;
 
 	  for(i=0;i<length;i++)
 	    fgetc(input);
@@ -245,7 +248,7 @@ calculate_fingerprint(struct packet *packet,size_t public_len,
 ssize_t
 extract_secrets(struct packet *packet)
 {
-  ssize_t offset=0;
+  size_t offset;
 
   if(packet->len==0)
     return -1;

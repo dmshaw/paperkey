@@ -63,9 +63,12 @@ extract(FILE *input)
   ssize_t offset;
   unsigned char fingerprint[20];
 
-  packet=parse(input,5,0);
+  packet=parse(input,5,0);\
   if(!packet)
-    exit(1);
+    {
+      fprintf(stderr,"Unable to find secret key packet\n");
+      exit(1);
+    }
 
   offset=extract_secrets(packet);
   if(offset==-1)

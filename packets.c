@@ -120,7 +120,7 @@ parse(FILE *input,unsigned char want,unsigned char stop)
 		}
 	    }
 
-	  if(verbose)
+	  if(verbose>1)
 	    fprintf(stderr,"Found packet of type %d, length %d\n",type,length);
 	}
       else

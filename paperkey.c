@@ -19,6 +19,7 @@ enum options
   {
     OPT_HELP=256,
     OPT_VERSION,
+    OPT_VERBOSE,
     OPT_OUTPUT
   };
 
@@ -26,6 +27,7 @@ static struct option long_options[]=
   {
     {"help",no_argument,NULL,OPT_HELP},
     {"version",no_argument,NULL,OPT_VERSION},
+    {"verbose",no_argument,NULL,OPT_VERBOSE},
     {"output",required_argument,NULL,OPT_OUTPUT},
     {NULL,0,NULL,0}
   };
@@ -41,7 +43,7 @@ main(int argc,char *argv[])
 
   output=stdout;
 
-  while((arg=getopt_long(argc,argv,"hv",long_options,NULL))!=-1)
+  while((arg=getopt_long(argc,argv,"hVv",long_options,NULL))!=-1)
     switch(arg)
       {
       case OPT_HELP:
@@ -51,9 +53,14 @@ main(int argc,char *argv[])
         exit(0);
 
       case OPT_VERSION:
-      case 'v':
+      case 'V':
 	printf("paperkey " VERSION "\n");
 	exit(0);
+
+      case OPT_VERBOSE:
+      case 'v':
+	verbose++;
+	break;
 
       case OPT_OUTPUT:
 	output=fopen(optarg,"w");
@@ -63,7 +70,6 @@ main(int argc,char *argv[])
 	    exit(1);
 	  }
 	break;
-
       }
 
   file=fopen("key.gpg","r");
@@ -71,10 +77,17 @@ main(int argc,char *argv[])
   packet=parse(file,5,0);
   offset=extract_secrets(packet);
 
-  if(verbose)
+  if(verbose>1)
     fprintf(stderr,"Secret offset is %d\n",offset);
 
   calculate_fingerprint(packet,offset,fingerprint);
+
+  if(verbose)
+    {
+      fprintf(stderr,"Primary key fingerprint: ");
+      print_bytes(stderr,fingerprint,20);
+      fprintf(stderr,"\n");
+    }
 
   output_start(fingerprint);
 
@@ -83,23 +96,33 @@ main(int argc,char *argv[])
   output_length(packet->len-offset);
   output_bytes(&packet->buf[offset],packet->len-offset);
 
-  output_finish();
-
   free_packet(packet);
-
-  return 0;
 
   while((packet=parse(file,7,5)))
     {
       offset=extract_secrets(packet);
-      //print_packet(packet,offset);
+
+      if(verbose>1)
+	fprintf(stderr,"Secret subkey offset is %d\n",offset);
+
+      calculate_fingerprint(packet,offset,fingerprint);
+
+      if(verbose)
+	{
+	  fprintf(stderr,"Subkey fingerprint: ");
+	  print_bytes(stderr,fingerprint,20);
+	  fprintf(stderr,"\n");
+	}
+
+      output_bytes(packet->buf,1);
+      output_bytes(fingerprint,20);
+      output_length(packet->len-offset);
+      output_bytes(&packet->buf[offset],packet->len-offset);
+
       free_packet(packet);
     }
 
-
-
-
-  //parse(stdin,0,0);
+  output_finish();
 
   return 0;
 }

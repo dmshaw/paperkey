@@ -41,14 +41,20 @@ print_hex(const uint8_t *buf,size_t length)
 }
 
 void
-output_start(unsigned char fingerprint[20])
+print_bytes(FILE *stream,const uint8_t *buf,size_t length)
 {
   int i;
 
+  for(i=0;i<length;i++)
+    fprintf(stream,"%02X",buf[i]);
+}
+
+void
+output_start(unsigned char fingerprint[20])
+{
   fprintf(output,"# Secret portions of key ");
-  
-  for(i=0;i<20;i++)
-    fprintf(output,"%02X",fingerprint[i]);
+
+  print_bytes(output,fingerprint,20);
 
   fprintf(output,"\n");
 
@@ -66,11 +72,11 @@ output_bytes(const uint8_t *buf,size_t length)
   print_hex(buf,length);
 }
 
+/* We use the same 1,2,5 format as OpenPGP */
 void
 output_length(size_t length)
 {
   unsigned char encoded[5];
-  /* We use the same 1,3,5 format as OpenPGP */
 
   if(length>8383)
     {

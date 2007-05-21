@@ -48,7 +48,7 @@ print_hex(const uint8_t *buf,size_t length)
 void
 print_bytes(FILE *stream,const uint8_t *buf,size_t length)
 {
-  int i;
+  size_t i;
 
   for(i=0;i<length;i++)
     fprintf(stream,"%02X",buf[i]);

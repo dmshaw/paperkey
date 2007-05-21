@@ -17,9 +17,23 @@ static unsigned int line_items;
 #define CRC24_POLY 0x864CFBL
 
 static void
+do_crc24(unsigned long *crc,unsigned char byte)
+{
+  int j;
+
+  *crc^=byte<<16;
+  for(j=0;j<8;j++)
+    {
+      *crc<<=1;
+      if(*crc&0x1000000)
+	*crc^=CRC24_POLY;
+    }
+}
+
+static void
 print_hex(const unsigned char *buf,size_t length)
 {
-  static long crc=CRC24_INIT;
+  static unsigned long crc=CRC24_INIT;
 
   if(buf)
     {
@@ -28,8 +42,6 @@ print_hex(const unsigned char *buf,size_t length)
 
       for(i=0;i<length;i++,offset++)
 	{
-	  int j;
-
 	  if(offset%line_items==0)
 	    {
 	      if(line)
@@ -43,13 +55,7 @@ print_hex(const unsigned char *buf,size_t length)
 
 	  fprintf(output,"%02X ",buf[i]);
 
-	  crc^=buf[i]<<16;
-	  for(j=0;j<8;j++)
-	    {
-	      crc<<=1;
-	      if(crc&0x1000000)
-		crc^=CRC24_POLY;
-	    }
+	  do_crc24(&crc,buf[i]);
 	}
     }
   else
@@ -133,6 +139,7 @@ read_secrets_file(FILE *secrets)
   while(fgets(line,1024,secrets))
     {
       unsigned int linenum;
+      unsigned long crc=CRC24_INIT;
       char *ptr=line,*tok;
 
       if(line[0]=='#')
@@ -160,17 +167,32 @@ read_secrets_file(FILE *secrets)
 	      if(tok[0]=='\0')
 		continue;
 
-	      if(linenum==0 && strcmp("BASE16",tok)!=0)
+	      if(linenum==0)
 		{
-		  fprintf(stderr,"No BASE16 specifier\n");
-		  free_packet(packet);
-		  return NULL;
+		  if(strcmp("BASE16",tok)!=0)
+		    {
+		      fprintf(stderr,"No BASE16 specifier\n");
+		      free_packet(packet);
+		      return NULL;
+		    }
+		  else
+		    continue;
 		}
 
 	      if(ptr==NULL)
 		{
-		  /* Checksum */
+		  unsigned long new_crc;
 
+		  if(sscanf(tok,"%06lX",&new_crc))
+		    {
+		      if((new_crc&0xFFFFFFL)!=(crc&0xFFFFFFL))
+			{
+			  fprintf(stderr,"CRC on line %d does not match"
+				  " (%06lX!=%06lX)\n",linenum,new_crc,crc);
+			  free_packet(packet);
+			  return NULL;
+			}
+		    }
 		}
 	      else
 		{
@@ -180,6 +202,7 @@ read_secrets_file(FILE *secrets)
 		    {
 		      unsigned char d=digit;
 		      packet=append_packet(packet,&d,1);
+		      do_crc24(&crc,d);
 		    }
 		}
 	    }

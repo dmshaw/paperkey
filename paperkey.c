@@ -10,7 +10,7 @@ static const char RCSID[]="$Id$";
 #include "output.h"
 
 int verbose=0;
-unsigned int output_width=80;
+unsigned int output_width=78;
 enum output_type output_type=BASE16;
 FILE *output=NULL;
 

@@ -151,8 +151,13 @@ parse(FILE *input,unsigned char want,unsigned char stop)
 	break;
       else
 	{
-	  /* We don't want it, so skip the packet. */
-	  fseek(input,length,SEEK_CUR);
+	  int i;
+	  /* We don't want it, so skip the packet.  We don't use fseek
+	     here since the input might be on stdin and that isn't
+	     seekable. */
+
+	  for(i=0;i<length;i++)
+	    fgetc(input);
 	}
     }
 

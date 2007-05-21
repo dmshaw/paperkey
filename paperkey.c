@@ -20,7 +20,8 @@ enum options
     OPT_HELP=256,
     OPT_VERSION,
     OPT_VERBOSE,
-    OPT_OUTPUT
+    OPT_OUTPUT,
+    OPT_SECRET_KEY
   };
 
 static struct option long_options[]=
@@ -29,6 +30,7 @@ static struct option long_options[]=
     {"version",no_argument,NULL,OPT_VERSION},
     {"verbose",no_argument,NULL,OPT_VERBOSE},
     {"output",required_argument,NULL,OPT_OUTPUT},
+    {"secret-key",required_argument,NULL,OPT_SECRET_KEY},
     {NULL,0,NULL,0}
   };
 
@@ -36,11 +38,12 @@ int
 main(int argc,char *argv[])
 {
   int arg;
-  FILE *file;
+  FILE *input;
   struct packet *packet;
   ssize_t offset;
   unsigned char fingerprint[20];
 
+  input=stdin;
   output=stdout;
 
   while((arg=getopt_long(argc,argv,"hVv",long_options,NULL))!=-1)
@@ -70,11 +73,21 @@ main(int argc,char *argv[])
 	    exit(1);
 	  }
 	break;
+
+      case OPT_SECRET_KEY:
+	input=fopen(optarg,"r");
+	if(!input)
+	  {
+	    fprintf(stderr,"Unable to open %s: %s\n",optarg,strerror(errno));
+	    exit(1);
+	  }
+	break;
       }
 
-  file=fopen("key.gpg","r");
+  packet=parse(input,5,0);
+  if(!packet)
+    exit(1);
 
-  packet=parse(file,5,0);
   offset=extract_secrets(packet);
 
   if(verbose>1)
@@ -98,7 +111,7 @@ main(int argc,char *argv[])
 
   free_packet(packet);
 
-  while((packet=parse(file,7,5)))
+  while((packet=parse(input,7,5)))
     {
       offset=extract_secrets(packet);
 
@@ -123,6 +136,13 @@ main(int argc,char *argv[])
     }
 
   output_finish();
+
+  if(input==stdin)
+    {
+      /* Consume everything else on input */
+      while((fgetc(input)!=EOF))
+	;
+    }
 
   return 0;
 }

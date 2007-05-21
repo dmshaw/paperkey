@@ -57,7 +57,7 @@ usage(void)
 }
 
 static void
-extract(FILE *input,FILE *output)
+extract(FILE *input)
 {
   struct packet *packet;
   ssize_t offset;
@@ -127,7 +127,7 @@ extract(FILE *input,FILE *output)
 }
 
 static void
-restore(FILE *pubring,FILE *secrets,FILE *output)
+restore(FILE *pubring,FILE *secrets)
 {
   struct packet *packet;
   unsigned char fpr[20];
@@ -218,9 +218,9 @@ main(int argc,char *argv[])
       }
 
   if(pubring && secrets)
-    restore(pubring,secrets,output);
+    restore(pubring,secrets);
   else
-    extract(secret_key,output);
+    extract(secret_key);
 
   return 0;
 }

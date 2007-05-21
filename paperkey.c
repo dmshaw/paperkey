@@ -11,7 +11,7 @@ static const char RCSID[]="$Id$";
 #include "output.h"
 
 int verbose=0;
-size_t line_items=20;
+size_t output_width=80;
 enum output_type output_type=BASE16;
 FILE *output=NULL;
 
@@ -21,6 +21,7 @@ enum options
     OPT_VERSION,
     OPT_VERBOSE,
     OPT_OUTPUT,
+    OPT_OUTPUT_WIDTH,
     OPT_SECRET_KEY,
     OPT_PUBRING,
     OPT_SECRETS
@@ -32,7 +33,8 @@ static struct option long_options[]=
     {"version",no_argument,NULL,OPT_VERSION},
     {"verbose",no_argument,NULL,OPT_VERBOSE},
     {"output",required_argument,NULL,OPT_OUTPUT},
-    {"secret_key",required_argument,NULL,OPT_SECRET_KEY},
+    {"output-width",required_argument,NULL,OPT_OUTPUT_WIDTH},
+    {"secret-key",required_argument,NULL,OPT_SECRET_KEY},
     {"pubring",required_argument,NULL,OPT_PUBRING},
     {"secrets",required_argument,NULL,OPT_SECRETS},
     {NULL,0,NULL,0}
@@ -41,13 +43,17 @@ static struct option long_options[]=
 static void
 usage(void)
 {
-  fprintf(stderr,"paperkey:\n");
-  fprintf(stderr,"\t--help\n");
-  fprintf(stderr,"\t--version\n");
-  fprintf(stderr,"\t--output      <write output to this file>\n");
-  fprintf(stderr,"\t--secret-key"
-	  "  <extract secret data from this secret key>\n");
-  fprintf(stderr,"\t--pubring     <public keyring to find non-secret data>\n");
+  fprintf(stderr,"Usage: paperkey [OPTIONS]\n");
+  fprintf(stderr,"  --help\n");
+  fprintf(stderr,"  --version\n");
+  fprintf(stderr,"  --output        write output to this file\n");
+  fprintf(stderr,"  --output-width  maximum width of the text output\n");
+  fprintf(stderr,"  --secret-key"
+	  "    extract secret data from this secret key\n");
+  fprintf(stderr,"  --pubring"
+	  "       public keyring to find non-secret data\n");
+  fprintf(stderr,"  --secrets       text file containing secret"
+	  " data to join with the public key\n");
 }
 
 static void
@@ -123,8 +129,6 @@ extract(FILE *input,FILE *output)
 static void
 restore(FILE *pubring,FILE *secrets,FILE *output)
 {
-
-
 }
 
 int
@@ -148,6 +152,12 @@ main(int argc,char *argv[])
       case OPT_VERSION:
       case 'V':
 	printf("paperkey " VERSION "\n");
+	printf("Copyright (C) 2007 David Shaw\n");
+	printf("This is free software.  You may redistribute copies of it"
+	       " under the terms of\n");
+	printf("the GNU General Public License"
+	       " <http://www.gnu.org/licenses/gpl.html>.\n");
+	printf("There is NO WARRANTY, to the extent permitted by law.\n\n");
 	exit(0);
 
       case OPT_VERBOSE:
@@ -162,6 +172,10 @@ main(int argc,char *argv[])
 	    fprintf(stderr,"Unable to open %s: %s\n",optarg,strerror(errno));
 	    exit(1);
 	  }
+	break;
+
+      case OPT_OUTPUT_WIDTH:
+	output_width=atoi(optarg);
 	break;
 
       case OPT_SECRET_KEY:

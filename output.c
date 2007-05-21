@@ -4,9 +4,11 @@ static const char RCSID[]="$Id$";
 #include <stdio.h>
 #include "output.h"
 
-extern size_t line_items;
+extern size_t output_width;
 extern enum output_type output_type;
 extern FILE *output;
+
+static size_t line_items;
 
 static void
 print_hex(const uint8_t *buf,size_t length)
@@ -61,6 +63,7 @@ output_start(unsigned char fingerprint[20])
   switch(output_type)
     {
     case BASE16:
+      line_items=(output_width-4-4)/3;
       fprintf(output," 0: BASE16\n");
       break;
     }

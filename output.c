@@ -129,39 +129,55 @@ read_secrets_file(FILE *secrets)
 
       linenum=atoi(ptr);
       if(linenum!=next_linenum)
-	fprintf(stderr,"Error: missing line number %d\n",next_linenum);
+	{
+	  fprintf(stderr,"Error: missing line number %d\n",next_linenum);
+	  free_packet(packet);
+	  return NULL;
+	}
       else
 	next_linenum=linenum+1;
 
       ptr=strchr(line,':');
-      ptr++;
-
-      line[strlen(line)-1]='\0';
-
-      while((tok=strsep(&ptr," ")))
+      if(ptr)
 	{
-	  if(tok[0]=='\0')
-	    continue;
+	  ptr++;
 
-	  printf("Tok \"%s\" %p\n",tok,ptr);
-	  if(linenum==0 && strcmp("BASE16",tok)!=0)
-	    abort();
+	  line[strlen(line)-1]='\0';
 
-	  if(ptr==NULL)
+	  while((tok=strsep(&ptr," ")))
 	    {
-	      /* Checksum */
+	      if(tok[0]=='\0')
+		continue;
 
-	    }
-	  else
-	    {
-	      unsigned int digit;
-
-	      if(sscanf(tok,"%02X",&digit))
+	      if(linenum==0 && strcmp("BASE16",tok)!=0)
 		{
-		  unsigned char d=digit;
-		  packet=append_packet(packet,&d,1);
+		  fprintf(stderr,"No BASE16 specifier\n");
+		  free_packet(packet);
+		  return NULL;
+		}
+
+	      if(ptr==NULL)
+		{
+		  /* Checksum */
+
+		}
+	      else
+		{
+		  unsigned int digit;
+
+		  if(sscanf(tok,"%02X",&digit))
+		    {
+		      unsigned char d=digit;
+		      packet=append_packet(packet,&d,1);
+		    }
 		}
 	    }
+	}
+      else
+	{
+	  fprintf(stderr,"No colon ':' found in line %d\n",linenum);
+	  free_packet(packet);
+	  return NULL;
 	}
     }
 

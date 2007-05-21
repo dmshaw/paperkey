@@ -206,8 +206,11 @@ append_packet(struct packet *packet,unsigned char *buf,size_t len)
 void
 free_packet(struct packet *packet)
 {
-  free(packet->buf);
-  free(packet);
+  if(packet)
+    {
+      free(packet->buf);
+      free(packet);
+    }
 }
 
 int

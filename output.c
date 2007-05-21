@@ -4,6 +4,7 @@ static const char RCSID[]="$Id$";
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <assert.h>
 #include "packets.h"
 #include "output.h"
 
@@ -104,7 +105,19 @@ output_bytes(const unsigned char *buf,size_t length)
     }
 }
 
-/* We use the same 1,2,5 format as OpenPGP */
+void
+output_length16(size_t length)
+{
+  unsigned char encoded[2];
+
+  assert(length<=65535);
+
+  encoded[0]=length<<8;
+  encoded[1]=length;
+
+  output_bytes(encoded,2);
+}
+
 void
 output_length(size_t length)
 {

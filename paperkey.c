@@ -21,7 +21,9 @@ enum options
     OPT_VERSION,
     OPT_VERBOSE,
     OPT_OUTPUT,
-    OPT_EXTRACT
+    OPT_SECRET_KEY,
+    OPT_PUBRING,
+    OPT_SECRETS
   };
 
 static struct option long_options[]=
@@ -30,7 +32,9 @@ static struct option long_options[]=
     {"version",no_argument,NULL,OPT_VERSION},
     {"verbose",no_argument,NULL,OPT_VERBOSE},
     {"output",required_argument,NULL,OPT_OUTPUT},
-    {"extract",required_argument,NULL,OPT_EXTRACT},
+    {"secret_key",required_argument,NULL,OPT_SECRET_KEY},
+    {"pubring",required_argument,NULL,OPT_PUBRING},
+    {"secrets",required_argument,NULL,OPT_SECRETS},
     {NULL,0,NULL,0}
   };
 
@@ -40,8 +44,10 @@ usage(void)
   fprintf(stderr,"paperkey:\n");
   fprintf(stderr,"\t--help\n");
   fprintf(stderr,"\t--version\n");
-  fprintf(stderr,"\t--output <write output to this file>\n");
-  fprintf(stderr,"\t--extract <extract secret data from this secret key>\n");
+  fprintf(stderr,"\t--output      <write output to this file>\n");
+  fprintf(stderr,"\t--secret-key"
+	  "  <extract secret data from this secret key>\n");
+  fprintf(stderr,"\t--pubring     <public keyring to find non-secret data>\n");
 }
 
 static void
@@ -114,13 +120,20 @@ extract(FILE *input,FILE *output)
     }
 }
 
+static void
+restore(FILE *pubring,FILE *secrets,FILE *output)
+{
+
+
+}
+
 int
 main(int argc,char *argv[])
 {
   int arg;
-  FILE *input,*pubring=NULL;
+  FILE *secret_key,*pubring=NULL,*secrets=NULL;
 
-  input=stdin;
+  secret_key=stdin;
   output=stdout;
 
   while((arg=getopt_long(argc,argv,"hVv",long_options,NULL))!=-1)
@@ -151,22 +164,40 @@ main(int argc,char *argv[])
 	  }
 	break;
 
-      case OPT_EXTRACT:
-	input=fopen(optarg,"r");
-	if(!input)
+      case OPT_SECRET_KEY:
+	secret_key=fopen(optarg,"r");
+	if(!secret_key)
 	  {
 	    fprintf(stderr,"Unable to open %s: %s\n",optarg,strerror(errno));
 	    exit(1);
 	  }
 	break;
+
+      case OPT_PUBRING:
+	pubring=fopen(optarg,"r");
+	if(!pubring)
+	  {
+	    fprintf(stderr,"Unable to open pubring %s: %s\n",
+		    optarg,strerror(errno));
+	    exit(1);
+	  }
+	break;
+
+      case OPT_SECRETS:
+	secrets=fopen(optarg,"r");
+	if(!secrets)
+	  {
+	    fprintf(stderr,"Unable to open secrets %s: %s\n",
+		    optarg,strerror(errno));
+	    exit(1);
+	  }
+	break;
       }
 
-  if(pubring)
-    {
-
-    }
+  if(pubring && secrets)
+    restore(pubring,secrets,output);
   else
-    extract(input,output);
+    extract(secret_key,output);
 
   return 0;
 }

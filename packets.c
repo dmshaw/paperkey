@@ -9,6 +9,21 @@ static const char RCSID[]="$Id$";
 
 extern int verbose;
 
+static void *
+xmalloc(size_t size)
+{
+  void *ptr;
+
+  ptr=malloc(size);
+  if(!ptr)
+    {
+      fprintf(stderr,"Unable to allocate memory\n");
+      abort();
+    }
+
+  return ptr;
+}
+
 struct packet *
 parse(FILE *input,unsigned char want,unsigned char stop)
 {
@@ -131,19 +146,9 @@ parse(FILE *input,unsigned char want,unsigned char stop)
 
       if(type==want)
 	{
-	  packet=malloc(sizeof(*packet));
-	  if(!packet)
-	    goto fail;
-
-	  packet->buf=malloc(length);
-	  if(!packet->buf)
-	    {
-	      free(packet);
-	      goto fail;
-	    }
-
+	  packet=xmalloc(sizeof(*packet));
+	  packet->buf=xmalloc(length);
 	  packet->len=length;
-
 	  fread(packet->buf,1,packet->len,input);
 	  break;
 	}
@@ -185,6 +190,7 @@ find_fingerprint(struct packet *packet,size_t public_len)
     }
   else if(packet->buf[0]==4)
     {
+      int i;
       SHA1Context sha;
       unsigned char head[3],fingerprint[20];
 
@@ -199,14 +205,10 @@ find_fingerprint(struct packet *packet,size_t public_len)
       SHA1Input(&sha,packet->buf,public_len);
       SHA1Result(&sha,fingerprint);
 
-      fpr=malloc(41);
-      if(fpr)
-	{
-	  int i;
+      fpr=xmalloc(41);
 
-	  for(i=0;i<20;i++)
-	    sprintf(&fpr[i*2],"%02X",fingerprint[i]);
-	}
+      for(i=0;i<20;i++)
+	sprintf(&fpr[i*2],"%02X",fingerprint[i]);
     }
 
   return fpr;

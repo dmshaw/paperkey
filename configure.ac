@@ -24,7 +24,6 @@ AC_CHECK_TYPE([int_least16_t],,
    AC_DEFINE(int_least16_t,uint32_t,[An integer type with at least 16 bits]))
 
 # Checks for library functions.
-AC_FUNC_MALLOC
 
 if test "$GCC" = yes; then
    CFLAGS="$CFLAGS -Wall -W -pedantic"

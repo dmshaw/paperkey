@@ -7,11 +7,11 @@ static const char RCSID[]="$Id$";
 #include "packets.h"
 #include "output.h"
 
-extern size_t output_width;
+extern unsigned int output_width;
 extern enum output_type output_type;
 extern FILE *output;
 
-static size_t line_items;
+static unsigned int line_items;
 
 #define CRC24_INIT 0xB704CEL
 #define CRC24_POLY 0x864CFBL
@@ -24,8 +24,7 @@ print_hex(const unsigned char *buf,size_t length)
   if(buf)
     {
       size_t i;
-      static size_t line=0;
-      static size_t offset=0;
+      static unsigned int line=0,offset=0;
 
       for(i=0;i<length;i++,offset++)
 	{

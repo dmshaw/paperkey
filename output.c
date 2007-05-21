@@ -74,16 +74,16 @@ print_bytes(FILE *stream,const unsigned char *buf,size_t length)
 void
 output_start(unsigned char fingerprint[20])
 {
-  fprintf(output,"# Secret portions of key ");
-
-  print_bytes(output,fingerprint,20);
-
-  fprintf(output,"\n");
-
   switch(output_type)
     {
+    case RAW:
+      break;
+
     case BASE16:
       line_items=(output_width-5-6)/3;
+      fprintf(output,"# Secret portions of key ");
+      print_bytes(output,fingerprint,20);
+      fprintf(output,"\n");
       fprintf(output,"%3u: BASE16\n",0);
       break;
     }
@@ -92,7 +92,16 @@ output_start(unsigned char fingerprint[20])
 void
 output_bytes(const unsigned char *buf,size_t length)
 {
-  print_hex(buf,length);
+  switch(output_type)
+    {
+    case RAW:
+      fwrite(buf,1,length,output);
+      break;
+
+    case BASE16:
+      print_hex(buf,length);
+      break;
+    }
 }
 
 /* We use the same 1,2,5 format as OpenPGP */
@@ -126,7 +135,15 @@ output_length(size_t length)
 void
 output_finish(void)
 {
-  print_hex(NULL,0);
+  switch(output_type)
+    {
+    case RAW:
+      break;
+
+    case BASE16:
+      print_hex(NULL,0);
+      break;
+    }
 }
 
 struct packet *

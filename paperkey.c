@@ -56,6 +56,8 @@ extract(FILE *input,FILE *output)
     exit(1);
 
   offset=extract_secrets(packet);
+  if(offset==-1)
+    exit(1);
 
   if(verbose>1)
     fprintf(stderr,"Secret offset is %d\n",offset);

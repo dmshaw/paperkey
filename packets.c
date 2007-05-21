@@ -34,7 +34,6 @@ parse(FILE *input,unsigned char want,unsigned char stop)
     {
       unsigned char type;
       unsigned int length;
-      int new;
 
       if(byte&0x80)
 	{
@@ -44,8 +43,7 @@ parse(FILE *input,unsigned char want,unsigned char stop)
 
 	  if(byte&0x40)
 	    {
-	      new=1;
-
+	      /* New-style packets */
 	      length=fgetc(input);
 	      if(length==EOF)
 		goto fail;
@@ -74,6 +72,8 @@ parse(FILE *input,unsigned char want,unsigned char stop)
 		{
 		  /* Partial body length, so fail (keys can't use
 		     partial body) */
+		  fprintf(stderr,"Invalid partial packet encoding\n");
+		  goto fail;
 		}
 	      else if(length>=192)
 		{
@@ -86,6 +86,7 @@ parse(FILE *input,unsigned char want,unsigned char stop)
 	    }
 	  else
 	    {
+	      /* Old-style packets */
 	      type>>=2;
 
 	      switch(byte&0x03)
@@ -156,10 +157,11 @@ parse(FILE *input,unsigned char want,unsigned char stop)
 	break;
       else
 	{
-	  int i;
 	  /* We don't want it, so skip the packet.  We don't use fseek
 	     here since the input might be on stdin and that isn't
 	     seekable. */
+
+	  int i;
 
 	  for(i=0;i<length;i++)
 	    fgetc(input);
@@ -179,83 +181,20 @@ free_packet(struct packet *packet)
   free(packet);
 }
 
-char *
-find_fingerprint(struct packet *packet,size_t public_len)
-{
-  char *fpr=NULL;
-
-  if(packet->buf[0]==3)
-    {
-      
-    }
-  else if(packet->buf[0]==4)
-    {
-      int i;
-      SHA1Context sha;
-      unsigned char head[3],fingerprint[20];
-
-      if(SHA1Reset(&sha))
-	return NULL;
-
-      head[0]=0x99;
-      head[1]=public_len>>8;
-      head[2]=public_len&0xFF;
-
-      SHA1Input(&sha,head,3);
-      SHA1Input(&sha,packet->buf,public_len);
-      SHA1Result(&sha,fingerprint);
-
-      fpr=xmalloc(41);
-
-      for(i=0;i<20;i++)
-	sprintf(&fpr[i*2],"%02X",fingerprint[i]);
-    }
-
-  return fpr;
-}
-
-void
-output_fingerprint(struct packet *packet,size_t public_len)
-{
-  if(packet->buf[0]==3)
-    {
-      
-    }
-  else if(packet->buf[0]==4)
-    {
-      SHA1Context sha;
-      unsigned char head[3],fingerprint[20];
-
-      if(SHA1Reset(&sha))
-	abort();
-
-      head[0]=0x99;
-      head[1]=public_len>>8;
-      head[2]=public_len&0xFF;
-
-      SHA1Input(&sha,head,3);
-      SHA1Input(&sha,packet->buf,public_len);
-      SHA1Result(&sha,fingerprint);
-
-      output_bytes(fingerprint,20);
-    }
-}
-
-void
+int
 calculate_fingerprint(struct packet *packet,size_t public_len,
 		      unsigned char fingerprint[20])
 {
   if(packet->buf[0]==3)
     {
-      
+      return -1;
     }
   else if(packet->buf[0]==4)
     {
       SHA1Context sha;
       unsigned char head[3];
 
-      if(SHA1Reset(&sha))
-	abort();
+      SHA1Reset(&sha);
 
       head[0]=0x99;
       head[1]=public_len>>8;
@@ -265,6 +204,8 @@ calculate_fingerprint(struct packet *packet,size_t public_len,
       SHA1Input(&sha,packet->buf,public_len);
       SHA1Result(&sha,fingerprint);
     }
+
+  return 0;
 }
 
 #define MPI_LENGTH(_start) (((((_start)[0]<<8 | (_start)[1]) + 7) / 8) + 2)
@@ -283,12 +224,8 @@ extract_secrets(struct packet *packet)
 
   if(packet->buf[0]==3)
     {
-      /*
-	Jump 7 bytes in.  That gets us past 1 byte of version, 4 bytes
-	of timestamp, and 2 bytes of expiration.
-      */
-
-      offset=7;
+      fprintf(stderr,"Version 3 keys are not supported yet.\n");
+      return -1;
     }
   else if(packet->buf[0]==4)
     {

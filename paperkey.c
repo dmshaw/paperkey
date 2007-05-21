@@ -42,16 +42,16 @@ static struct option long_options[]=
 static void
 usage(void)
 {
-  fprintf(stderr,"Usage: paperkey [OPTIONS]\n");
-  fprintf(stderr,"  --help\n");
-  fprintf(stderr,"  --version\n");
-  fprintf(stderr,"  --output        write output to this file\n");
-  fprintf(stderr,"  --output-width  maximum width of the text output\n");
-  fprintf(stderr,"  --secret-key"
+  printf("Usage: paperkey [OPTIONS]\n");
+  printf("  --help\n");
+  printf("  --version\n");
+  printf("  --output        write output to this file\n");
+  printf("  --output-width  maximum width of the text output\n");
+  printf("  --secret-key"
 	  "    extract secret data from this secret key\n");
-  fprintf(stderr,"  --pubring"
+  printf("  --pubring"
 	  "       public keyring to find non-secret data\n");
-  fprintf(stderr,"  --secrets       text file containing secret"
+  printf("  --secrets       text file containing secret"
 	  " data to join with the public key\n");
 }
 

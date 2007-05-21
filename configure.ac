@@ -7,7 +7,6 @@ AC_INIT(paperkey, 0.1, dshaw@jabberwocky.com)
 AC_CONFIG_SRCDIR([paperkey.c])
 AC_CONFIG_HEADER([config.h])
 AM_INIT_AUTOMAKE([std-options])
-# AM_MAINTAINER_MODE
 
 # Checks for programs.
 AC_PROG_CC
@@ -24,11 +23,7 @@ AC_TYPE_SIZE_T
 AC_FUNC_MALLOC
 
 if test "$GCC" = yes; then
-    if test "$USE_MAINTAINER_MODE" = "yes"; then
-        CFLAGS="$CFLAGS -Wall -pedantic"
-    else
-        CFLAGS="$CFLAGS -Wall"
-    fi
+   CFLAGS="$CFLAGS -Wall -pedantic"
 fi
 
 AC_CONFIG_FILES([Makefile])

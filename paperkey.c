@@ -21,7 +21,7 @@ enum options
     OPT_VERSION,
     OPT_VERBOSE,
     OPT_OUTPUT,
-    OPT_SECRET_KEY
+    OPT_EXTRACT
   };
 
 static struct option long_options[]=
@@ -30,59 +30,26 @@ static struct option long_options[]=
     {"version",no_argument,NULL,OPT_VERSION},
     {"verbose",no_argument,NULL,OPT_VERBOSE},
     {"output",required_argument,NULL,OPT_OUTPUT},
-    {"secret-key",required_argument,NULL,OPT_SECRET_KEY},
+    {"extract",required_argument,NULL,OPT_EXTRACT},
     {NULL,0,NULL,0}
   };
 
-int
-main(int argc,char *argv[])
+static void
+usage(void)
 {
-  int arg;
-  FILE *input;
+  fprintf(stderr,"paperkey:\n");
+  fprintf(stderr,"\t--help\n");
+  fprintf(stderr,"\t--version\n");
+  fprintf(stderr,"\t--output <write output to this file>\n");
+  fprintf(stderr,"\t--extract <extract secret data from this secret key>\n");
+}
+
+static void
+extract(FILE *input,FILE *output)
+{
   struct packet *packet;
   ssize_t offset;
   unsigned char fingerprint[20];
-
-  input=stdin;
-  output=stdout;
-
-  while((arg=getopt_long(argc,argv,"hVv",long_options,NULL))!=-1)
-    switch(arg)
-      {
-      case OPT_HELP:
-      case 'h':
-      default:
-        printf("foo\n");
-        exit(0);
-
-      case OPT_VERSION:
-      case 'V':
-	printf("paperkey " VERSION "\n");
-	exit(0);
-
-      case OPT_VERBOSE:
-      case 'v':
-	verbose++;
-	break;
-
-      case OPT_OUTPUT:
-	output=fopen(optarg,"w");
-	if(!output)
-	  {
-	    fprintf(stderr,"Unable to open %s: %s\n",optarg,strerror(errno));
-	    exit(1);
-	  }
-	break;
-
-      case OPT_SECRET_KEY:
-	input=fopen(optarg,"r");
-	if(!input)
-	  {
-	    fprintf(stderr,"Unable to open %s: %s\n",optarg,strerror(errno));
-	    exit(1);
-	  }
-	break;
-      }
 
   packet=parse(input,5,0);
   if(!packet)
@@ -143,6 +110,61 @@ main(int argc,char *argv[])
       while((fgetc(input)!=EOF))
 	;
     }
+}
+
+int
+main(int argc,char *argv[])
+{
+  int arg;
+  FILE *input,*pubring=NULL;
+
+  input=stdin;
+  output=stdout;
+
+  while((arg=getopt_long(argc,argv,"hVv",long_options,NULL))!=-1)
+    switch(arg)
+      {
+      case OPT_HELP:
+      case 'h':
+      default:
+        usage();
+        exit(0);
+
+      case OPT_VERSION:
+      case 'V':
+	printf("paperkey " VERSION "\n");
+	exit(0);
+
+      case OPT_VERBOSE:
+      case 'v':
+	verbose++;
+	break;
+
+      case OPT_OUTPUT:
+	output=fopen(optarg,"w");
+	if(!output)
+	  {
+	    fprintf(stderr,"Unable to open %s: %s\n",optarg,strerror(errno));
+	    exit(1);
+	  }
+	break;
+
+      case OPT_EXTRACT:
+	input=fopen(optarg,"r");
+	if(!input)
+	  {
+	    fprintf(stderr,"Unable to open %s: %s\n",optarg,strerror(errno));
+	    exit(1);
+	  }
+	break;
+      }
+
+  if(pubring)
+    {
+
+    }
+  else
+    extract(input,output);
 
   return 0;
 }

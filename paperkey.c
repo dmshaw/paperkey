@@ -10,6 +10,8 @@ static const char RCSID[]="$Id$";
 
 int verbose=0;
 size_t line_items=21;
+enum output_type output_type=BASE16;
+FILE *output=NULL;
 
 enum options
   {
@@ -47,6 +49,8 @@ main(int argc,char *argv[])
 	exit(0);
       }
 
+  output=stdout;
+
   file=fopen("key.gpg","r");
 
   output_start();
@@ -57,14 +61,9 @@ main(int argc,char *argv[])
   if(verbose)
     fprintf(stderr,"Secret offset is %d\n",offset);
 
-  printf("fpr is %s\n",find_fingerprint(packet,offset));
-
   output_fingerprint(packet,offset);
 
-  //  print_packet(packet,offset);
-
-  output(&packet->buf[offset],packet->len-offset);
-
+  output_bytes(&packet->buf[offset],packet->len-offset);
 
   output_finish();
 
@@ -75,7 +74,7 @@ main(int argc,char *argv[])
   while((packet=parse(file,7,5)))
     {
       offset=extract_secrets(packet);
-      print_packet(packet,offset);
+      //print_packet(packet,offset);
       free_packet(packet);
     }
 

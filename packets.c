@@ -230,7 +230,7 @@ output_fingerprint(struct packet *packet,size_t public_len)
       SHA1Input(&sha,packet->buf,public_len);
       SHA1Result(&sha,fingerprint);
 
-      output(fingerprint,20);
+      output_bytes(fingerprint,20);
     }
 }
 
@@ -319,28 +319,4 @@ extract_secrets(struct packet *packet)
     }
 
   return offset;
-}
-
-void
-print_packet(struct packet *packet,ssize_t offset)
-{
-  ssize_t i;
-  size_t line=0;
-  size_t checksum=0;
-
-  for(i=0;i+offset<packet->len;i++)
-    {
-      if(i%20==0)
-	{
-	  if(line)
-	    printf("%04X",checksum);
-	  printf("\n%2u:",++line);
-	  checksum=0;
-	}
-
-      printf(" %02X",packet->buf[i+offset]);
-      checksum+=packet->buf[i+offset];
-    }
-
-  printf("\n");
 }

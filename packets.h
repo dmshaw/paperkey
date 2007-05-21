@@ -14,6 +14,5 @@ void free_packet(struct packet *packet);
 char *find_fingerprint(struct packet *packet,size_t public_len);
 void output_fingerprint(struct packet *packet,size_t public_len);
 ssize_t extract_secrets(struct packet *packet);
-void print_packet(struct packet *packet,ssize_t offset);
 
 #endif /* !_PACKETS_H_ */

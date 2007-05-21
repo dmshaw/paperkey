@@ -5,6 +5,8 @@ static const char RCSID[]="$Id$";
 #include "output.h"
 
 extern size_t line_items;
+extern enum output_type output_type;
+extern FILE *output;
 
 static void
 print_hex(const uint8_t *buf,size_t length)
@@ -41,10 +43,16 @@ print_hex(const uint8_t *buf,size_t length)
 void
 output_start(void)
 {
+  switch(output_type)
+    {
+    case BASE16:
+      fprintf(output,"BASE16\n");
+      break;
+    }
 }
 
 void
-output(const uint8_t *buf,size_t length)
+output_bytes(const uint8_t *buf,size_t length)
 {
   print_hex(buf,length);
 }

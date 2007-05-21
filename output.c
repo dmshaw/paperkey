@@ -2,6 +2,9 @@ static const char RCSID[]="$Id$";
 
 #include <config.h>
 #include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+#include "packets.h"
 #include "output.h"
 
 extern size_t output_width;
@@ -31,7 +34,7 @@ print_hex(const uint8_t *buf,size_t length)
 		  checksum=0;
 		}
 
-	      fprintf(output,"%2u: ",++line);
+	      fprintf(output,"%3u: ",++line);
 	    }
 
 	  fprintf(output,"%02X ",buf[i]);
@@ -63,8 +66,8 @@ output_start(unsigned char fingerprint[20])
   switch(output_type)
     {
     case BASE16:
-      line_items=(output_width-4-4)/3;
-      fprintf(output," 0: BASE16\n");
+      line_items=(output_width-5-4)/3;
+      fprintf(output,"%3u: BASE16\n",0);
       break;
     }
 }
@@ -107,4 +110,60 @@ void
 output_finish(void)
 {
   print_hex(NULL,0);
+}
+
+struct packet *
+read_secrets_file(FILE *secrets)
+{
+  struct packet *packet=NULL;
+  char line[1024];
+  int next_linenum=0;
+
+  while(fgets(line,1024,secrets))
+    {
+      int linenum;
+      char *ptr=line,*tok;
+
+      if(line[0]=='#')
+	continue;
+
+      linenum=atoi(ptr);
+      if(linenum!=next_linenum)
+	fprintf(stderr,"Error: missing line number %d\n",next_linenum);
+      else
+	next_linenum=linenum+1;
+
+      ptr=strchr(line,':');
+      ptr++;
+
+      line[strlen(line)-1]='\0';
+
+      while((tok=strsep(&ptr," ")))
+	{
+	  if(tok[0]=='\0')
+	    continue;
+
+	  printf("Tok \"%s\" %p\n",tok,ptr);
+	  if(linenum==0 && strcmp("BASE16",tok)!=0)
+	    abort();
+
+	  if(ptr==NULL)
+	    {
+	      /* Checksum */
+
+	    }
+	  else
+	    {
+	      unsigned int digit;
+
+	      if(sscanf(tok,"%02X",&digit))
+		{
+		  unsigned char d=digit;
+		  packet=append_packet(packet,&d,1);
+		}
+	    }
+	}
+    }
+
+  return packet;
 }

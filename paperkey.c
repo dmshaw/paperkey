@@ -129,6 +129,12 @@ extract(FILE *input,FILE *output)
 static void
 restore(FILE *pubring,FILE *secrets,FILE *output)
 {
+  struct packet *packet;
+  unsigned char fpr[20];
+
+  packet=read_secrets_file(secrets);
+  output_start(fpr);
+  output_bytes(packet->buf,packet->len);
 }
 
 int

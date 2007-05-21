@@ -12,5 +12,6 @@ void output_start(unsigned char fingerprint[20]);
 void output_bytes(const uint8_t *buf,size_t length);
 void output_length(size_t length);
 void output_finish(void);
+struct packet *read_secrets_file(FILE *secrets);
 
 #endif /* !_OUTPUT_H_ */

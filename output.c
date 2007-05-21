@@ -13,10 +13,13 @@ extern FILE *output;
 
 static size_t line_items;
 
+#define CRC24_INIT 0xB704CEL
+#define CRC24_POLY 0x864CFBL
+
 static void
 print_hex(const unsigned char *buf,size_t length)
 {
-  static size_t checksum=0;
+  static long crc=CRC24_INIT;
 
   if(buf)
     {
@@ -26,23 +29,32 @@ print_hex(const unsigned char *buf,size_t length)
 
       for(i=0;i<length;i++,offset++)
 	{
+	  int j;
+
 	  if(offset%line_items==0)
 	    {
 	      if(line)
 		{
-		  fprintf(output,"%04X\n",checksum);
-		  checksum=0;
+		  fprintf(output,"%06lX\n",crc&0xFFFFFFL);
+		  crc=CRC24_INIT;
 		}
 
 	      fprintf(output,"%3u: ",++line);
 	    }
 
 	  fprintf(output,"%02X ",buf[i]);
-	  checksum+=buf[i];
+
+	  crc^=buf[i]<<16;
+	  for(j=0;j<8;j++)
+	    {
+	      crc<<=1;
+	      if(crc&0x1000000)
+		crc^=CRC24_POLY;
+	    }
 	}
     }
   else
-    fprintf(output,"%04X\n",checksum);
+    fprintf(output,"%06lX\n",crc&0xFFFFFFL);
 }
 
 void
@@ -66,7 +78,7 @@ output_start(unsigned char fingerprint[20])
   switch(output_type)
     {
     case BASE16:
-      line_items=(output_width-5-4)/3;
+      line_items=(output_width-5-6)/3;
       fprintf(output,"%3u: BASE16\n",0);
       break;
     }

@@ -9,7 +9,7 @@ static const char RCSID[]="$Id$";
 #include "packets.h"
 #include "output.h"
 
-int verbose=0;
+int verbose=0,ignore_crc_error=0;
 unsigned int output_width=78;
 enum output_type output_type=BASE16;
 FILE *output=NULL;
@@ -23,7 +23,8 @@ enum options
     OPT_OUTPUT_WIDTH,
     OPT_SECRET_KEY,
     OPT_PUBRING,
-    OPT_SECRETS
+    OPT_SECRETS,
+    OPT_IGNORE_CRC_ERROR
   };
 
 static struct option long_options[]=
@@ -36,6 +37,7 @@ static struct option long_options[]=
     {"secret-key",required_argument,NULL,OPT_SECRET_KEY},
     {"pubring",required_argument,NULL,OPT_PUBRING},
     {"secrets",required_argument,NULL,OPT_SECRETS},
+    {"ignore-crc-error",no_argument,NULL,OPT_IGNORE_CRC_ERROR},
     {NULL,0,NULL,0}
   };
 
@@ -260,6 +262,10 @@ main(int argc,char *argv[])
 		    optarg,strerror(errno));
 	    exit(1);
 	  }
+	break;
+
+      case OPT_IGNORE_CRC_ERROR:
+	ignore_crc_error=1;
 	break;
       }
 

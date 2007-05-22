@@ -12,6 +12,7 @@ static const char RCSID[]="$Id$";
 extern unsigned int output_width;
 extern enum output_type output_type;
 extern FILE *output;
+extern int ignore_crc_error;
 
 static unsigned int line_items;
 
@@ -212,8 +213,11 @@ read_secrets_file(FILE *secrets)
 			{
 			  fprintf(stderr,"CRC on line %d does not match"
 				  " (%06lX!=%06lX)\n",linenum,new_crc,crc);
-			  free_packet(packet);
-			  return NULL;
+			  if(!ignore_crc_error)
+			    {
+			      free_packet(packet);
+			      return NULL;
+			    }
 			}
 		    }
 		}

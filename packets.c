@@ -10,7 +10,7 @@ static const char RCSID[]="$Id$";
 
 extern int verbose;
 
-static void *
+void *
 xrealloc(void *ptr,size_t size)
 {
   ptr=realloc(ptr,size);
@@ -22,8 +22,6 @@ xrealloc(void *ptr,size_t size)
 
   return ptr;
 }
-
-#define xmalloc(_size) xrealloc(NULL,_size)
 
 struct packet *
 parse(FILE *input,unsigned char want,unsigned char stop)
@@ -41,6 +39,16 @@ parse(FILE *input,unsigned char want,unsigned char stop)
 	  int tmp;
 
 	  type=byte&0x3F;
+
+	  /* Old-style packet type */
+	  if(!(byte&0x40))
+	    type>>=2;
+
+	  if(type==stop)
+	    {
+	      ungetc(byte,input);
+	      break;
+	    }
 
 	  if(byte&0x40)
 	    {
@@ -90,8 +98,6 @@ parse(FILE *input,unsigned char want,unsigned char stop)
 	  else
 	    {
 	      /* Old-style packets */
-	      type>>=2;
-
 	      switch(byte&0x03)
 		{
 		case 0:
@@ -159,8 +165,6 @@ parse(FILE *input,unsigned char want,unsigned char stop)
 	  fread(packet->buf,1,packet->len,input);
 	  break;
 	}
-      else if(type==stop)
-	break;
       else
 	{
 	  /* We don't want it, so skip the packet.  We don't use fseek

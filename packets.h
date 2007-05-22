@@ -13,6 +13,8 @@ struct packet
   size_t size;
 };
 
+void *xrealloc(void *ptr,size_t size);
+#define xmalloc(_size) xrealloc(NULL,_size)
 struct packet *parse(FILE *input,unsigned char want,unsigned char stop);
 struct packet *append_packet(struct packet *packet,
 			     unsigned char *buf,size_t len);

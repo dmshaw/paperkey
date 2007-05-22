@@ -8,6 +8,7 @@ static const char RCSID[]="$Id$";
 #include <errno.h>
 #include "packets.h"
 #include "output.h"
+#include "restore.h"
 
 int verbose=0,ignore_crc_error=0;
 unsigned int output_width=78;

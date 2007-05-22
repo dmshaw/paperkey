@@ -3,11 +3,66 @@ static const char RCSID[]="$Id$";
 #include <config.h>
 #include <stdio.h>
 #include <sys/types.h>
+#include <string.h>
+#include <stdlib.h>
 #include "packets.h"
 #include "output.h"
 #include "restore.h"
 
 extern enum output_type output_type;
+
+struct key
+{
+  unsigned char fpr[20];
+  struct packet *packet;
+  struct key *next;
+};
+
+static struct key *
+extract_key(struct packet *packet,size_t *idx)
+{
+  struct key *key=NULL;
+
+  /* 1+20+2 == version + fingerprint + length */
+  if(*idx+1+20+2<=packet->len)
+    {
+      if(packet->buf[*idx]==4)
+	{
+	  unsigned int len;
+
+	  key=xmalloc(sizeof(*key));
+	  key->next=NULL;
+
+	  (*idx)++;
+	  memcpy(key->fpr,&packet->buf[*idx],20);
+
+	  *idx+=20;
+
+	  len =packet->buf[(*idx)++]<<8;
+	  len|=packet->buf[(*idx)++];
+
+	  if(*idx+len<=packet->len)
+	    {
+	      key->packet=append_packet(NULL,&packet->buf[*idx],len);
+	      *idx+=len;
+	    }
+	  else
+	    {
+	      free(key);
+	      key=NULL;
+	    }
+	}
+    }
+  
+  return key;
+}
+
+static void
+free_key(struct key *key)
+{
+  free_packet(key->packet);
+  free(key);
+}
 
 void
 restore(FILE *pubring,FILE *secrets)
@@ -21,7 +76,8 @@ restore(FILE *pubring,FILE *secrets)
     {
       struct packet *pubkey;
       unsigned char ptag;
-      size_t sidx,secretlen;
+      size_t sidx=0;
+      struct key *keys;
 
       output_start(NULL);
 
@@ -34,28 +90,68 @@ restore(FILE *pubring,FILE *secrets)
 
       pubkey=find_pubkey(pubring,&secret->buf[1]);
 
-      sidx=21;
+      keys=extract_key(secret,&sidx);
+      if(keys)
+	{
+	  /* Build a list of all subkeys.  We need to do this since
+	     the public key we are transforming might have the subkeys
+	     in a different order than (or not match subkeys at all
+	     with) our secret data. */
 
-      secretlen=secret->buf[sidx++]<<8;
-      secretlen|=secret->buf[sidx++];
+	  struct key *walk=keys;
 
-      /* New-style secret key */
+	  while((walk->next=extract_key(secret,&sidx)))
+	    walk=walk->next;
+	}
+      else
+	{
+	  fprintf(stderr,"Unable to extract primary key from secret data\n");
+	  goto fail;
+	}
+
+      /* New-style secret primary key */
       ptag=0xC5;
       output_bytes(&ptag,1);
-      output_length(pubkey->len+secretlen);
+      output_length(pubkey->len+keys->packet->len);
       output_bytes(pubkey->buf,pubkey->len);
-      output_bytes(&secret->buf[23],secretlen);
-
-      sidx+=secretlen;
-
+      output_bytes(keys->packet->buf,keys->packet->len);
       free_packet(pubkey);
 
-      pubkey=parse(pubring,13,0);
-
-      free_packet(pubkey);
-
-      while((pubkey=parse(pubring,14,6)))
+      while((pubkey=parse(pubring,0,6)))
 	{
+	  if(pubkey->type==14)
+	    {
+	      /* We found a public subkey.  Get a fingerprint for
+		 it. */
+
+	      unsigned char fpr[20];
+	      struct key *keyidx;
+
+	      calculate_fingerprint(pubkey,pubkey->len,fpr);
+
+	      /* Do we have a secret key that matches? */
+	      for(keyidx=keys->next;keyidx;keyidx=keyidx->next)
+		{
+		  if(memcmp(fpr,keyidx->fpr,20)==0)
+		    {
+		      /* Match, so create a secret key. */
+		      ptag=0xC7;
+		      output_bytes(&ptag,1);
+		      output_length(pubkey->len+keyidx->packet->len);
+		      output_bytes(pubkey->buf,pubkey->len);
+		      output_bytes(keyidx->packet->buf,keyidx->packet->len);
+		    }
+		}
+	    }
+	  else if(pubkey->type==13)
+	    {
+	      /* Copy the usual user ID, sigs, etc, so the key is
+		 well-formed */
+	      ptag=0xC0|pubkey->type;
+	      output_bytes(&ptag,1);
+	      output_length(pubkey->len);
+	      output_bytes(pubkey->buf,pubkey->len);
+	    }
 
 	  free_packet(pubkey);
 	}

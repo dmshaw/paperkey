@@ -166,6 +166,18 @@ restore(FILE *pubring,FILE *secrets)
       output_bytes(&secret->buf[23],secretlen);
 
       sidx+=secretlen;
+
+      free_packet(pubkey);
+
+      pubkey=parse(pubring,13,0);
+
+      free_packet(pubkey);
+
+      while((pubkey=parse(pubring,14,6)))
+	{
+
+	  free_packet(pubkey);
+	}
     }
 
   return;

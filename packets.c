@@ -149,9 +149,10 @@ parse(FILE *input,unsigned char want,unsigned char stop)
 	  goto fail;
 	}
 
-      if(type==want)
+      if(want==0 || type==want)
 	{
 	  packet=xmalloc(sizeof(*packet));
+	  packet->type=type;
 	  packet->buf=xmalloc(length);
 	  packet->len=length;
 	  packet->size=length;

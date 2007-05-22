@@ -5,6 +5,7 @@
 
 struct packet
 {
+  unsigned char type;
   unsigned char *buf;
   /* The length the data we've put into buf. */
   size_t len;

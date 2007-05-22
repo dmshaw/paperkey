@@ -4,6 +4,7 @@ static const char RCSID[]="$Id$";
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <time.h>
 #include <assert.h>
 #include "packets.h"
 #include "output.h"
@@ -81,11 +82,15 @@ output_start(unsigned char fingerprint[20])
       break;
 
     case BASE16:
-      line_items=(output_width-5-6)/3;
-      fprintf(output,"# Secret portions of key ");
-      print_bytes(output,fingerprint,20);
-      fprintf(output,"\n");
-      fprintf(output,"%3u: BASE16\n",0);
+      {
+	time_t now=time(NULL);
+
+	line_items=(output_width-5-6)/3;
+	fprintf(output,"# Secret portions of key ");
+	print_bytes(output,fingerprint,20);
+	fprintf(output,"\n");
+	fprintf(output,"# Base 16 data extracted %.24s\n",ctime(&now));
+      }
       break;
     }
 }
@@ -164,7 +169,7 @@ read_secrets_file(FILE *secrets)
 {
   struct packet *packet=NULL;
   char line[1024];
-  unsigned int next_linenum=0;
+  unsigned int next_linenum=1;
 
   while(fgets(line,1024,secrets))
     {
@@ -196,18 +201,6 @@ read_secrets_file(FILE *secrets)
 	    {
 	      if(tok[0]=='\0')
 		continue;
-
-	      if(linenum==0)
-		{
-		  if(strcmp("BASE16",tok)!=0)
-		    {
-		      fprintf(stderr,"No BASE16 specifier\n");
-		      free_packet(packet);
-		      return NULL;
-		    }
-		  else
-		    continue;
-		}
 
 	      if(ptr==NULL)
 		{

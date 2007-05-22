@@ -176,12 +176,12 @@ read_secrets_file(FILE *secrets)
     {
       unsigned int linenum;
       unsigned long crc=CRC24_INIT;
-      char *ptr=line,*tok;
+      char *tok;
 
       if(line[0]=='#')
 	continue;
 
-      linenum=atoi(ptr);
+      linenum=atoi(line);
       if(linenum!=next_linenum)
 	{
 	  fprintf(stderr,"Error: missing line number %u\n",next_linenum);
@@ -191,20 +191,22 @@ read_secrets_file(FILE *secrets)
       else
 	next_linenum=linenum+1;
 
-      ptr=strchr(line,':');
-      if(ptr)
+      tok=strchr(line,':');
+      if(tok)
 	{
-	  ptr++;
+	  tok=strchr(tok,' ');
 
-	  line[strlen(line)-1]='\0';
-
-	  while((tok=strsep(&ptr," ")))
+	  while(tok)
 	    {
-	      if(tok[0]=='\0')
-		continue;
+	      char *next;
 
-	      if(ptr==NULL)
+	      tok++;
+
+	      next=strchr(tok,' ');
+
+	      if(next==NULL)
 		{
+		  /* End of line, so check the CRC. */
 		  unsigned long new_crc;
 
 		  if(sscanf(tok,"%06lX",&new_crc))
@@ -212,7 +214,8 @@ read_secrets_file(FILE *secrets)
 		      if((new_crc&0xFFFFFFL)!=(crc&0xFFFFFFL))
 			{
 			  fprintf(stderr,"CRC on line %d does not match"
-				  " (%06lX!=%06lX)\n",linenum,new_crc,crc);
+				  " (%06lX!=%06lX)\n",linenum,
+				  new_crc&0xFFFFFFL,crc&0xFFFFFFL);
 			  if(!ignore_crc_error)
 			    {
 			      free_packet(packet);
@@ -232,6 +235,8 @@ read_secrets_file(FILE *secrets)
 		      do_crc24(&crc,d);
 		    }
 		}
+
+	      tok=next;
 	    }
 	}
       else

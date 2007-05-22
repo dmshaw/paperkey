@@ -131,9 +131,8 @@ restore(FILE *pubring,FILE *secrets)
 			  /* Match, so create a secret key. */
 			  output_bytes(&ptag,1);
 			  output_length(pubkey->len+keyidx->packet->len);
-			  output_bytes(pubkey->buf,pubkey->len);
-			  output_bytes(keyidx->packet->buf,
-				       keyidx->packet->len);
+			  output_packet(pubkey);
+			  output_packet(keyidx->packet);
 			}
 		    }
 		}
@@ -144,7 +143,7 @@ restore(FILE *pubring,FILE *secrets)
 		  ptag=0xC0|pubkey->type;
 		  output_bytes(&ptag,1);
 		  output_length(pubkey->len);
-		  output_bytes(pubkey->buf,pubkey->len);
+		  output_packet(pubkey);
 		}
 
 	      free_packet(pubkey);

@@ -3,6 +3,8 @@
 #ifndef _PACKETS_H_
 #define _PACKETS_H_
 
+#include <sys/types.h>
+
 struct packet
 {
   unsigned char type;

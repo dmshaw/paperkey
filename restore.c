@@ -2,7 +2,6 @@ static const char RCSID[]="$Id$";
 
 #include <config.h>
 #include <stdio.h>
-#include <sys/types.h>
 #include <string.h>
 #include <stdlib.h>
 #include "packets.h"

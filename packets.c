@@ -329,21 +329,3 @@ extract_secrets(struct packet *packet)
 
   return offset;
 }
-
-struct packet *
-find_pubkey(FILE *pubring,unsigned char fpr[20])
-{
-  struct packet *packet;
-
-  while((packet=parse(pubring,6,0)))
-    {
-      unsigned char comp_fpr[20];
-
-      calculate_fingerprint(packet,packet->len,comp_fpr);
-
-      if(memcmp(fpr,comp_fpr,20)==0)
-	break;
-    }
-
-  return packet;
-}

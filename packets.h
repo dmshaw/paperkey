@@ -24,6 +24,5 @@ void free_packet(struct packet *packet);
 int calculate_fingerprint(struct packet *packet,size_t public_len,
 			  unsigned char fingerprint[20]);
 ssize_t extract_secrets(struct packet *packet);
-struct packet * find_pubkey(FILE *pubring,unsigned char fpr[20]);
 
 #endif /* !_PACKETS_H_ */

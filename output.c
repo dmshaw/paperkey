@@ -121,7 +121,7 @@ output_length16(size_t length)
 }
 
 void
-output_length(size_t length)
+output_openpgp_length(size_t length)
 {
   unsigned char encoded[5];
 

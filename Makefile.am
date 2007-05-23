@@ -1,6 +1,6 @@
 # $Id$
 
-SUBDIRS=checks
+SUBDIRS=. checks
 
 bin_PROGRAMS=paperkey
 

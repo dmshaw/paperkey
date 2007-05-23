@@ -22,6 +22,7 @@ enum options
     OPT_VERSION,
     OPT_VERBOSE,
     OPT_OUTPUT,
+    OPT_OUTPUT_TYPE,
     OPT_OUTPUT_WIDTH,
     OPT_SECRET_KEY,
     OPT_PUBRING,
@@ -35,6 +36,7 @@ static struct option long_options[]=
     {"version",no_argument,NULL,OPT_VERSION},
     {"verbose",no_argument,NULL,OPT_VERBOSE},
     {"output",required_argument,NULL,OPT_OUTPUT},
+    {"output-type",required_argument,NULL,OPT_OUTPUT_TYPE},
     {"output-width",required_argument,NULL,OPT_OUTPUT_WIDTH},
     {"secret-key",required_argument,NULL,OPT_SECRET_KEY},
     {"pubring",required_argument,NULL,OPT_PUBRING},
@@ -101,6 +103,17 @@ main(int argc,char *argv[])
 	    exit(1);
 	  }
 	break;
+
+      case OPT_OUTPUT_TYPE:
+	if(strcmp(optarg,"base16")==0)
+	  output_type=BASE16;
+	else if(strcmp(optarg,"raw")==0)
+	  output_type=RAW;
+	else
+	  {
+	    fprintf(stderr,"Unknown output type \"%s\"\n",optarg);
+	    exit(1);
+	  }
 
       case OPT_OUTPUT_WIDTH:
 	output_width=atoi(optarg);

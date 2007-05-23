@@ -6,6 +6,7 @@ static const char RCSID[]="$Id$";
 #include <stdlib.h>
 #include "packets.h"
 #include "output.h"
+#include "parse.h"
 #include "restore.h"
 
 extern enum output_type output_type;

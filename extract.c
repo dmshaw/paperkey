@@ -4,6 +4,7 @@ static const char RCSID[]="$Id$";
 #include <stdio.h>
 #include "packets.h"
 #include "output.h"
+#include "parse.h"
 #include "extract.h"
 
 extern int verbose;

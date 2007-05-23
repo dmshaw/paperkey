@@ -77,7 +77,7 @@ free_keys(struct key *key)
     }
 }
 
-void
+int
 restore(FILE *pubring,FILE *secrets)
 {
   struct packet *secret;
@@ -154,10 +154,16 @@ restore(FILE *pubring,FILE *secrets)
 	  free_keys(keys);
 	}
       else
-	fprintf(stderr,"Unable to parse secret data\n");
+	{
+	  fprintf(stderr,"Unable to parse secret data\n");
+	  return 1;
+	}
     }
   else
-    fprintf(stderr,"Unable to read secrets file\n");
+    {
+      fprintf(stderr,"Unable to read secrets file\n");
+      return 1;
+    }
 
-  return;
+  return 0;
 }

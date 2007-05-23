@@ -6,7 +6,6 @@ static const char RCSID[]="$Id$";
 #include <stdlib.h>
 #include <string.h>
 #include <errno.h>
-#include "packets.h"
 #include "output.h"
 #include "extract.h"
 #include "restore.h"
@@ -52,7 +51,8 @@ usage(void)
   printf("  --help\n");
   printf("  --version\n");
   printf("  --output        write output to this file\n");
-  printf("  --output-width  maximum width of the text output\n");
+  printf("  --output-type   base16 or raw (binary)\n");
+  printf("  --output-width  maximum width of base16 output\n");
   printf("  --secret-key"
 	  "    extract secret data from this secret key\n");
   printf("  --pubring"
@@ -64,7 +64,7 @@ usage(void)
 int
 main(int argc,char *argv[])
 {
-  int arg;
+  int arg,err;
   FILE *secret_key,*pubring=NULL,*secrets=NULL;
 
   secret_key=stdin;
@@ -155,9 +155,9 @@ main(int argc,char *argv[])
       }
 
   if(pubring && secrets)
-    restore(pubring,secrets);
+    err=restore(pubring,secrets);
   else
-    extract(secret_key);
+    err=extract(secret_key);
 
-  return 0;
+  return err;
 }

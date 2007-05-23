@@ -1,0 +1,3 @@
+# $Id$
+
+TESTS=roundtrip.sh

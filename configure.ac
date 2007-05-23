@@ -29,5 +29,5 @@ if test "$GCC" = yes; then
    CFLAGS="$CFLAGS -Wall -W -pedantic"
 fi
 
-AC_CONFIG_FILES([Makefile])
+AC_CONFIG_FILES([Makefile checks/Makefile])
 AC_OUTPUT

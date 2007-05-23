@@ -18,6 +18,7 @@ AC_PROG_CC
 # Checks for typedefs, structures, and compiler characteristics.
 AC_C_CONST
 AC_TYPE_SIZE_T
+AC_TYPE_SSIZE_T
 AC_TYPE_UINT8_T
 AC_TYPE_UINT32_T
 AC_CHECK_TYPE([int_least16_t],,

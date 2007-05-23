@@ -9,8 +9,6 @@ static const char RCSID[]="$Id$";
 #include "parse.h"
 #include "restore.h"
 
-extern enum output_type output_type;
-
 struct key
 {
   unsigned char fpr[20];
@@ -78,11 +76,9 @@ free_keys(struct key *key)
 }
 
 int
-restore(FILE *pubring,FILE *secrets)
+restore(FILE *pubring,FILE *secrets,const char *outname)
 {
   struct packet *secret;
-
-  output_type=RAW;
 
   secret=read_secrets_file(secrets);
   if(secret)
@@ -99,7 +95,7 @@ restore(FILE *pubring,FILE *secrets)
       keys=extract_keys(secret);
       if(keys)
 	{
-	  output_start(NULL);
+	  output_start(outname,RAW,NULL);
 
 	  while((pubkey=parse(pubring,0,0)))
 	    {

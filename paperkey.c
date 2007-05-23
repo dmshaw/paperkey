@@ -12,8 +12,6 @@ static const char RCSID[]="$Id$";
 
 int verbose=0,ignore_crc_error=0;
 unsigned int output_width=78;
-enum output_type output_type=BASE16;
-FILE *output=NULL;
 
 enum options
   {
@@ -67,9 +65,10 @@ main(int argc,char *argv[])
 {
   int arg,err;
   FILE *secret_key,*pubring=NULL,*secrets=NULL;
+  const char *outname=NULL;
+  enum output_type output_type=BASE16;
 
   secret_key=stdin;
-  output=stdout;
 
   while((arg=getopt_long(argc,argv,"hVv",long_options,NULL))!=-1)
     switch(arg)
@@ -97,12 +96,7 @@ main(int argc,char *argv[])
 	break;
 
       case OPT_OUTPUT:
-	output=fopen(optarg,"w");
-	if(!output)
-	  {
-	    fprintf(stderr,"Unable to open %s: %s\n",optarg,strerror(errno));
-	    exit(1);
-	  }
+	outname=optarg;
 	break;
 
       case OPT_OUTPUT_TYPE:
@@ -156,9 +150,9 @@ main(int argc,char *argv[])
       }
 
   if(pubring && secrets)
-    err=restore(pubring,secrets);
+    err=restore(pubring,secrets,outname);
   else
-    err=extract(secret_key);
+    err=extract(secret_key,outname,output_type);
 
   return err;
 }

@@ -10,7 +10,7 @@ static const char RCSID[]="$Id$";
 extern int verbose;
 
 int
-extract(FILE *input)
+extract(FILE *input,const char *outname,enum output_type output_type)
 {
   struct packet *packet;
   int offset;
@@ -39,7 +39,7 @@ extract(FILE *input)
       fprintf(stderr,"\n");
     }
 
-  output_start(fingerprint);
+  output_start(outname,output_type,fingerprint);
 
   output_bytes(packet->buf,1);
   output_bytes(fingerprint,20);

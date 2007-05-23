@@ -10,9 +10,9 @@ static const char RCSID[]="$Id$";
 #include "output.h"
 
 extern unsigned int output_width;
-extern enum output_type output_type;
-extern FILE *output;
 
+static enum output_type output_type;
+static FILE *output;
 static unsigned int line_items;
 
 void
@@ -70,10 +70,26 @@ print_bytes(FILE *stream,const unsigned char *buf,size_t length)
     fprintf(stream,"%02X",buf[i]);
 }
 
-void
-output_start(unsigned char fingerprint[20])
+int
+output_start(const char *name,enum output_type type,
+	     unsigned char fingerprint[20])
 {
-  switch(output_type)
+  if(name)
+    {
+      if(type==RAW)
+	output=fopen(name,"wb");
+      else
+	output=fopen(name,"w");
+
+      if(!output)
+	return -1;
+    }
+  else
+    output=stdout;
+
+  output_type=type;
+
+  switch(type)
     {
     case RAW:
       break;
@@ -90,6 +106,8 @@ output_start(unsigned char fingerprint[20])
       }
       break;
     }
+
+  return 0;
 }
 
 ssize_t

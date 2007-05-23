@@ -114,6 +114,7 @@ main(int argc,char *argv[])
 	    fprintf(stderr,"Unknown output type \"%s\"\n",optarg);
 	    exit(1);
 	  }
+	break;
 
       case OPT_OUTPUT_WIDTH:
 	output_width=atoi(optarg);

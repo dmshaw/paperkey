@@ -2,11 +2,15 @@ static const char RCSID[]="$Id$";
 
 #include <config.h>
 #include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
 #include "sha1.h"
 #include "packets.h"
+#include "output.h"
 #include "parse.h"
 
 extern int verbose;
+extern int ignore_crc_error;
 
 struct packet *
 parse(FILE *input,unsigned char want,unsigned char stop)
@@ -276,4 +280,89 @@ extract_secrets(struct packet *packet)
     }
 
   return offset;
+}
+
+struct packet *
+read_secrets_file(FILE *secrets)
+{
+  struct packet *packet=NULL;
+  char line[1024];
+  unsigned int next_linenum=1;
+
+  while(fgets(line,1024,secrets))
+    {
+      unsigned int linenum;
+      unsigned long crc=CRC24_INIT;
+      char *tok;
+
+      if(line[0]=='#')
+	continue;
+
+      linenum=atoi(line);
+      if(linenum!=next_linenum)
+	{
+	  fprintf(stderr,"Error: missing line number %u\n",next_linenum);
+	  free_packet(packet);
+	  return NULL;
+	}
+      else
+	next_linenum=linenum+1;
+
+      tok=strchr(line,':');
+      if(tok)
+	{
+	  tok=strchr(tok,' ');
+
+	  while(tok)
+	    {
+	      char *next;
+
+	      tok++;
+
+	      next=strchr(tok,' ');
+
+	      if(next==NULL)
+		{
+		  /* End of line, so check the CRC. */
+		  unsigned long new_crc;
+
+		  if(sscanf(tok,"%06lX",&new_crc))
+		    {
+		      if((new_crc&0xFFFFFFL)!=(crc&0xFFFFFFL))
+			{
+			  fprintf(stderr,"CRC on line %d does not match"
+				  " (%06lX!=%06lX)\n",linenum,
+				  new_crc&0xFFFFFFL,crc&0xFFFFFFL);
+			  if(!ignore_crc_error)
+			    {
+			      free_packet(packet);
+			      return NULL;
+			    }
+			}
+		    }
+		}
+	      else
+		{
+		  unsigned int digit;
+
+		  if(sscanf(tok,"%02X",&digit))
+		    {
+		      unsigned char d=digit;
+		      packet=append_packet(packet,&d,1);
+		      do_crc24(&crc,d);
+		    }
+		}
+
+	      tok=next;
+	    }
+	}
+      else
+	{
+	  fprintf(stderr,"No colon ':' found in line %u\n",linenum);
+	  free_packet(packet);
+	  return NULL;
+	}
+    }
+
+  return packet;
 }

@@ -40,6 +40,7 @@ append_packet(struct packet *packet,unsigned char *buf,size_t len)
   else
     {
       packet=xmalloc(sizeof(*packet));
+      packet->type=0;
       packet->buf=xmalloc(len);
       packet->len=len;
       packet->size=len;

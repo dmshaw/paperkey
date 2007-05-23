@@ -50,6 +50,7 @@ usage(void)
   printf("Usage: paperkey [OPTIONS]\n");
   printf("  --help\n");
   printf("  --version\n");
+  printf("  --verbose\n");
   printf("  --output        write output to this file\n");
   printf("  --output-type   base16 or raw (binary)\n");
   printf("  --output-width  maximum width of base16 output\n");

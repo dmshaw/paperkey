@@ -30,7 +30,7 @@ do_crc24(unsigned long *crc,unsigned char byte)
 }
 
 static void
-print_hex(const unsigned char *buf,size_t length)
+print_base16(const unsigned char *buf,size_t length)
 {
   static unsigned long crc=CRC24_INIT;
 
@@ -92,22 +92,27 @@ output_start(unsigned char fingerprint[20])
     }
 }
 
-void
+ssize_t
 output_bytes(const unsigned char *buf,size_t length)
 {
+  ssize_t ret=-1;
+
   switch(output_type)
     {
     case RAW:
-      fwrite(buf,1,length,output);
+      ret=fwrite(buf,1,length,output);
       break;
 
     case BASE16:
-      print_hex(buf,length);
+      print_base16(buf,length);
+      ret=length;
       break;
     }
+
+  return ret;
 }
 
-void
+ssize_t
 output_length16(size_t length)
 {
   unsigned char encoded[2];
@@ -117,10 +122,10 @@ output_length16(size_t length)
   encoded[0]=length<<8;
   encoded[1]=length;
 
-  output_bytes(encoded,2);
+  return output_bytes(encoded,2);
 }
 
-void
+ssize_t
 output_openpgp_length(size_t length)
 {
   unsigned char encoded[5];
@@ -132,18 +137,18 @@ output_openpgp_length(size_t length)
       encoded[2]=length>>16;
       encoded[3]=length>>8;
       encoded[4]=length;
-      output_bytes(encoded,5);
+      return output_bytes(encoded,5);
     }
   else if(length>191)
     {
       encoded[0]=192+((length-192)>>8);
       encoded[1]=(length-192);
-      output_bytes(encoded,2);
+      return output_bytes(encoded,2);
     }
   else
     {
       encoded[0]=length;
-      output_bytes(encoded,1);
+      return output_bytes(encoded,1);
     }
 }
 
@@ -156,7 +161,7 @@ output_finish(void)
       break;
 
     case BASE16:
-      print_hex(NULL,0);
+      print_base16(NULL,0);
       break;
     }
 }

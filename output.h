@@ -3,6 +3,8 @@
 #ifndef _OUTPUT_H_
 #define _OUTPUT_H_
 
+#include <sys/types.h>
+
 enum data_type {BASE16,RAW};
 
 #define CRC24_INIT 0xB704CEL

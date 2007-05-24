@@ -4,6 +4,7 @@ static const char RCSID[]="$Id$";
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <errno.h>
 #include "packets.h"
 #include "output.h"
 #include "parse.h"
@@ -76,9 +77,23 @@ free_keys(struct key *key)
 }
 
 int
-restore(FILE *pubring,FILE *secrets,const char *outname)
+restore(FILE *pubring,const char *secretname,
+	enum output_type input_type,const char *outname)
 {
+  FILE *secrets;
   struct packet *secret;
+
+  if(input_type==RAW)
+    secrets=fopen(secretname,"rb");
+  else
+    secrets=fopen(secretname,"r");
+
+  if(!secrets)
+    {
+      fprintf(stderr,"Unable to open secrets file %s: %s\n",
+	      secretname,strerror(errno));
+      return 1;
+    }
 
   secret=read_secrets_file(secrets);
   if(secret)

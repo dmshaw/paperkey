@@ -66,8 +66,8 @@ main(int argc,char *argv[])
   int arg,err;
   FILE *secret_key,*pubring=NULL;
   const char *outname=NULL,*secretname=NULL;
-  enum output_type output_type=BASE16;
-  enum output_type input_type=BASE16;
+  enum data_type output_type=BASE16;
+  enum data_type input_type=BASE16;
 
   secret_key=stdin;
 

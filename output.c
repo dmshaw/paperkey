@@ -11,7 +11,7 @@ static const char RCSID[]="$Id$";
 
 extern unsigned int output_width;
 
-static enum output_type output_type;
+static enum data_type output_type;
 static FILE *output;
 static unsigned int line_items;
 
@@ -71,7 +71,7 @@ print_bytes(FILE *stream,const unsigned char *buf,size_t length)
 }
 
 int
-output_start(const char *name,enum output_type type,
+output_start(const char *name,enum data_type type,
 	     unsigned char fingerprint[20])
 {
   if(name)

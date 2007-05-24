@@ -78,7 +78,7 @@ free_keys(struct key *key)
 
 int
 restore(FILE *pubring,const char *secretname,
-	enum output_type input_type,const char *outname)
+	enum data_type input_type,const char *outname)
 {
   FILE *secrets;
   struct packet *secret;

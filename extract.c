@@ -10,7 +10,7 @@ static const char RCSID[]="$Id$";
 extern int verbose;
 
 int
-extract(FILE *input,const char *outname,enum output_type output_type)
+extract(FILE *input,const char *outname,enum data_type output_type)
 {
   struct packet *packet;
   int offset;

@@ -3,14 +3,14 @@
 #ifndef _OUTPUT_H_
 #define _OUTPUT_H_
 
-enum output_type {BASE16,RAW};
+enum data_type {BASE16,RAW};
 
 #define CRC24_INIT 0xB704CEL
 #define CRC24_POLY 0x864CFBL
 
 void do_crc24(unsigned long *crc,unsigned char byte);
 void print_bytes(FILE *stream,const unsigned char *buf,size_t length);
-int output_start(const char *name,enum output_type type,
+int output_start(const char *name,enum data_type type,
 		 unsigned char fingerprint[20]);
 ssize_t output_bytes(const unsigned char *buf,size_t length);
 #define output_packet(_packet) output_bytes((_packet)->buf,(_packet)->len)

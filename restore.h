@@ -4,7 +4,7 @@
 #define _RESTORE_H_
 
 int restore(FILE *pubring,const char *secretname,
-	    enum output_type input_type,const char *outname);
+	    enum data_type input_type,const char *outname);
 
 #endif /* !_RESTORE_H_ */
 

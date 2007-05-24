@@ -116,7 +116,7 @@ main(int argc,char *argv[])
 	break;
 
       case OPT_SECRET_KEY:
-	secret_key=fopen(optarg,"r");
+	secret_key=fopen(optarg,"rb");
 	if(!secret_key)
 	  {
 	    fprintf(stderr,"Unable to open %s: %s\n",optarg,strerror(errno));
@@ -125,7 +125,7 @@ main(int argc,char *argv[])
 	break;
 
       case OPT_PUBRING:
-	pubring=fopen(optarg,"r");
+	pubring=fopen(optarg,"rb");
 	if(!pubring)
 	  {
 	    fprintf(stderr,"Unable to open pubring %s: %s\n",

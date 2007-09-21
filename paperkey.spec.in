@@ -1,6 +1,6 @@
 # $Id$
 
-Summary: Program to archive OpenPGP keys on paper
+Summary: Program to back up OpenPGP keys on paper
 Name: paperkey
 Version: @PACKAGE_VERSION@
 Release: 1

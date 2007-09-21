@@ -292,15 +292,15 @@ read_secrets_file(FILE *secrets,enum data_type input_type)
       unsigned char buffer[1024];
       size_t got;
 
-      got=fread(buffer,1,1024,secrets);
+      while((got=fread(buffer,1,1024,secrets)))
+	packet=append_packet(packet,buffer,got);
+
       if(got==0 && !feof(secrets))
 	{
 	  fprintf(stderr,"Error: unable to read secrets file\n");
 	  free_packet(packet);
 	  return NULL;
 	}
-
-      packet=append_packet(packet,buffer,got);
     }
   else
     {

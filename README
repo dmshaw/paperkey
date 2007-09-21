@@ -108,4 +108,28 @@ passphrase, neither does the paper copy.  Whatever the passphrase (or
 lack thereof) was on the original secret key will be the same on the
 reconstructed key.
 
+
+Universal Binaries on Apple OS X
+--------------------------------
+
+You can build a universal ("fat") library that will work on both PPC
+and Intel Macs with:
+
+./configure CFLAGS="-arch ppc -arch i386" --disable-dependency-tracking
+
+Note that if you are doing the build on a OS X 10.4 (Tiger) PPC
+machine you may need to add the following to those CFLAGS:
+
+  "-isysroot /Developer/SDKs/MacOSX10.4u.sdk"
+
+The additional isysroot is not necessary on Intel Tiger boxes, or any
+Leopard boxes.
+
+
+RPMs
+----
+
+Paperkey ships with a RPM spec file.  You can build the RPMs with the
+usual "rpmbuild -ta /path/to/the/paperkey/tarball.tar.gz".
+
 $Id$

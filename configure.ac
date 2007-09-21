@@ -1,9 +1,10 @@
 #                                               -*- Autoconf -*-
 # Process this file with autoconf to produce a configure script.
 
-AC_PREREQ(2.60)
-AC_REVISION([$Id$])
+AC_PREREQ(2.61)
 AC_INIT(paperkey, 0.1, dshaw@jabberwocky.com)
+AC_REVISION([$Id$])
+AC_COPYRIGHT([Copyright (C) 2007 David Shaw])
 AC_CONFIG_SRCDIR([paperkey.c])
 AC_CONFIG_HEADER([config.h])
 AM_INIT_AUTOMAKE([std-options])
@@ -14,6 +15,8 @@ AC_PROG_CC
 # Checks for libraries.
 
 # Checks for header files.
+AC_HEADER_STDC
+AC_CHECK_HEADERS([inttypes.h stdint.h stdlib.h string.h])
 
 # Checks for typedefs, structures, and compiler characteristics.
 AC_C_CONST
@@ -25,6 +28,12 @@ AC_CHECK_TYPE([int_least16_t],,
    AC_DEFINE(int_least16_t,uint32_t,[An integer type with at least 16 bits]))
 
 # Checks for library functions.
+
+AC_ARG_ENABLE(optimization,
+   AC_HELP_STRING([--disable-optimization],[disable compiler optimization]),
+   [if test $enableval = no ; then
+      CFLAGS=`echo $CFLAGS | sed 's/-O[[0-9]]//'`
+   fi])
 
 if test "$GCC" = yes; then
    CFLAGS="$CFLAGS -Wall -W -pedantic"

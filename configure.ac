@@ -41,9 +41,7 @@ AC_ARG_ENABLE(optimization,
       CFLAGS=`echo $CFLAGS | sed 's/-O[[0-9]]//'`
    fi])
 
-if test "$GCC" = yes; then
-   CFLAGS="$CFLAGS -Wall -W -pedantic"
-fi
+AM_CONDITIONAL(USING_GCC, test "$GCC" = yes)
 
 AC_CONFIG_FILES([gl/Makefile Makefile checks/Makefile])
 AC_OUTPUT

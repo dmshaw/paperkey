@@ -3,25 +3,24 @@
 		  David Shaw <dshaw@jabberwocky.com>
 
 
-A reasonable way to achieve a long term backup of OpenPGP (PGP, GnuPG,
+A reasonable way to achieve a long term backup of OpenPGP (GnuPG, PGP,
 etc) keys is to print them out on paper.  The reasoning behind this is
 that paper and ink has amazingly long retention qualities - far longer
 than the magnetic or optical means that are generally used to back up
-computer data.  A paper backup isn't a replacement for the usual
-machine readable (tape, CD-R, DVD-R, etc) backups, but rather as an
-if-all-else-fails method of restoring a key.
+computer data.
 
 Paper?  Seriously?
 ------------------
 
-Again, the goal with paper is not secure storage.  There are countless
-ways to store something securely (not least of which makes use of
-GnuPG itself).  The goal is rather a "backup of last resort".  Most of
-the storage media in use today do not have particularly good long-term
+The goal with paper is not secure storage.  There are countless ways
+to store something securely.  A paper backup also isn't a replacement
+for the usual machine readable (tape, CD-R, DVD-R, etc) backups, but
+rather as an if-all-else-fails method of restoring a key.  Most of the
+storage media in use today do not have particularly good long-term
 (measured in years to decades) retention of data.  If and when the
-CD-R and/or tape cassette and/or hard drive the secret key is stored
-on becomes unusable, the paper copy can be used to restore the secret
-key.
+CD-R and/or tape cassette and/or USB key and/or hard drive the secret
+key is stored on becomes unusable, the paper copy can be used to
+restore the secret key.
 
 What paperkey does
 ------------------
@@ -98,5 +97,15 @@ Some other useful options are:
 
   --verbose (or -v)  be chatty about what is happening.  Repeat this
 		     multiple times for more verbosity.
+
+Security
+--------
+
+Note that paperkey does not change the security requirements of
+storing a secret key.  If your key has a passphrase on it (i.e. is
+encrypted), the paper copy is similarly encrypted.  If your key has no
+passphrase, neither does the paper copy.  Whatever the passphrase (or
+lack thereof) was on the original secret key will be the same on the
+reconstructed key.
 
 $Id$

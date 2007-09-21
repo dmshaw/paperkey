@@ -1,7 +1,7 @@
 # $Id$
 
 ACLOCAL_AMFLAGS=-I gl/m4
-
+EXTRA_DIST=paperkey.spec
 SUBDIRS=gl . checks
 
 AM_CPPFLAGS=-I$(top_srcdir)/gl

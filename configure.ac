@@ -43,5 +43,5 @@ AC_ARG_ENABLE(optimization,
 
 AM_CONDITIONAL(USING_GCC, test "$GCC" = yes)
 
-AC_CONFIG_FILES([gl/Makefile Makefile checks/Makefile])
+AC_CONFIG_FILES([gl/Makefile Makefile checks/Makefile paperkey.spec])
 AC_OUTPUT

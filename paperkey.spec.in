@@ -1,0 +1,42 @@
+# $Id$
+
+Summary: Program to archive OpenPGP keys on paper
+Name: paperkey
+Version: @PACKAGE_VERSION@
+Release: 1
+License: GPL
+Group: Applications/Cryptography
+Source: http://www.jabberwocky.com/software/paperkey/paperkey-%{version}.tar.gz
+Url: http://www.jabberwocky.com/software/paperkey/
+BuildRoot: %{_tmppath}/%{name}-root
+
+%description
+A reasonable way to achieve a long term backup of OpenPGP (PGP, GnuPG,
+etc) keys is to print them out on paper.  The reasoning behind this is
+that paper and ink has amazingly long retention qualities - far longer
+than the magnetic or optical means that are generally used to back up
+computer data.  A paper backup isn't a replacement for the usual
+machine readable (tape, CD-R, DVD-R, etc) backups, but rather as an
+if-all-else-fails method of restoring a key.
+
+%prep
+%setup
+
+%build
+%configure
+make
+
+%install
+rm -rf $RPM_BUILD_ROOT
+make install DESTDIR="$RPM_BUILD_ROOT"
+
+%clean
+rm -rf $RPM_BUILD_ROOT
+
+%post
+%postun
+
+%files
+%defattr(-,root,root)
+%doc README NEWS
+%{_bindir}/paperkey

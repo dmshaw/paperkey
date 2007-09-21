@@ -1,6 +1,11 @@
 # $Id$
 
-SUBDIRS=. checks
+ACLOCAL_AMFLAGS=-I gl/m4
+
+SUBDIRS=gl . checks
+
+AM_CPPFLAGS=-I$(top_srcdir)/gl
+LIBADD=gl/libgl.a
 
 bin_PROGRAMS=paperkey
 

@@ -11,6 +11,14 @@ AM_INIT_AUTOMAKE([std-options])
 
 # Checks for programs.
 AC_PROG_CC
+gl_EARLY
+AC_PROG_RANLIB
+
+gl_SOURCE_BASE(gl)
+gl_M4_BASE(gl/m4)
+gl_LIB(libgl)
+gl_MODULES(getopt)
+gl_INIT
 
 # Checks for libraries.
 
@@ -24,6 +32,10 @@ AC_TYPE_SIZE_T
 AC_TYPE_SSIZE_T
 AC_TYPE_UINT8_T
 AC_TYPE_UINT32_T
+
+# There is no autoconf check for the int_least16_t type, but
+
+
 AC_CHECK_TYPE([int_least16_t],,
    AC_DEFINE(int_least16_t,uint32_t,[An integer type with at least 16 bits]))
 
@@ -39,5 +51,5 @@ if test "$GCC" = yes; then
    CFLAGS="$CFLAGS -Wall -W -pedantic"
 fi
 
-AC_CONFIG_FILES([Makefile checks/Makefile])
+AC_CONFIG_FILES([gl/Makefile Makefile checks/Makefile])
 AC_OUTPUT

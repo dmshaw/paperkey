@@ -94,6 +94,7 @@ output_start(const char *name,enum data_type type,
     case RAW:
       break;
 
+    case AUTO:
     case BASE16:
       {
 	time_t now=time(NULL);
@@ -121,6 +122,7 @@ output_bytes(const unsigned char *buf,size_t length)
       ret=fwrite(buf,1,length,output);
       break;
 
+    case AUTO:
     case BASE16:
       print_base16(buf,length);
       ret=length;
@@ -178,6 +180,7 @@ output_finish(void)
     case RAW:
       break;
 
+    case AUTO:
     case BASE16:
       print_base16(NULL,0);
       break;

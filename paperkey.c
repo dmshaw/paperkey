@@ -70,7 +70,7 @@ main(int argc,char *argv[])
   FILE *secret_key,*pubring=NULL;
   const char *outname=NULL,*secretname=NULL;
   enum data_type output_type=BASE16;
-  enum data_type input_type=BASE16;
+  enum data_type input_type=AUTO;
 
   secret_key=stdin;
 
@@ -104,7 +104,9 @@ main(int argc,char *argv[])
 	break;
 
       case OPT_INPUT_TYPE:
-	if(strcmp(optarg,"base16")==0)
+	if(strcmp(optarg,"auto")==0)
+	  input_type=AUTO;
+	else if(strcmp(optarg,"base16")==0)
 	  input_type=BASE16;
 	else if(strcmp(optarg,"raw")==0)
 	  input_type=RAW;
@@ -116,7 +118,9 @@ main(int argc,char *argv[])
 	break;
 
       case OPT_OUTPUT_TYPE:
-	if(strcmp(optarg,"base16")==0)
+	if(strcmp(optarg,"auto")==0)
+	  output_type=AUTO;
+	else if(strcmp(optarg,"base16")==0)
 	  output_type=BASE16;
 	else if(strcmp(optarg,"raw")==0)
 	  output_type=RAW;

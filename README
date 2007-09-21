@@ -87,7 +87,8 @@ Some other useful options are:
 		     another program like a bar-code generator.
 
   --input-type       same as --output-type, but for the restore side of
-		     things.
+		     things.  By default the input type is inferred
+		     automatically from the input data.
 
   --output-width     sets the width of base16 output
 

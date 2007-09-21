@@ -5,7 +5,7 @@
 
 #include <sys/types.h>
 
-enum data_type {BASE16,RAW};
+enum data_type {AUTO,BASE16,RAW};
 
 #define CRC24_INIT 0xB704CEL
 #define CRC24_POLY 0x864CFBL

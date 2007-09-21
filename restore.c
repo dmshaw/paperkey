@@ -5,6 +5,7 @@ static const char RCSID[]="$Id$";
 #include <string.h>
 #include <stdlib.h>
 #include <errno.h>
+#include <ctype.h>
 #include "packets.h"
 #include "output.h"
 #include "parse.h"
@@ -93,6 +94,36 @@ restore(FILE *pubring,const char *secretname,
       fprintf(stderr,"Unable to open secrets file %s: %s\n",
 	      secretname,strerror(errno));
       return 1;
+    }
+
+  if(input_type==AUTO)
+    {
+      int test=fgetc(secrets);
+
+      if(test==EOF)
+	{
+	  fprintf(stderr,"Unable to check type of secrets file %s\n",
+		  secretname);
+	  return 1;
+	}
+      else if(isascii(test) && isprint(test))
+	{
+	  input_type=BASE16;
+	  ungetc(test,secrets);
+	}
+      else
+	{
+	  input_type=RAW;
+
+	  fclose(secrets);
+	  secrets=fopen(secretname,"rb");
+	  if(!secrets)
+	    {
+	      fprintf(stderr,"Unable to reopen secrets file %s: %s\n",
+		      secretname,strerror(errno));
+	      return 1;
+	    }
+	}
     }
 
   secret=read_secrets_file(secrets,input_type);

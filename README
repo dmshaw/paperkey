@@ -53,9 +53,10 @@ burner quality, the storage, etc, all have a significant impact on how
 long an optical disc will last.  Some tests show that you're lucky to
 get 10 years.
 
-For paper to last 100 years is not even vaguely impressive.
-High-quality paper with good ink regularly lasts many hundreds of
-years even under less than optimal conditions.
+For paper, on the other hand, to claim it will last for 100 years is
+not even vaguely impressive.  High-quality paper with good ink
+regularly lasts many hundreds of years even under less than optimal
+conditions.
 
 Another bonus is that ink on paper is readable by humans.  Not all
 backup methods will be readable 50 years later, so even if you have
@@ -82,9 +83,9 @@ If --output is not specified, the output goes to stdout.  If
 
 Some other useful options are:
 
-  --output-type      can be "base16" or "raw".  "Base16" is human-readable,
+  --output-type      can be "base16" or "raw".  "base16" is human-readable,
 		     and "raw" is useful if you want to pass the output to
-		     another program like a bar-code generator.
+		     another program like a bar code generator.
 
   --input-type       same as --output-type, but for the restore side of
 		     things.  By default the input type is inferred

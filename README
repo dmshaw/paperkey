@@ -49,20 +49,20 @@ Doesn't CD-R claim to last a long time?
 They're certainly advertised to (I've seen some pretty incredible
 claims of 100 years or more), but in practice it doesn't really work
 out that way.  The manufacturing of the media, the burn quality, the
-burner quality, the storage, etc, all have an impact on how long an
-optical disc will last.  Some tests show that you're lucky to get 10
-years.
+burner quality, the storage, etc, all have a significant impact on how
+long an optical disc will last.  Some tests show that you're lucky to
+get 10 years.
 
-For paper to last 100 years is not even vaguely impressive.  Paper
-regularly lasts many hundreds of years even under less than optimal
-conditions.
+For paper to last 100 years is not even vaguely impressive.
+High-quality paper regularly lasts many hundreds of years even under
+less than optimal conditions.
 
-Another bonus with paper is that ink on paper is readable by humans.
-Not all backup methods will be readable 50 years later, even if you
-have the backup, you can't easily buy a drive to read it.  I doubt
-this will happen anytime soon with CD-R as there are just so many of
-them out there, but the storage industry is littered with old now-dead
-ways of storing data.
+Another bonus is that ink on paper is readable by humans.  Not all
+backup methods will be readable 50 years later, so even if you have
+the backup, you can't easily buy a drive to read it.  I doubt this
+will happen anytime soon with CD-R as there are just so many of them
+out there, but the storage industry is littered with old now-dead ways
+of storing data.
 
 Examples
 --------
@@ -76,6 +76,8 @@ Take the secret key data in my-key-text-file.txt and combine it with
 my-public-key.gpg to reconstruct my-secret-key.gpg:
 
 $ paperkey --pubring my-public-key.gpg --secrets my-key-text-file.txt --output my-secret-key.gpg
+
+If --output is not specified, the output goes to stdout.
 
 Some other useful options are:
 

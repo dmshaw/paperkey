@@ -108,7 +108,6 @@ passphrase, neither does the paper copy.  Whatever the passphrase (or
 lack thereof) was on the original secret key will be the same on the
 reconstructed key.
 
-
 Universal Binaries on Apple OS X
 --------------------------------
 
@@ -124,7 +123,6 @@ machine you may need to add the following to those CFLAGS:
 
 The additional isysroot is not necessary on Intel Tiger boxes, or any
 Leopard boxes.
-
 
 RPMs
 ----

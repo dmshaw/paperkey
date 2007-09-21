@@ -3,9 +3,91 @@
 		  David Shaw <dshaw@jabberwocky.com>
 
 
-This program can be used
+A reasonable way to achieve a long term backup of OpenPGP (PGP, GnuPG,
+etc) keys is to print them out on paper.  The reasoning behind this is
+that paper and ink has amazingly long retention qualities - far longer
+than the magnetic or optical means that are generally used to back up
+computer data.  A paper backup isn't a replacement for the usual
+machine readable (tape, CD-R, DVD-R, etc) backups, but rather as an
+if-all-else-fails method of restoring a key.
 
+Paper?  Seriously?
+------------------
 
+Again, the goal with paper is not secure storage.  There are countless
+ways to store something securely (not least of which makes use of
+GnuPG itself).  The goal is rather a "backup of last resort".  Most of
+the storage media in use today do not have particularly good long-term
+(measured in years to decades) retention of data.  If and when the
+CD-R and/or tape cassette and/or hard drive the secret key is stored
+on becomes unusable, the paper copy can be used to restore the secret
+key.
 
+What paperkey does
+------------------
+
+Due to metadata and redundancy, OpenPGP secret keys are significantly
+larger than just the "secret bits".  In fact, the secret key contains
+a complete copy of the public key.  Since the public key generally
+doesn't need to be escrowed (most people have many copies of it on
+various keyservers, web pages, etc), only extracting the secret parts
+can be a real advantage.
+
+Paperkey extracts just those secret bytes and prints them.  To
+reconstruct, you re-enter those bytes (whether by hand or via OCR) and
+paperkey can use them to transform your existing public key into a
+secret key.
+
+For example, the regular DSA+Elgamal secret key I just tested comes
+out to 1281 bytes.  The secret parts of that (plus some minor packet
+structure) come to only 149 bytes.  It's a lot easier to re-enter 149
+bytes correctly.
+
+Doesn't CD-R claim to last a long time?
+---------------------------------------
+
+They're certainly advertised to (I've seen some pretty incredible
+claims of 100 years or more), but in practice it doesn't really work
+out that way.  The manufacturing of the media, the burn quality, the
+burner quality, the storage, etc, all have an impact on how long an
+optical disc will last.  Some tests show that you're lucky to get 10
+years.
+
+For paper to last 100 years is not even vaguely impressive.  Paper
+regularly lasts many hundreds of years even under less than optimal
+conditions.
+
+Another bonus with paper is that ink on paper is readable by humans.
+Not all backup methods will be readable 50 years later, even if you
+have the backup, you can't easily buy a drive to read it.  I doubt
+this will happen anytime soon with CD-R as there are just so many of
+them out there, but the storage industry is littered with old now-dead
+ways of storing data.
+
+Examples
+--------
+
+Take the secret key in key.gpg and generate a text file
+to-be-printed.txt that contains the secret data:
+
+$ paperkey --secret-key my-secret-key.gpg --output to-be-printed.txt
+
+Take the secret key data in my-key-text-file.txt and combine it with
+my-public-key.gpg to reconstruct my-secret-key.gpg:
+
+$ paperkey --pubring my-public-key.gpg --secrets my-key-text-file.txt --output my-secret-key.gpg
+
+Some other useful options are:
+
+  --output-type      can be "base16" or "raw".  "Base16" is human-readable,
+		     and "raw" is useful if you want to pass the output to
+		     another program like a bar-code generator.
+
+  --output-width     sets the width of base16 output
+
+  --ignore-crc-error allows paperkey to continue when reconstructing
+		     even if it detects data corruption in the input.
+
+  --verbose          be chatty about what is happening
 
 $Id$

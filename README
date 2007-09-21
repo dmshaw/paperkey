@@ -124,10 +124,10 @@ machine you may need to add the following to those CFLAGS:
 The additional isysroot is not necessary on Intel Tiger boxes, or any
 Leopard boxes.
 
-RPMs
-----
+RPM
+---
 
-Paperkey ships with a RPM spec file.  You can build the RPMs with the
+Paperkey ships with a RPM spec file.  You can build the RPM with the
 usual "rpmbuild -ta /path/to/the/paperkey/tarball.tar.gz".
 
 $Id$

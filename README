@@ -77,13 +77,17 @@ my-public-key.gpg to reconstruct my-secret-key.gpg:
 
 $ paperkey --pubring my-public-key.gpg --secrets my-key-text-file.txt --output my-secret-key.gpg
 
-If --output is not specified, the output goes to stdout.
+If --output is not specified, the output goes to stdout.  If
+--secret-key is not specified, the data is read from stdin.
 
 Some other useful options are:
 
   --output-type      can be "base16" or "raw".  "Base16" is human-readable,
 		     and "raw" is useful if you want to pass the output to
 		     another program like a bar-code generator.
+
+  --input-type       same as --output-type, but for the restore side of
+		     things.
 
   --output-width     sets the width of base16 output
 

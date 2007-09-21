@@ -19,6 +19,7 @@ enum options
     OPT_VERSION,
     OPT_VERBOSE,
     OPT_OUTPUT,
+    OPT_INPUT_TYPE,
     OPT_OUTPUT_TYPE,
     OPT_OUTPUT_WIDTH,
     OPT_SECRET_KEY,
@@ -33,6 +34,7 @@ static struct option long_options[]=
     {"version",no_argument,NULL,OPT_VERSION},
     {"verbose",no_argument,NULL,OPT_VERBOSE},
     {"output",required_argument,NULL,OPT_OUTPUT},
+    {"input-type",required_argument,NULL,OPT_INPUT_TYPE},
     {"output-type",required_argument,NULL,OPT_OUTPUT_TYPE},
     {"output-width",required_argument,NULL,OPT_OUTPUT_WIDTH},
     {"secret-key",required_argument,NULL,OPT_SECRET_KEY},
@@ -99,6 +101,18 @@ main(int argc,char *argv[])
 
       case OPT_OUTPUT:
 	outname=optarg;
+	break;
+
+      case OPT_INPUT_TYPE:
+	if(strcmp(optarg,"base16")==0)
+	  input_type=BASE16;
+	else if(strcmp(optarg,"raw")==0)
+	  input_type=RAW;
+	else
+	  {
+	    fprintf(stderr,"Unknown input type \"%s\"\n",optarg);
+	    exit(1);
+	  }
 	break;
 
       case OPT_OUTPUT_TYPE:

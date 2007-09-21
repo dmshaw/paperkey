@@ -95,7 +95,7 @@ restore(FILE *pubring,const char *secretname,
       return 1;
     }
 
-  secret=read_secrets_file(secrets);
+  secret=read_secrets_file(secrets,input_type);
   if(secret)
     {
       struct packet *pubkey;

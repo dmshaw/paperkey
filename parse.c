@@ -283,84 +283,103 @@ extract_secrets(struct packet *packet)
 }
 
 struct packet *
-read_secrets_file(FILE *secrets)
+read_secrets_file(FILE *secrets,enum data_type input_type)
 {
   struct packet *packet=NULL;
-  char line[1024];
-  unsigned int next_linenum=1;
 
-  while(fgets(line,1024,secrets))
+  if(input_type==RAW)
     {
-      unsigned int linenum;
-      unsigned long crc=CRC24_INIT;
-      char *tok;
+      unsigned char buffer[1024];
+      size_t got;
 
-      if(line[0]=='#')
-	continue;
-
-      linenum=atoi(line);
-      if(linenum!=next_linenum)
+      got=fread(buffer,1,1024,secrets);
+      if(got==0 && !feof(secrets))
 	{
-	  fprintf(stderr,"Error: missing line number %u\n",next_linenum);
+	  fprintf(stderr,"Error: unable to read secrets file\n");
 	  free_packet(packet);
 	  return NULL;
 	}
-      else
-	next_linenum=linenum+1;
 
-      tok=strchr(line,':');
-      if(tok)
+      packet=append_packet(packet,buffer,got);
+    }
+  else
+    {
+      char line[1024];
+      unsigned int next_linenum=1;
+
+      while(fgets(line,1024,secrets))
 	{
-	  tok=strchr(tok,' ');
+	  unsigned int linenum;
+	  unsigned long crc=CRC24_INIT;
+	  char *tok;
 
-	  while(tok)
+	  if(line[0]=='#')
+	    continue;
+
+	  linenum=atoi(line);
+	  if(linenum!=next_linenum)
 	    {
-	      char *next;
+	      fprintf(stderr,"Error: missing line number %u\n",next_linenum);
+	      free_packet(packet);
+	      return NULL;
+	    }
+	  else
+	    next_linenum=linenum+1;
 
-	      tok++;
+	  tok=strchr(line,':');
+	  if(tok)
+	    {
+	      tok=strchr(tok,' ');
 
-	      next=strchr(tok,' ');
-
-	      if(next==NULL)
+	      while(tok)
 		{
-		  /* End of line, so check the CRC. */
-		  unsigned long new_crc;
+		  char *next;
 
-		  if(sscanf(tok,"%06lX",&new_crc))
+		  tok++;
+
+		  next=strchr(tok,' ');
+
+		  if(next==NULL)
 		    {
-		      if((new_crc&0xFFFFFFL)!=(crc&0xFFFFFFL))
+		      /* End of line, so check the CRC. */
+		      unsigned long new_crc;
+
+		      if(sscanf(tok,"%06lX",&new_crc))
 			{
-			  fprintf(stderr,"CRC on line %d does not match"
-				  " (%06lX!=%06lX)\n",linenum,
-				  new_crc&0xFFFFFFL,crc&0xFFFFFFL);
-			  if(!ignore_crc_error)
+			  if((new_crc&0xFFFFFFL)!=(crc&0xFFFFFFL))
 			    {
-			      free_packet(packet);
-			      return NULL;
+			      fprintf(stderr,"CRC on line %d does not match"
+				      " (%06lX!=%06lX)\n",linenum,
+				      new_crc&0xFFFFFFL,crc&0xFFFFFFL);
+			      if(!ignore_crc_error)
+				{
+				  free_packet(packet);
+				  return NULL;
+				}
 			    }
 			}
 		    }
-		}
-	      else
-		{
-		  unsigned int digit;
-
-		  if(sscanf(tok,"%02X",&digit))
+		  else
 		    {
-		      unsigned char d=digit;
-		      packet=append_packet(packet,&d,1);
-		      do_crc24(&crc,d);
-		    }
-		}
+		      unsigned int digit;
 
-	      tok=next;
+		      if(sscanf(tok,"%02X",&digit))
+			{
+			  unsigned char d=digit;
+			  packet=append_packet(packet,&d,1);
+			  do_crc24(&crc,d);
+			}
+		    }
+
+		  tok=next;
+		}
 	    }
-	}
-      else
-	{
-	  fprintf(stderr,"No colon ':' found in line %u\n",linenum);
-	  free_packet(packet);
-	  return NULL;
+	  else
+	    {
+	      fprintf(stderr,"No colon ':' found in line %u\n",linenum);
+	      free_packet(packet);
+	      return NULL;
+	    }
 	}
     }
 

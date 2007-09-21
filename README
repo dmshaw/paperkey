@@ -94,6 +94,7 @@ Some other useful options are:
   --ignore-crc-error allows paperkey to continue when reconstructing
 		     even if it detects data corruption in the input.
 
-  --verbose          be chatty about what is happening
+  --verbose (or -v)  be chatty about what is happening.  Repeat this
+		     multiple times for more verbosity.
 
 $Id$

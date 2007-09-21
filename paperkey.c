@@ -58,6 +58,7 @@ usage(void)
 	  "       public keyring to find non-secret data\n");
   printf("  --secrets       text file containing secret"
 	  " data to join with the public key\n");
+  printf("  --ignore-crc-error  don't reject corrupted input\n");
 }
 
 int

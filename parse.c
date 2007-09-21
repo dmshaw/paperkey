@@ -183,18 +183,18 @@ calculate_fingerprint(struct packet *packet,size_t public_len,
     }
   else if(packet->buf[0]==4)
     {
-      SHA1Context sha;
+      struct sha1_ctx sha;
       unsigned char head[3];
 
-      SHA1Reset(&sha);
+      sha1_init_ctx(&sha);
 
       head[0]=0x99;
       head[1]=public_len>>8;
       head[2]=public_len&0xFF;
 
-      SHA1Input(&sha,head,3);
-      SHA1Input(&sha,packet->buf,public_len);
-      SHA1Result(&sha,fingerprint);
+      sha1_process_bytes(head,3,&sha);
+      sha1_process_bytes(packet->buf,public_len,&sha);
+      sha1_finish_ctx(&sha,fingerprint);
     }
 
   return 0;

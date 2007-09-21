@@ -14,12 +14,6 @@ AC_PROG_CC
 gl_EARLY
 AC_PROG_RANLIB
 
-gl_SOURCE_BASE(gl)
-gl_M4_BASE(gl/m4)
-gl_LIB(libgl)
-gl_MODULES(getopt)
-gl_INIT
-
 # Checks for libraries.
 
 # Checks for header files.
@@ -30,16 +24,15 @@ AC_CHECK_HEADERS([inttypes.h stdint.h stdlib.h string.h])
 AC_C_CONST
 AC_TYPE_SIZE_T
 AC_TYPE_SSIZE_T
-AC_TYPE_UINT8_T
-AC_TYPE_UINT32_T
-
-# There is no autoconf check for the int_least16_t type, but
-
-
-AC_CHECK_TYPE([int_least16_t],,
-   AC_DEFINE(int_least16_t,uint32_t,[An integer type with at least 16 bits]))
 
 # Checks for library functions.
+
+# Gnulib stuff.
+gl_SOURCE_BASE(gl)
+gl_M4_BASE(gl/m4)
+gl_LIB(libgl)
+gl_MODULES(getopt crypto/sha1)
+gl_INIT
 
 AC_ARG_ENABLE(optimization,
    AC_HELP_STRING([--disable-optimization],[disable compiler optimization]),

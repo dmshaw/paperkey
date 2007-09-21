@@ -335,7 +335,8 @@ read_secrets_file(FILE *secrets,enum data_type input_type)
 		{
 		  char *next;
 
-		  tok++;
+		  while(*tok==' ')
+		    tok++;
 
 		  next=strchr(tok,' ');
 

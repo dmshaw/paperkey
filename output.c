@@ -49,12 +49,13 @@ do_crc24(unsigned long *crc,unsigned char byte)
 static void
 print_base16(const unsigned char *buf,size_t length)
 {
-  static unsigned long crc=CRC24_INIT;
+  static unsigned long line_crc=CRC24_INIT,all_crc=CRC24_INIT;
+  static unsigned int line=0;
 
   if(buf)
     {
       size_t i;
-      static unsigned int line=0,offset=0;
+      static unsigned int offset=0;
 
       for(i=0;i<length;i++,offset++)
 	{
@@ -62,8 +63,8 @@ print_base16(const unsigned char *buf,size_t length)
 	    {
 	      if(line)
 		{
-		  fprintf(output,"%06lX\n",crc&0xFFFFFFL);
-		  crc=CRC24_INIT;
+		  fprintf(output,"%06lX\n",line_crc&0xFFFFFFL);
+		  line_crc=CRC24_INIT;
 		}
 
 	      fprintf(output,"%3u: ",++line);
@@ -71,11 +72,15 @@ print_base16(const unsigned char *buf,size_t length)
 
 	  fprintf(output,"%02X ",buf[i]);
 
-	  do_crc24(&crc,buf[i]);
+	  do_crc24(&line_crc,buf[i]);
+	  do_crc24(&all_crc,buf[i]);
 	}
     }
   else
-    fprintf(output,"%06lX\n",crc&0xFFFFFFL);
+    {
+      fprintf(output,"%06lX\n",line_crc&0xFFFFFFL);
+      fprintf(output,"%3u: %06lX\n",line+1,all_crc&0xFFFFFFL);
+    }
 }
 
 void
@@ -121,7 +126,7 @@ output_start(const char *name,enum data_type type,
 	print_bytes(output,fingerprint,20);
 	fprintf(output,"\n");
 	fprintf(output,"# Base 16 data extracted %.24s\n",ctime(&now));
-	fprintf(output,"# Created with " PACKAGE_STRING "\n");
+	fprintf(output,"# Created with " PACKAGE_STRING " by David Shaw\n");
       }
       break;
     }

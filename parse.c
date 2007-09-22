@@ -322,12 +322,14 @@ read_secrets_file(FILE *secrets,enum data_type input_type)
   else
     {
       char line[1024];
+      int final_crc=0;
       unsigned int next_linenum=1;
+      unsigned long all_crc=CRC24_INIT;
 
       while(fgets(line,1024,secrets))
 	{
-	  unsigned int linenum;
-	  unsigned long crc=CRC24_INIT;
+	  unsigned int linenum,did_digit=0;
+	  unsigned long line_crc=CRC24_INIT;
 	  char *tok;
 
 	  if(line[0]=='#')
@@ -364,15 +366,35 @@ read_secrets_file(FILE *secrets,enum data_type input_type)
 
 		      if(sscanf(tok,"%06lX",&new_crc))
 			{
-			  if((new_crc&0xFFFFFFL)!=(crc&0xFFFFFFL))
+			  if(did_digit)
 			    {
-			      fprintf(stderr,"CRC on line %d does not match"
-				      " (%06lX!=%06lX)\n",linenum,
-				      new_crc&0xFFFFFFL,crc&0xFFFFFFL);
-			      if(!ignore_crc_error)
+			      if((new_crc&0xFFFFFFL)!=(line_crc&0xFFFFFFL))
 				{
-				  free_packet(packet);
-				  return NULL;
+				  fprintf(stderr,"CRC on line %d does not"
+					  " match (%06lX!=%06lX)\n",linenum,
+					  new_crc&0xFFFFFFL,
+					  line_crc&0xFFFFFFL);
+				  if(!ignore_crc_error)
+				    {
+				      free_packet(packet);
+				      return NULL;
+				    }
+				}
+			    }
+			  else
+			    {
+			      final_crc=1;
+			      if((new_crc&0xFFFFFFL)!=(all_crc&0xFFFFFFL))
+				{
+				  fprintf(stderr,"CRC of secret does not"
+					  " match (%06lX!=%06lX)\n",
+					  new_crc&0xFFFFFFL,
+					  line_crc&0xFFFFFFL);
+				  if(!ignore_crc_error)
+				    {
+				      free_packet(packet);
+				      return NULL;
+				    }
 				}
 			    }
 			}
@@ -385,7 +407,9 @@ read_secrets_file(FILE *secrets,enum data_type input_type)
 			{
 			  unsigned char d=digit;
 			  packet=append_packet(packet,&d,1);
-			  do_crc24(&crc,d);
+			  do_crc24(&line_crc,d);
+			  do_crc24(&all_crc,d);
+			  did_digit=1;
 			}
 		    }
 
@@ -395,6 +419,16 @@ read_secrets_file(FILE *secrets,enum data_type input_type)
 	  else
 	    {
 	      fprintf(stderr,"No colon ':' found in line %u\n",linenum);
+	      free_packet(packet);
+	      return NULL;
+	    }
+	}
+
+      if(!final_crc)
+	{
+	  fprintf(stderr,"CRC of secret is missing\n");
+	  if(!ignore_crc_error)
+	    {
 	      free_packet(packet);
 	      return NULL;
 	    }

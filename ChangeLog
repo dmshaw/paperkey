@@ -1,5 +1,8 @@
 2007-09-22  David Shaw  <dshaw@jabberwocky.com>
 
+	* parse.c (read_secrets_file), output.c (print_base16): Add an
+	overall CRC that covers the whole secrets file.
+
 	* output.c (output_length16): Fix sizing bug.  Thanks to Peter
 	Palfrader.
 	(output_start): Show what version of paperkey generated a given

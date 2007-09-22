@@ -1,5 +1,8 @@
 2007-09-22  David Shaw  <dshaw@jabberwocky.com>
 
+	* parse.c (read_secrets_file), output.c (output_finish,
+	output_bytes, print_base16): Add a CRC on RAW output as well.
+
 	* NEWS, README: Update.
 
 	* parse.c (read_secrets_file), output.c (print_base16): Add an

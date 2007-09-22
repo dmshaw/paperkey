@@ -303,6 +303,8 @@ struct packet *
 read_secrets_file(FILE *secrets,enum data_type input_type)
 {
   struct packet *packet=NULL;
+  int final_crc=0;
+  unsigned long all_crc=CRC24_INIT,my_crc=0;
 
   if(input_type==RAW)
     {
@@ -318,13 +320,25 @@ read_secrets_file(FILE *secrets,enum data_type input_type)
 	  free_packet(packet);
 	  return NULL;
 	}
+
+      if(packet->len>=3)
+	{
+	  /* Grab the last 3 bytes to be the CRC24 */
+	  my_crc =packet->buf[packet->len-3]<<16;
+	  my_crc|=packet->buf[packet->len-2]<<8;
+	  my_crc|=packet->buf[packet->len-1];
+	  final_crc=1;
+	  packet->len-=3;
+
+	  /* And all the rest get CRCed */
+	  for(got=0;got<packet->len;got++)
+	    do_crc24(&all_crc,packet->buf[got]);
+	}
     }
   else
     {
       char line[1024];
-      int final_crc=0;
       unsigned int next_linenum=1;
-      unsigned long all_crc=CRC24_INIT;
 
       while(fgets(line,1024,secrets))
 	{
@@ -384,18 +398,7 @@ read_secrets_file(FILE *secrets,enum data_type input_type)
 			  else
 			    {
 			      final_crc=1;
-			      if((new_crc&0xFFFFFFL)!=(all_crc&0xFFFFFFL))
-				{
-				  fprintf(stderr,"CRC of secret does not"
-					  " match (%06lX!=%06lX)\n",
-					  new_crc&0xFFFFFFL,
-					  line_crc&0xFFFFFFL);
-				  if(!ignore_crc_error)
-				    {
-				      free_packet(packet);
-				      return NULL;
-				    }
-				}
+			      my_crc=new_crc;
 			    }
 			}
 		    }
@@ -423,15 +426,28 @@ read_secrets_file(FILE *secrets,enum data_type input_type)
 	      return NULL;
 	    }
 	}
+    }
 
-      if(!final_crc)
+  if(final_crc)
+    {
+      if((my_crc&0xFFFFFFL)!=(all_crc&0xFFFFFFL))
 	{
-	  fprintf(stderr,"CRC of secret is missing\n");
+	  fprintf(stderr,"CRC of secret does not match (%06lX!=%06lX)\n",
+		  my_crc&0xFFFFFFL,all_crc&0xFFFFFFL);
 	  if(!ignore_crc_error)
 	    {
 	      free_packet(packet);
 	      return NULL;
 	    }
+	}
+    }
+  else
+    {
+      fprintf(stderr,"CRC of secret is missing\n");
+      if(!ignore_crc_error)
+	{
+	  free_packet(packet);
+	  return NULL;
 	}
     }
 

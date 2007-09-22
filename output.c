@@ -31,6 +31,7 @@ extern unsigned int output_width;
 static enum data_type output_type;
 static FILE *output;
 static unsigned int line_items;
+static unsigned long all_crc=CRC24_INIT;
 
 void
 do_crc24(unsigned long *crc,unsigned char byte)
@@ -49,7 +50,7 @@ do_crc24(unsigned long *crc,unsigned char byte)
 static void
 print_base16(const unsigned char *buf,size_t length)
 {
-  static unsigned long line_crc=CRC24_INIT,all_crc=CRC24_INIT;
+  static unsigned long line_crc=CRC24_INIT;
   static unsigned int line=0;
 
   if(buf)
@@ -142,7 +143,27 @@ output_bytes(const unsigned char *buf,size_t length)
   switch(output_type)
     {
     case RAW:
-      ret=fwrite(buf,1,length,output);
+      {
+	if(buf==NULL)
+	  {
+	    unsigned char crc[3];
+
+	    crc[0]=(all_crc&0xFFFFFFL)>>16;
+	    crc[1]=(all_crc&0xFFFFFFL)>>8;
+	    crc[2]=(all_crc&0xFFFFFFL);
+
+	    ret=fwrite(crc,1,3,output);
+	  }
+	else
+	  {
+	    size_t i;
+
+	    for(i=0;i<length;i++)
+	      do_crc24(&all_crc,buf[i]);
+
+	    ret=fwrite(buf,1,length,output);
+	  }
+      }
       break;
 
     case AUTO:
@@ -198,14 +219,5 @@ output_openpgp_length(size_t length)
 void
 output_finish(void)
 {
-  switch(output_type)
-    {
-    case RAW:
-      break;
-
-    case AUTO:
-    case BASE16:
-      print_base16(NULL,0);
-      break;
-    }
+  output_bytes(NULL,0);
 }

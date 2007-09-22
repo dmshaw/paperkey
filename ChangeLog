@@ -1,3 +1,9 @@
+2007-09-22  David Shaw  <dshaw@jabberwocky.com>
+
+	* packets.h, output.c, output.h, extract.c, parse.c, parse.h,
+	extract.h, paperkey.c, restore.c, restore.h, packets.c: Add
+	copyright statements (oops).  Thanks to Peter Palfrader.
+
 2007-09-21  David Shaw  <dshaw@jabberwocky.com>
 
 	* configure.ac: Release version 0.5.

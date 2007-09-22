@@ -1,5 +1,9 @@
 2007-09-22  David Shaw  <dshaw@jabberwocky.com>
 
+	* restore.c (restore): Properly handle extracting a public key out
+	from a large keyring so we can just pass our pubring directly to
+	--pubring.
+
 	* packets.h, output.c, output.h, extract.c, parse.c, parse.h,
 	extract.h, paperkey.c, restore.c, restore.h, packets.c: Add
 	copyright statements (oops).  Thanks to Peter Palfrader.

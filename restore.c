@@ -170,16 +170,8 @@ restore(FILE *pubring,const char *secretname,
 		  unsigned char fpr[20];
 		  struct key *keyidx;
 
-		  if(pubkey->type==6)
-		    {
-		      if(did_pubkey)
-			break;
-
-		      ptag=0xC5;
-		      did_pubkey=1;
-		    }
-		  else
-		    ptag=0xC7;
+		  if(pubkey->type==6 && did_pubkey)
+		    break;
 
 		  calculate_fingerprint(pubkey,pubkey->len,fpr);
 
@@ -188,6 +180,14 @@ restore(FILE *pubring,const char *secretname,
 		    {
 		      if(memcmp(fpr,keyidx->fpr,20)==0)
 			{
+			  if(pubkey->type==6)
+			    {
+			      ptag=0xC5;
+			      did_pubkey=1;
+			    }
+			  else
+			    ptag=0xC7;
+
 			  /* Match, so create a secret key. */
 			  output_bytes(&ptag,1);
 			  output_openpgp_length(pubkey->len
@@ -197,7 +197,7 @@ restore(FILE *pubring,const char *secretname,
 			}
 		    }
 		}
-	      else if(pubkey->type==13)
+	      else if(pubkey->type==13 && did_pubkey)
 		{
 		  /* Copy the usual user ID, sigs, etc, so the key is
 		     well-formed */

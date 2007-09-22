@@ -233,7 +233,7 @@ extract_secrets(struct packet *packet)
 
   if(packet->buf[0]==3)
     {
-      fprintf(stderr,"Version 3 keys are not supported yet.\n");
+      fprintf(stderr,"Version 3 (PGP 2.x style) keys are not supported.\n");
       return -1;
     }
   else if(packet->buf[0]==4)

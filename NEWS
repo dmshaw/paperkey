@@ -1,6 +1,16 @@
 Noteworthy changes in version 0.6 (unreleased)
 ----------------------------------------------
 
+    * Bug fix for certain key sizes thanks to Peter Palfrader.
+
+    * Add versioning to the output format.
+
+    * Add an overall CRC to the secrets output to catch certain types
+      of corruption.
+
+    * Properly use a single public key out of a whole public keyring
+      when restoring.
+
 
 Noteworthy changes in version 0.5 (2007-09-21)
 ----------------------------------------------

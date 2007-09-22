@@ -78,7 +78,10 @@ my-public-key.gpg to reconstruct my-secret-key.gpg:
 $ paperkey --pubring my-public-key.gpg --secrets my-key-text-file.txt --output my-secret-key.gpg
 
 If --output is not specified, the output goes to stdout.  If
---secret-key is not specified, the data is read from stdin.
+--secret-key is not specified, the data is read from stdin so you can
+do things like:
+
+$ gpg --export-secret-key my-key | paperkey --output my-key-text-file.txt
 
 Some other useful options are:
 

@@ -1,7 +1,10 @@
 2007-09-22  David Shaw  <dshaw@jabberwocky.com>
 
+	* paperkey.c (usage): Options.
+
 	* parse.c (read_secrets_file), output.c (output_finish,
 	output_bytes, print_base16): Add a CRC on RAW output as well.
+	(parse): Note that we don't support armored data.
 
 	* NEWS, README: Update.
 

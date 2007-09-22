@@ -67,15 +67,16 @@ usage(void)
   printf("Usage: paperkey [OPTIONS]\n");
   printf("  --help\n");
   printf("  --version\n");
-  printf("  --verbose\n");
+  printf("  --verbose (-v)  be more verbose\n");
   printf("  --output        write output to this file\n");
+  printf("  --input-type    auto, base16 or raw (binary)\n");
   printf("  --output-type   base16 or raw (binary)\n");
   printf("  --output-width  maximum width of base16 output\n");
   printf("  --secret-key"
 	  "    extract secret data from this secret key\n");
   printf("  --pubring"
 	  "       public keyring to find non-secret data\n");
-  printf("  --secrets       text file containing secret"
+  printf("  --secrets       file containing secret"
 	  " data to join with the public key\n");
   printf("  --ignore-crc-error  don't reject corrupted input\n");
 }

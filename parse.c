@@ -157,7 +157,8 @@ parse(FILE *input,unsigned char want,unsigned char stop)
 	}
       else
 	{
-	  fprintf(stderr,"Error: unable to parse OpenPGP packets\n");
+	  fprintf(stderr,"Error: unable to parse OpenPGP packets"
+		  " (is this armored data?)\n");
 	  goto fail;
 	}
 

@@ -1,5 +1,9 @@
 2007-09-22  David Shaw  <dshaw@jabberwocky.com>
 
+	* extract.c (extract), restore.c (extract_keys): Include a version
+	number in the secrets, in case the format needs to change in the
+	future.
+
 	* restore.c (extract_keys): Some more rigorous consistency
 	checking when pulling apart the secret image.  It's possible that
 	OCR or the like mangled it.

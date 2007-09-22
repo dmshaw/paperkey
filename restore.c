@@ -39,7 +39,15 @@ static struct key *
 extract_keys(struct packet *packet)
 {
   struct key *key=NULL;
-  size_t idx=0;
+  size_t idx=1;
+
+  /* Check the version */
+  if(packet->len && packet->buf[0]!=0)
+    {
+      fprintf(stderr,"Cannot handle secrets file version %d\n",
+	      packet->buf[0]);
+      return NULL;
+    }
 
   while(idx<packet->len)
     {

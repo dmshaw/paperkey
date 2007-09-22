@@ -32,6 +32,7 @@ extract(FILE *input,const char *outname,enum data_type output_type)
   struct packet *packet;
   int offset;
   unsigned char fingerprint[20];
+  unsigned char version=0;
 
   packet=parse(input,5,0);
   if(!packet)
@@ -57,7 +58,7 @@ extract(FILE *input,const char *outname,enum data_type output_type)
     }
 
   output_start(outname,output_type,fingerprint);
-
+  output_bytes(&version,1);
   output_bytes(packet->buf,1);
   output_bytes(fingerprint,20);
   output_length16(packet->len-offset);

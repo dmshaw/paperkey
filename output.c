@@ -121,6 +121,7 @@ output_start(const char *name,enum data_type type,
 	print_bytes(output,fingerprint,20);
 	fprintf(output,"\n");
 	fprintf(output,"# Base 16 data extracted %.24s\n",ctime(&now));
+	fprintf(output,"# Created with " PACKAGE_STRING "\n");
       }
       break;
     }
@@ -156,7 +157,7 @@ output_length16(size_t length)
 
   assert(length<=65535);
 
-  encoded[0]=length<<8;
+  encoded[0]=length>>8;
   encoded[1]=length;
 
   return output_bytes(encoded,2);

@@ -1,5 +1,10 @@
 2007-09-22  David Shaw  <dshaw@jabberwocky.com>
 
+	* output.c (output_length16): Fix sizing bug.  Thanks to Peter
+	Palfrader.
+	(output_start): Show what version of paperkey generated a given
+	file.
+
 	* extract.c (extract), restore.c (extract_keys): Include a version
 	number in the secrets, in case the format needs to change in the
 	future.

@@ -69,6 +69,7 @@ extract_keys(struct packet *packet)
 		}
 	      else
 		{
+		  fprintf(stderr,"Warning: Short data in secret image\n");
 		  free(newkey);
 		  break;
 		}
@@ -76,6 +77,16 @@ extract_keys(struct packet *packet)
 	      newkey->next=key;
 	      key=newkey;
 	    }
+	  else
+	    {
+	      fprintf(stderr,"Warning: Corrupt data in secret image\n");
+	      break;
+	    }
+	}
+      else
+	{
+	  fprintf(stderr,"Warning: Short header in secret image\n");
+	  break;
 	}
     }
   

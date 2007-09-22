@@ -1,5 +1,9 @@
 2007-09-22  David Shaw  <dshaw@jabberwocky.com>
 
+	* restore.c (extract_keys): Some more rigorous consistency
+	checking when pulling apart the secret image.  It's possible that
+	OCR or the like mangled it.
+
 	* parse.c (extract_secrets): We're not going to support v3 keys.
 
 	* restore.c (restore): Properly handle extracting a public key out

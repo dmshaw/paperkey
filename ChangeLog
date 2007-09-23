@@ -1,5 +1,7 @@
 2007-09-22  David Shaw  <dshaw@jabberwocky.com>
 
+	* configure.ac, NEWS: Release version 0.6.
+
 	* output.h, output.c (do_crc24): Better CRC24 implementation.
 	parse.c (read_secrets_file), output.c (output_bytes): Call it
 	here.

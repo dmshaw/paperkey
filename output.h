@@ -25,9 +25,8 @@
 enum data_type {AUTO,BASE16,RAW};
 
 #define CRC24_INIT 0xB704CEL
-#define CRC24_POLY 0x864CFBL
 
-void do_crc24(unsigned long *crc,unsigned char byte);
+void do_crc24(unsigned long *crc,const unsigned char *buf,size_t len);
 void print_bytes(FILE *stream,const unsigned char *buf,size_t length);
 int output_start(const char *name,enum data_type type,
 		 unsigned char fingerprint[20]);

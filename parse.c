@@ -305,7 +305,7 @@ read_secrets_file(FILE *secrets,enum data_type input_type)
 {
   struct packet *packet=NULL;
   int final_crc=0;
-  unsigned long all_crc=CRC24_INIT,my_crc=0;
+  unsigned long my_crc=0;
 
   if(input_type==RAW)
     {
@@ -330,10 +330,6 @@ read_secrets_file(FILE *secrets,enum data_type input_type)
 	  my_crc|=packet->buf[packet->len-1];
 	  final_crc=1;
 	  packet->len-=3;
-
-	  /* And all the rest get CRCed */
-	  for(got=0;got<packet->len;got++)
-	    do_crc24(&all_crc,packet->buf[got]);
 	}
     }
   else
@@ -411,8 +407,7 @@ read_secrets_file(FILE *secrets,enum data_type input_type)
 			{
 			  unsigned char d=digit;
 			  packet=append_packet(packet,&d,1);
-			  do_crc24(&line_crc,d);
-			  do_crc24(&all_crc,d);
+			  do_crc24(&line_crc,&d,1);
 			  did_digit=1;
 			}
 		    }
@@ -431,6 +426,10 @@ read_secrets_file(FILE *secrets,enum data_type input_type)
 
   if(final_crc)
     {
+      unsigned long all_crc=CRC24_INIT;
+
+      do_crc24(&all_crc,packet->buf,packet->len);
+
       if((my_crc&0xFFFFFFL)!=(all_crc&0xFFFFFFL))
 	{
 	  fprintf(stderr,"CRC of secret does not match (%06lX!=%06lX)\n",

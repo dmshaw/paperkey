@@ -1,5 +1,12 @@
 2007-09-22  David Shaw  <dshaw@jabberwocky.com>
 
+	* output.h, output.c (do_crc24): Better CRC24 implementation.
+	parse.c (read_secrets_file), output.c (output_bytes): Call it
+	here.
+
+	* README: Bar codes, of course, have many of the disadvantages of
+	non-human-readable media.
+
 	* paperkey.c (usage): Options.
 
 	* parse.c (read_secrets_file), output.c (output_finish,

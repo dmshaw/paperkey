@@ -33,17 +33,24 @@ static FILE *output;
 static unsigned int line_items;
 static unsigned long all_crc=CRC24_INIT;
 
-void
-do_crc24(unsigned long *crc,unsigned char byte)
-{
-  int j;
+#define CRC24_POLY 0x864CFBL
 
-  *crc^=byte<<16;
-  for(j=0;j<8;j++)
+void
+do_crc24(unsigned long *crc,const unsigned char *buf,size_t len)
+{
+  size_t i;
+
+  for(i=0;i<len;i++)
     {
-      *crc<<=1;
-      if(*crc&0x1000000)
-	*crc^=CRC24_POLY;
+      int j;
+
+      *crc^=buf[i]<<16;
+      for(j=0;j<8;j++)
+	{
+	  *crc<<=1;
+	  if(*crc&0x1000000)
+	    *crc^=CRC24_POLY;
+	}
     }
 }
 
@@ -73,8 +80,7 @@ print_base16(const unsigned char *buf,size_t length)
 
 	  fprintf(output,"%02X ",buf[i]);
 
-	  do_crc24(&line_crc,buf[i]);
-	  do_crc24(&all_crc,buf[i]);
+	  do_crc24(&line_crc,&buf[i],1);
 	}
     }
   else
@@ -140,30 +146,23 @@ output_bytes(const unsigned char *buf,size_t length)
 {
   ssize_t ret=-1;
 
+  do_crc24(&all_crc,buf,length);
+
   switch(output_type)
     {
     case RAW:
-      {
-	if(buf==NULL)
-	  {
-	    unsigned char crc[3];
+      if(buf==NULL)
+	{
+	  unsigned char crc[3];
 
-	    crc[0]=(all_crc&0xFFFFFFL)>>16;
-	    crc[1]=(all_crc&0xFFFFFFL)>>8;
-	    crc[2]=(all_crc&0xFFFFFFL);
+	  crc[0]=(all_crc&0xFFFFFFL)>>16;
+	  crc[1]=(all_crc&0xFFFFFFL)>>8;
+	  crc[2]=(all_crc&0xFFFFFFL);
 
-	    ret=fwrite(crc,1,3,output);
-	  }
-	else
-	  {
-	    size_t i;
-
-	    for(i=0;i<length;i++)
-	      do_crc24(&all_crc,buf[i]);
-
-	    ret=fwrite(buf,1,length,output);
-	  }
-      }
+	  ret=fwrite(crc,1,3,output);
+	}
+      else
+	ret=fwrite(buf,1,length,output);
       break;
 
     case AUTO:

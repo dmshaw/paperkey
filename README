@@ -86,8 +86,10 @@ $ gpg --export-secret-key my-key | paperkey --output my-key-text-file.txt
 Some other useful options are:
 
   --output-type      can be "base16" or "raw".  "base16" is human-readable,
-		     and "raw" is useful if you want to pass the output to
-		     another program like a bar code generator.
+		     and "raw" is useful if you want to pass the
+		     output to another program like a bar code
+		     generator (though note that bar codes have many
+		     of the disadvantages discussed above).
 
   --input-type       same as --output-type, but for the restore side of
 		     things.  By default the input type is inferred

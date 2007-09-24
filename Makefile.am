@@ -1,7 +1,7 @@
 # $Id$
 
 ACLOCAL_AMFLAGS=-I gl/m4
-EXTRA_DIST=paperkey.spec
+EXTRA_DIST=paperkey.spec $(man_MANS)
 SUBDIRS=gl . checks
 
 AM_CPPFLAGS=-I$(top_srcdir)/gl
@@ -10,6 +10,8 @@ LDADD=gl/libgl.a
 if USING_GCC
 AM_CPPFLAGS+=-Wall -W -pedantic
 endif
+
+man_MANS=paperkey.1
 
 bin_PROGRAMS=paperkey
 

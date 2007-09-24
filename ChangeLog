@@ -1,5 +1,8 @@
 2007-09-24  David Shaw  <dshaw@jabberwocky.com>
 
+	* AUTHORS, Makefile.am, paperkey.spec.in, paperkey.1: Add man page
+	thanks to Peter Palfrader.
+
 	* restore.h, restore.c (restore): Pass in secrets FILE* from
 	outside.  Don't do the reopen-as-text trickery since even Win32
 	doesn't need it.

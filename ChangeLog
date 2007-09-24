@@ -1,3 +1,11 @@
+2007-09-24  David Shaw  <dshaw@jabberwocky.com>
+
+	* restore.h, restore.c (restore): Pass in secrets FILE* from
+	outside.  Don't do the reopen-as-text trickery since even Win32
+	doesn't need it.
+	paperkey.c (main): Call it from here.  This allows for secrets to
+	come in on stdin.
+
 2007-09-22  David Shaw  <dshaw@jabberwocky.com>
 
 	* configure.ac, NEWS: Release version 0.6.

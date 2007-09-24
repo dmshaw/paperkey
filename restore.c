@@ -114,23 +114,10 @@ free_keys(struct key *key)
 }
 
 int
-restore(FILE *pubring,const char *secretname,
+restore(FILE *pubring,FILE *secrets,
 	enum data_type input_type,const char *outname)
 {
-  FILE *secrets;
   struct packet *secret;
-
-  if(input_type==RAW)
-    secrets=fopen(secretname,"rb");
-  else
-    secrets=fopen(secretname,"r");
-
-  if(!secrets)
-    {
-      fprintf(stderr,"Unable to open secrets file %s: %s\n",
-	      secretname,strerror(errno));
-      return 1;
-    }
 
   if(input_type==AUTO)
     {
@@ -138,28 +125,15 @@ restore(FILE *pubring,const char *secretname,
 
       if(test==EOF)
 	{
-	  fprintf(stderr,"Unable to check type of secrets file %s\n",
-		  secretname);
+	  fprintf(stderr,"Unable to check type of secrets file\n");
 	  return 1;
 	}
       else if(isascii(test) && isprint(test))
-	{
-	  input_type=BASE16;
-	  ungetc(test,secrets);
-	}
+	input_type=BASE16;
       else
-	{
-	  input_type=RAW;
+	input_type=RAW;
 
-	  fclose(secrets);
-	  secrets=fopen(secretname,"rb");
-	  if(!secrets)
-	    {
-	      fprintf(stderr,"Unable to reopen secrets file %s: %s\n",
-		      secretname,strerror(errno));
-	      return 1;
-	    }
-	}
+      ungetc(test,secrets);
     }
 
   secret=read_secrets_file(secrets,input_type);

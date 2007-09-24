@@ -85,12 +85,12 @@ int
 main(int argc,char *argv[])
 {
   int arg,err;
-  FILE *secret_key,*pubring=NULL;
-  const char *outname=NULL,*secretname=NULL;
+  FILE *secret_key,*secrets,*pubring=NULL;
+  const char *outname=NULL;
   enum data_type output_type=BASE16;
   enum data_type input_type=AUTO;
 
-  secret_key=stdin;
+  secret_key=secrets=stdin;
 
   while((arg=getopt_long(argc,argv,"hVv",long_options,NULL))!=-1)
     switch(arg)
@@ -173,7 +173,12 @@ main(int argc,char *argv[])
 	break;
 
       case OPT_SECRETS:
-	secretname=optarg;
+	secrets=fopen(optarg,"rb");
+	if(!secrets)
+	  {
+	    fprintf(stderr,"Unable to open %s: %s\n",optarg,strerror(errno));
+	    exit(1);
+	  }
 	break;
 
       case OPT_IGNORE_CRC_ERROR:
@@ -181,8 +186,8 @@ main(int argc,char *argv[])
 	break;
       }
 
-  if(pubring && secretname)
-    err=restore(pubring,secretname,input_type,outname);
+  if(pubring)
+    err=restore(pubring,secrets,input_type,outname);
   else
     err=extract(secret_key,outname,output_type);
 

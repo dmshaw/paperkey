@@ -136,9 +136,7 @@ main(int argc,char *argv[])
 	break;
 
       case OPT_OUTPUT_TYPE:
-	if(strcmp(optarg,"auto")==0)
-	  output_type=AUTO;
-	else if(strcmp(optarg,"base16")==0)
+	if(strcmp(optarg,"base16")==0)
 	  output_type=BASE16;
 	else if(strcmp(optarg,"raw")==0)
 	  output_type=RAW;

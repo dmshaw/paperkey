@@ -169,7 +169,11 @@ parse(FILE *input,unsigned char want,unsigned char stop)
 	  packet->buf=xmalloc(length);
 	  packet->len=length;
 	  packet->size=length;
-	  fread(packet->buf,1,packet->len,input);
+	  if(fread(packet->buf,1,packet->len,input)<packet->len)
+	    {
+	      fprintf(stderr,"Short read on packet type %d\n",type);
+	      goto fail;
+	    }
 	  break;
 	}
       else

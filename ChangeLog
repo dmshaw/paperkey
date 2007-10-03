@@ -1,5 +1,7 @@
 2007-10-03  David Shaw  <dshaw@jabberwocky.com>
 
+	* configure.ac: NEWS: Post-release commit.
+
 	* README, configure.ac, NEWS: Preparing 0.7 release.
 
 2007-09-25  David Shaw  <dshaw@jabberwocky.com>

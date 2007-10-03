@@ -1,3 +1,7 @@
+2007-10-03  David Shaw  <dshaw@jabberwocky.com>
+
+	* README, configure.ac, NEWS: Preparing 0.7 release.
+
 2007-09-25  David Shaw  <dshaw@jabberwocky.com>
 
 	* paperkey.c (main): There is no such thing as an "auto"

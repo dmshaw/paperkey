@@ -1,5 +1,9 @@
-Noteworthy changes in version 0.7 (unreleased)
+Noteworthy changes in version 0.7 (2007-10-03)
 ----------------------------------------------
+
+    * Man page contributed by Peter Palfrader.
+
+    * Secret data can now be passed in on standard input if desired.
 
 
 Noteworthy changes in version 0.6 (2007-09-22)

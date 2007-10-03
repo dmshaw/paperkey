@@ -116,7 +116,7 @@ reconstructed key.
 Universal Binaries on Apple OS X
 --------------------------------
 
-You can build a universal ("fat") library that will work on both PPC
+You can build a universal ("fat") binary that will work on both PPC
 and Intel Macs with:
 
 ./configure CFLAGS="-arch ppc -arch i386" --disable-dependency-tracking

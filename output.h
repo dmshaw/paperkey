@@ -28,6 +28,7 @@ enum data_type {AUTO,BASE16,RAW};
 
 void do_crc24(unsigned long *crc,const unsigned char *buf,size_t len);
 void print_bytes(FILE *stream,const unsigned char *buf,size_t length);
+void output_file_format(FILE *stream,const char *prefix);
 int output_start(const char *name,enum data_type type,
 		 unsigned char fingerprint[20]);
 ssize_t output_bytes(const unsigned char *buf,size_t length);

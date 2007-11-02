@@ -1,3 +1,11 @@
+2007-11-01  David Shaw  <dshaw@jabberwocky.com>
+
+	* output.h, output.c (output_file_format): New function to print
+	our file format into the archive.
+	
+	* paperkey.c (main), output.c (output_start): Use it here.
+	Suggested by Brendan Kidwell.
+
 2007-10-03  David Shaw  <dshaw@jabberwocky.com>
 
 	* configure.ac: NEWS: Post-release commit.

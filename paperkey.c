@@ -42,7 +42,8 @@ enum options
     OPT_SECRET_KEY,
     OPT_PUBRING,
     OPT_SECRETS,
-    OPT_IGNORE_CRC_ERROR
+    OPT_IGNORE_CRC_ERROR,
+    OPT_FILE_FORMAT
   };
 
 static struct option long_options[]=
@@ -58,6 +59,7 @@ static struct option long_options[]=
     {"pubring",required_argument,NULL,OPT_PUBRING},
     {"secrets",required_argument,NULL,OPT_SECRETS},
     {"ignore-crc-error",no_argument,NULL,OPT_IGNORE_CRC_ERROR},
+    {"file-format",no_argument,NULL,OPT_FILE_FORMAT},
     {NULL,0,NULL,0}
   };
 
@@ -79,6 +81,7 @@ usage(void)
   printf("  --secrets       file containing secret"
 	  " data to join with the public key\n");
   printf("  --ignore-crc-error  don't reject corrupted input\n");
+  printf("  --file-format   show the paperkey file format\n");
 }
 
 int
@@ -182,6 +185,10 @@ main(int argc,char *argv[])
       case OPT_IGNORE_CRC_ERROR:
 	ignore_crc_error=1;
 	break;
+
+      case OPT_FILE_FORMAT:
+	output_file_format(stdout,"");
+	exit(0);
       }
 
   if(pubring)

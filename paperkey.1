@@ -25,19 +25,19 @@
 paperkey \- extract secret information out of OpenPGP secret keys
 .SH SYNOPSIS
 .B paperkey\fR
-[\fB--secret-key=\fR\fIFILE\fR]
-[\fB--output=\fR\fIFILE\fR]
-[\fB--output-type=\fR\fBbase16\fR|\fBraw\fR]
-[\fB--output-width=\fR\fIWIDTH\fR]
+[\fB\-\-secret\-key=\fR\fIFILE\fR]
+[\fB\-\-output=\fR\fIFILE\fR]
+[\fB\-\-output\-type=\fR\fBbase16\fR|\fBraw\fR]
+[\fB\-\-output\-width=\fR\fIWIDTH\fR]
 .LP
 .B paperkey\fR
-\fB--pubring=\fR\fIFILE\fR
-[\fB--secrets=\fR\fIFILE\fR]
-[\fB--input-type=\fR\fBauto\fR|\fBbase16\fR|\fBraw\fR]
-[\fB--output=\fR\fIFILE\fR]
-[\fB--ignore-crc-error\fR]
+\fB\-\-pubring=\fR\fIFILE\fR
+[\fB\-\-secrets=\fR\fIFILE\fR]
+[\fB\-\-input\-type=\fR\fBauto\fR|\fBbase16\fR|\fBraw\fR]
+[\fB\-\-output=\fR\fIFILE\fR]
+[\fB\-\-ignore\-crc\-error\fR]
 .LP
-.B paperkey\fR \fB--version\fR
+.B paperkey\fR \fB\-\-version\fR
 .SH MOTIVATION
 As with all data, secret keys should be backed up.  In fact, secret
 keys should be backed up even better than other data, because they are
@@ -67,13 +67,13 @@ for printing or in a raw mode for further processing.
 .PP
 The other mode rebuilds secret keys from such a paperkey and a copy of
 the public key, also verifying the checksums embedded in the paperkey.
-This mode is selected when the \fB--pubring\fR option is used, which
+This mode is selected when the \fB\-\-pubring\fR option is used, which
 is required in that case.  If a passphrase was set on the original
 secret key, the same passphrase is set on the rebuilt key.
 .PP
-Input is read from standard\-in except when the \fB--secret-key\fR or
-\fB--secrets\fR option is used; output is printed to standard\-out,
-unless changed with the \fB--output\fR option.
+Input is read from standard\-in except when the \fB\-\-secret\-key\fR or
+\fB\-\-secrets\fR option is used; output is printed to standard\-out,
+unless changed with the \fB\-\-output\fR option.
 .SH SECURITY CONSIDERATIONS
 Please note that \fBpaperkey\fR does not change the protection and
 encryption status of and security requirements for storing your secret
@@ -81,24 +81,24 @@ key. If the secret key was protected by a passphrase so is the
 paperkey.  If the secret key was unprotected the paperkey will not be
 protected either.
 .SH OPTIONS
-\fB--help\fR, \fB-h\fR
+\fB\-\-help\fR, \fB\-h\fR
 Display a short help message and exit successfully.
 .LP
 .TP
-\fB--version\fR
+\fB\-\-version\fR
 Print version information and copyright information and exit successfully.
 .LP
 .TP
-\fB--verbose\fR
+\fB\-\-verbose\fR
 Print status and progress information to standard\-error while processing
 the input.  Repeat for even more output.
 .LP
 .TP
-\fB--output=\fR\fIFILE\fR
+\fB\-\-output=\fR\fIFILE\fR
 Redirect output to the file given instead of printing to standard\-output.
 .SH OPTIONS FOR EXTRACTING SECRET INFORMATION
 .TP
-\fB--output-type=base16\fR, \fB--output-type=raw\fR
+\fB\-\-output\-type=base16\fR, \fB\-\-output\-type=raw\fR
 Select the output type.  The base16 style encodes the information in
 the style of a classic hex-dump, including line numbers and per-line
 CRC checksums to facilitate localizing errors in the input file during
@@ -107,48 +107,48 @@ the secret information, intended for feeding to barcode generators or
 the like.
 .LP
 .TP
-\fB--output-width=\fR\fIWIDTH\fR
+\fB\-\-output\-width=\fR\fIWIDTH\fR
 Choose line width in the base16 output mode.  The default is 78 characters.
 .LP
 .TP
-\fB--secret-key=\fR\fIFILE\fR
+\fB\-\-secret\-key=\fR\fIFILE\fR
 File to read the secret key from.  If this option is not given \fBpaperkey\fR
 reads from standard\-input.
 .SH OPTIONS FOR RE-CREATING PRIVATE KEYS
 .TP
-\fB--input-type=auto\fR, \fB--input-type=base16\fR, \fB--input-type=raw\fR
+\fB\-\-input\-type=auto\fR, \fB\-\-input\-type=base16\fR, \fB\-\-input\-type=raw\fR
 Specify that the given input is either in base16 format, as produced
 by \fBpaperkey\fR, or in raw format.  The default, auto, tries to
 automatically detect the format in use.
 .LP
 .TP
-\fB--pubring=\fR\fIFILE\fR
+\fB\-\-pubring=\fR\fIFILE\fR
 File to read public key information from.  It is assumed that the user can
 get the public key from sources like public internet keyservers.
 .LP
 .TP
-\fB--secrets=\fR\fIFILE\fR
+\fB\-\-secrets=\fR\fIFILE\fR
 File to read the extracted secrets, the paperkey, from.  If this is not given
 then the information is read from standard\-input.
 .LP
 .TP
-\fB--ignore-crc-error\fR
+\fB\-\-ignore\-crc\-error\fR
 Do not reject corrupt input and continue despite any CRC errors.
 .SH EXAMPLES
 Take the secret key in key.gpg and generate a text file
-to-be-printed.txt that contains the secret data:
+to\-be\-printed.txt that contains the secret data:
 .PP
-.B $ paperkey --secret-key my-secret-key.gpg --output to-be-printed.txt
+.B $ paperkey \-\-secret\-key my\-secret\-key.gpg \-\-output to\-be\-printed.txt
 .PP
-Take the secret key data in my-key-text-file.txt and combine it with
-my-public-key.gpg to reconstruct my-secret-key.gpg:
+Take the secret key data in my\-key\-text\-file.txt and combine it with
+my\-public\-key.gpg to reconstruct my\-secret\-key.gpg:
 .PP
-.B $ paperkey --pubring my-public-key.gpg --secrets my-key-text-file.txt --output my-secret-key.gpg
+.B $ paperkey \-\-pubring my\-public\-key.gpg \-\-secrets my\-key\-text\-file.txt \-\-output my\-secret\-key.gpg
 .PP
-If --output is not specified, the output goes to stdout.  If --secret-key is
+If \-\-output is not specified, the output goes to stdout.  If \-\-secret\-key is
 not specified, the data is read from stdin so you can do things like:
 .PP
-.B $ gpg --export-secret-key my-key | paperkey | lpr
+.B $ gpg \-\-export\-secret\-key my\-key | paperkey | lpr
 .SH SEE ALSO
 .BR gpg (1),
 .BR /usr/share/doc/paperkey/README.gz,

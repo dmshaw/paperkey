@@ -347,13 +347,14 @@ read_secrets_file(FILE *secrets,enum data_type input_type)
 	  unsigned long line_crc=CRC24_INIT;
 	  char *tok;
 
-	  if(line[0]=='#')
+	  if(line[0]=='#' || line[0]=='\n')
 	    continue;
 
 	  linenum=atoi(line);
 	  if(linenum!=next_linenum)
 	    {
-	      fprintf(stderr,"Error: missing line number %u\n",next_linenum);
+	      fprintf(stderr,"Error: missing line number %u (saw %u)\n",
+		      next_linenum,linenum);
 	      free_packet(packet);
 	      return NULL;
 	    }

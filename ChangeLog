@@ -1,3 +1,7 @@
+2008-01-30  David Shaw  <dshaw@jabberwocky.com>
+
+	* parse.c (read_secrets_file): Ignore blank lines in text input.
+
 2007-11-02  David Shaw  <dshaw@jabberwocky.com>
 
 	* paperkey.1: Escape dashes in man page.  From Peter Palfrader.

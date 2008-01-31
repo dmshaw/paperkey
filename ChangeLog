@@ -1,5 +1,7 @@
 2008-01-31  David Shaw  <dshaw@jabberwocky.com>
 
+	* parse.c (read_secrets_file): Skip \r lines as well for Win32.
+
 	* NEWS: Update for 0.8: --file-format, --comment, and SHA-1 fixes.
 
 	* paperkey.c (usage, main), output.c (output_start): Add --comment

@@ -347,7 +347,7 @@ read_secrets_file(FILE *secrets,enum data_type input_type)
 	  unsigned long line_crc=CRC24_INIT;
 	  char *tok;
 
-	  if(line[0]=='#' || line[0]=='\n')
+	  if(line[0]=='#' || line[0]=='\n' || line[0]=='\r')
 	    continue;
 
 	  linenum=atoi(line);

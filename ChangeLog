@@ -1,5 +1,7 @@
 2008-01-31  David Shaw  <dshaw@jabberwocky.com>
 
+	* paperkey.1: Document --file-format command.
+
 	* README, paperkey.spec.in: Slightly more elegant language.
 
 2008-01-30  David Shaw  <dshaw@jabberwocky.com>

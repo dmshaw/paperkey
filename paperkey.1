@@ -20,7 +20,7 @@
 .\"
 .\" paperkey, the software, is written and
 .\" copyright 2007 David Shaw <dshaw@jabberwocky.com>
-.TH PAPERKEY 1 "September 2007" "PAPERKEY"
+.TH PAPERKEY 1 "January 2008" "PAPERKEY"
 .SH NAME
 paperkey \- extract secret information out of OpenPGP secret keys
 .SH SYNOPSIS
@@ -36,6 +36,7 @@ paperkey \- extract secret information out of OpenPGP secret keys
 [\fB\-\-input\-type=\fR\fBauto\fR|\fBbase16\fR|\fBraw\fR]
 [\fB\-\-output=\fR\fIFILE\fR]
 [\fB\-\-ignore\-crc\-error\fR]
+[\fB\-\-file\-format\fR]
 .LP
 .B paperkey\fR \fB\-\-version\fR
 .SH MOTIVATION
@@ -96,6 +97,12 @@ the input.  Repeat for even more output.
 .TP
 \fB\-\-output=\fR\fIFILE\fR
 Redirect output to the file given instead of printing to standard\-output.
+.LP
+.TP
+\fB\-\-file\-format\fR
+Paperkey automatically includes the file format it uses as comments at
+the top of the base16 output.  This command simply prints out the file
+format and exits successfully.
 .SH OPTIONS FOR EXTRACTING SECRET INFORMATION
 .TP
 \fB\-\-output\-type=base16\fR, \fB\-\-output\-type=raw\fR

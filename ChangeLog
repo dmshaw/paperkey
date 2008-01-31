@@ -1,5 +1,8 @@
 2008-01-31  David Shaw  <dshaw@jabberwocky.com>
 
+	* paperkey.c (usage, main), output.c (output_start): Add --comment
+	option to include an arbitrary comment in base16 output.
+
 	* paperkey.1: Document --file-format command.
 
 	* README, paperkey.spec.in: Slightly more elegant language.

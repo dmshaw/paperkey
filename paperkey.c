@@ -29,6 +29,7 @@ static const char RCSID[]="$Id$";
 
 int verbose=0,ignore_crc_error=0;
 unsigned int output_width=78;
+char *comment=NULL;
 
 enum options
   {
@@ -43,7 +44,8 @@ enum options
     OPT_PUBRING,
     OPT_SECRETS,
     OPT_IGNORE_CRC_ERROR,
-    OPT_FILE_FORMAT
+    OPT_FILE_FORMAT,
+    OPT_COMMENT
   };
 
 static struct option long_options[]=
@@ -60,6 +62,7 @@ static struct option long_options[]=
     {"secrets",required_argument,NULL,OPT_SECRETS},
     {"ignore-crc-error",no_argument,NULL,OPT_IGNORE_CRC_ERROR},
     {"file-format",no_argument,NULL,OPT_FILE_FORMAT},
+    {"comment",required_argument,NULL,OPT_COMMENT},
     {NULL,0,NULL,0}
   };
 
@@ -82,6 +85,7 @@ usage(void)
 	  " data to join with the public key\n");
   printf("  --ignore-crc-error  don't reject corrupted input\n");
   printf("  --file-format   show the paperkey file format\n");
+  printf("  --comment       add a comment to the base16 output\n");
 }
 
 int
@@ -189,6 +193,10 @@ main(int argc,char *argv[])
       case OPT_FILE_FORMAT:
 	output_file_format(stdout,"");
 	exit(0);
+
+      case OPT_COMMENT:
+	comment=optarg;
+	break;
       }
 
   if(pubring)

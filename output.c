@@ -27,6 +27,7 @@ static const char RCSID[]="$Id$";
 #include "output.h"
 
 extern unsigned int output_width;
+extern char *comment;
 
 static enum data_type output_type;
 static FILE *output;
@@ -154,6 +155,8 @@ output_start(const char *name,enum data_type type,
 	output_file_format(output,"# ");
 	fprintf(output,"# Each base 16 line ends with a CRC-24 of that line.\n");
 	fprintf(output,"# The entire block of data ends with a CRC-24 of the entire block of data.\n\n");
+	if(comment)
+	  fprintf(output,"# %s\n\n",comment);
       }
       break;
     }

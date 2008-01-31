@@ -128,7 +128,7 @@ machine you may need to add the following to those CFLAGS:
   "-isysroot /Developer/SDKs/MacOSX10.4u.sdk"
 
 The additional isysroot is not necessary on Intel Tiger boxes, or any
-Leopard boxes.
+Leopard (or later) boxes.
 
 RPM
 ---

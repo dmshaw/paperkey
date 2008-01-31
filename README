@@ -4,10 +4,9 @@
 
 
 A reasonable way to achieve a long term backup of OpenPGP (GnuPG, PGP,
-etc) keys is to print them out on paper.  The reasoning behind this is
-that paper and ink has amazingly long retention qualities - far longer
-than the magnetic or optical means that are generally used to back up
-computer data.
+etc) keys is to print them out on paper.  Paper and ink have amazingly
+long retention qualities - far longer than the magnetic or optical
+means that are generally used to back up computer data.
 
 Paper?  Seriously?
 ------------------

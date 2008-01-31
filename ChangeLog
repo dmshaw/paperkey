@@ -1,3 +1,7 @@
+2008-01-31  David Shaw  <dshaw@jabberwocky.com>
+
+	* README, paperkey.spec.in: Slightly more elegant language.
+
 2008-01-30  David Shaw  <dshaw@jabberwocky.com>
 
 	* parse.c (read_secrets_file): Ignore blank lines in text input.

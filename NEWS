@@ -1,5 +1,16 @@
-Noteworthy changes in version 0.7 (unreleased)
+Noteworthy changes in version 0.8 (unreleased)
 ----------------------------------------------
+
+    * The file format is now included as part of the base16 output, as
+      there is no guarantee that this program will be on-hand when a
+      reconstruction is necessary.  The format can also be displayed
+      via the --file-format command.  Suggested by Brendan Kidwell.
+
+    * Some bug fixes (actually to gnulib, but relevant here as well)
+      to the SHA-1 code on platforms that require aligned access.
+      Thanks to Peter Palfrader.
+
+    * New --comment option to add comments to the base16 output.
 
 
 Noteworthy changes in version 0.7 (2007-10-03)

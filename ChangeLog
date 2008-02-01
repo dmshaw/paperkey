@@ -1,5 +1,7 @@
 2008-02-01  David Shaw  <dshaw@jabberwocky.com>
 
+	* NEWS, configure.ac: Post-release commit.
+
 	* NEWS, configure.ac: Preparing 0.8 release.
 
 2008-01-31  David Shaw  <dshaw@jabberwocky.com>

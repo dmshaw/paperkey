@@ -1,3 +1,7 @@
+2008-02-01  David Shaw  <dshaw@jabberwocky.com>
+
+	* NEWS, configure.ac: Preparing 0.8 release.
+
 2008-01-31  David Shaw  <dshaw@jabberwocky.com>
 
 	* parse.c (read_secrets_file): Skip \r lines as well for Win32.

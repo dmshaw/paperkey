@@ -1,4 +1,4 @@
-Noteworthy changes in version 0.8 (unreleased)
+Noteworthy changes in version 0.8 (2008-02-01)
 ----------------------------------------------
 
     * The file format is now included as part of the base16 output, as

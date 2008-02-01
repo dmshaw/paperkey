@@ -2,9 +2,9 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ(2.61)
-AC_INIT(paperkey, 0.8-devel, dshaw@jabberwocky.com)
+AC_INIT(paperkey, 0.8, dshaw@jabberwocky.com)
 AC_REVISION([$Id$])
-AC_COPYRIGHT([Copyright (C) 2007 David Shaw])
+AC_COPYRIGHT([Copyright (C) 2007, 2008 David Shaw])
 AC_GNU_SOURCE
 AC_CONFIG_SRCDIR([paperkey.c])
 AC_CONFIG_HEADER([config.h])

@@ -1,5 +1,8 @@
 2009-01-14  David Shaw  <dshaw@jabberwocky.com>
 
+	* Makefile.am: Autogenerate paperkey.txt from paperkey.1 when
+	cross compiling.
+
 	* configure.ac, Makefile.am: Don't run selftest when cross
 	compiling.
 

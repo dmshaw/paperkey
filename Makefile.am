@@ -16,3 +16,9 @@ man_MANS=paperkey.1
 bin_PROGRAMS=paperkey
 
 paperkey_SOURCES=paperkey.c packets.c packets.h parse.c parse.h extract.c extract.h restore.c restore.h output.c output.h
+
+if MINGW32_BUILD
+EXTRA_DIST+=README.WIN32 paperkey.txt paperkey.exe
+paperkey.txt: paperkey.1
+	nroff -man paperkey.1 > paperkey.txt
+endif

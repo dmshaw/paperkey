@@ -122,13 +122,18 @@ and Intel Macs with:
 
 ./configure CFLAGS="-arch ppc -arch i386" --disable-dependency-tracking
 
-Note that if you are doing the build on a OS X 10.4 (Tiger) PPC
-machine you may need to add the following to those CFLAGS:
+If you are doing the build on a OS X 10.4 (Tiger) PPC machine you may
+need to add the following to those CFLAGS:
 
   "-isysroot /Developer/SDKs/MacOSX10.4u.sdk"
 
 The additional isysroot is not necessary on Intel Tiger boxes, or any
 Leopard (or later) boxes.
+
+Note that there is little point in building a universal binary unless
+you plan to run the same binary on both a PPC and Intel Mac.
+Generally this is only useful if you are distributing the binary to
+other people and want it to work on older Macs.
 
 RPM
 ---

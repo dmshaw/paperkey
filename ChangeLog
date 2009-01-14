@@ -1,3 +1,15 @@
+2009-01-14  David Shaw  <dshaw@jabberwocky.com>
+
+	* Makefile.am: When cross compiling for Win32, add README.WIN32, a
+	regular text file version of the man page, and the Win32 binary.
+
+	* README: Clarify what universal binaries are good for.
+
+	* configure.ac: Add "-win32" to dist version string when cross
+	compiling.
+
+	* README.WIN32: New.
+
 2008-02-01  David Shaw  <dshaw@jabberwocky.com>
 
 	* NEWS, configure.ac: Post-release commit.

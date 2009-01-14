@@ -9,6 +9,13 @@ AC_GNU_SOURCE
 AC_CONFIG_SRCDIR([paperkey.c])
 AC_CONFIG_HEADER([config.h])
 AM_INIT_AUTOMAKE([std-options])
+AC_CANONICAL_HOST
+
+AM_CONDITIONAL(MINGW32_BUILD, test "$host_os" = "mingw32")
+
+if test "$host_os" = "mingw32" ; then
+   VERSION="$VERSION-win32"
+fi
 
 # Checks for programs.
 AC_PROG_CC

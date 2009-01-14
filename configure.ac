@@ -11,6 +11,7 @@ AC_CONFIG_HEADER([config.h])
 AM_INIT_AUTOMAKE([std-options])
 AC_CANONICAL_HOST
 
+AM_CONDITIONAL(CROSS_COMPILING, test "$cross_compiling" = "yes")
 AM_CONDITIONAL(MINGW32_BUILD, test "$host_os" = "mingw32")
 
 if test "$host_os" = "mingw32" ; then

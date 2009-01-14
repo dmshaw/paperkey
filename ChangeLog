@@ -1,5 +1,8 @@
 2009-01-14  David Shaw  <dshaw@jabberwocky.com>
 
+	* configure.ac, Makefile.am: Don't run selftest when cross
+	compiling.
+
 	* Makefile.am: When cross compiling for Win32, add README.WIN32, a
 	regular text file version of the man page, and the Win32 binary.
 

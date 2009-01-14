@@ -1,0 +1,6 @@
+This is the Win32 release of Paperkey.  It is identical to the regular
+POSIX release, with the addition of this README.WIN32 file,
+instructions for use in paperkey.txt and a pre-compiled paperkey.exe
+binary.
+
+$Id$

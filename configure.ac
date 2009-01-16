@@ -1,19 +1,23 @@
 #                                               -*- Autoconf -*-
 # Process this file with autoconf to produce a configure script.
 
-AC_PREREQ(2.61)
-AC_INIT(paperkey, 0.9-devel, dshaw@jabberwocky.com)
+AC_PREREQ(2.63)
+AC_INIT([paperkey],[0.9-devel],[dshaw@jabberwocky.com])
 AC_REVISION([$Id$])
-AC_COPYRIGHT([Copyright (C) 2007, 2008 David Shaw])
-AC_GNU_SOURCE
+m4_define(_COPYRIGHT_STRING,
+   [[Copyright (C) 2007, 2008, 2009 David Shaw <dshaw@jabberwocky.com>]])
+AC_COPYRIGHT(_COPYRIGHT_STRING)
+AC_USE_SYSTEM_EXTENSIONS
 AC_CONFIG_SRCDIR([paperkey.c])
 AC_CONFIG_HEADER([config.h])
 AM_INIT_AUTOMAKE([std-options])
 AC_CANONICAL_HOST
-
+AC_DEFINE(COPYRIGHT_STRING,"_COPYRIGHT_STRING",[The copyright string])
 AM_CONDITIONAL(CROSS_COMPILING, test "$cross_compiling" = "yes")
 AM_CONDITIONAL(MINGW32_BUILD, test "$host_os" = "mingw32")
 
+# This is so "make dist" when cross compiling has a "-win32" at the
+# end of the name.
 if test "$host_os" = "mingw32" ; then
    VERSION="$VERSION-win32"
 fi
@@ -44,7 +48,7 @@ gl_MODULES(getopt crypto/sha1)
 gl_INIT
 
 AC_ARG_ENABLE(optimization,
-   AC_HELP_STRING([--disable-optimization],[disable compiler optimization]),
+   AS_HELP_STRING([--disable-optimization],[disable compiler optimization]),
    [if test $enableval = no ; then
       CFLAGS=`echo $CFLAGS | sed 's/-O[[0-9]]//'`
    fi])

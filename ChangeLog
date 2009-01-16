@@ -1,5 +1,10 @@
 2009-01-16  David Shaw  <dshaw@jabberwocky.com>
 
+	* paperkey.c (main): --version strings from autoconf.
+
+	* configure.ac: autoupdate, and some m4 magic so we can propagate
+	the copyright line into config.h.
+
 	* paperkey.spec.in: Borrow some RPM-fu from the Fedora RPM by Todd
 	Zullinger.
 

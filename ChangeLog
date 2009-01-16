@@ -1,3 +1,11 @@
+2009-01-16  David Shaw  <dshaw@jabberwocky.com>
+
+	* paperkey.spec.in: Borrow some RPM-fu from the Fedora RPM by Todd
+	Zullinger.
+
+	* output.c (output_file_format): Clarify we're all big endian
+	here.  Noted by Frédéric Brière.
+
 2009-01-14  David Shaw  <dshaw@jabberwocky.com>
 
 	* Makefile.am: Autogenerate paperkey.txt from paperkey.1 when

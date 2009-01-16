@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2007 David Shaw <dshaw@jabberwocky.com>
+ * Copyright (C) 2007, 2008, 2009 David Shaw <dshaw@jabberwocky.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -107,9 +107,9 @@ output_file_format(FILE *stream,const char *prefix)
   fprintf(stream,"%sa) 1 octet:  version of the paperkey format (currently 0).\n",prefix);
   fprintf(stream,"%sb) 1 octet:  OpenPGP key version (currently 4)\n",prefix);
   fprintf(stream,"%sc) n octets: Key fingerprint (20 octets for a version 4 key)\n",prefix);
-  fprintf(stream,"%sd) 2 octets: 16-bit length of the following secret data\n",prefix);
+  fprintf(stream,"%sd) 2 octets: 16-bit big endian length of the following secret data\n",prefix);
   fprintf(stream,"%se) n octets: secret data: an OpenPGP secret key or subkey as specified in\n",prefix);
-  fprintf(stream,"%s             RFC-4880, starting with the string-to-key usage octet and\n",prefix);
+  fprintf(stream,"%s             RFC 4880, starting with the string-to-key usage octet and\n",prefix);
   fprintf(stream,"%s             continuing until the end of the packet.\n",prefix);
   fprintf(stream,"%sRepeat fields b through e as needed to cover all subkeys.\n",prefix);
   fprintf(stream,"%sTo recover, use the fingerprint to match an existing public key with the\n",prefix);

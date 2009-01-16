@@ -1,14 +1,15 @@
 # $Id$
 
-Summary: Program to back up OpenPGP keys on paper
-Name: paperkey
-Version: @PACKAGE_VERSION@
-Release: 1
-License: GPL
-Group: Applications/Cryptography
-Source: http://www.jabberwocky.com/software/paperkey/paperkey-%{version}.tar.gz
-Url: http://www.jabberwocky.com/software/paperkey/
-BuildRoot: %{_tmppath}/%{name}-root
+Name:      paperkey
+Version:   @PACKAGE_VERSION@
+Release:   1
+Summary:   An OpenPGP key archiver
+Group:	   Applications/Cryptography
+License:   GPLv2+
+URL:	   http://www.jabberwocky.com/software/paperkey/
+Source0:   http://www.jabberwocky.com/software/%{name}/%{name}-%{version}.tar.gz
+Source1:   http://www.jabberwocky.com/software/%{name}/%{name}-%{version}.tar.gz.sig
+BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 %description
 A reasonable way to achieve a long term backup of OpenPGP (PGP, GnuPG,
@@ -20,24 +21,25 @@ DVD-R, etc) backups, but rather as an if-all-else-fails method of
 restoring a key.
 
 %prep
-%setup
+%setup -q
 
 %build
 %configure
-make
+make %{?_smp_mflags}
 
 %install
-rm -rf $RPM_BUILD_ROOT
+rm -rf "$RPM_BUILD_ROOT"
 make install DESTDIR="$RPM_BUILD_ROOT"
 
 %clean
-rm -rf $RPM_BUILD_ROOT
-
-%post
-%postun
+rm -rf "$RPM_BUILD_ROOT"
 
 %files
-%defattr(-,root,root)
-%doc README NEWS
-%{_mandir}/man1/*
-%{_bindir}/paperkey
+%defattr(-,root,root,-)
+%doc AUTHORS ChangeLog COPYING README NEWS
+%{_bindir}/%{name}
+%{_mandir}/man1/%{name}.1.gz
+
+%changelog
+* Fri Jan 16 2009 David Shaw <dshaw@jabberwocky.com>
+- Borrow some RPM-fu from the Fedora RPM.

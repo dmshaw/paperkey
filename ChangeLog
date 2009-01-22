@@ -1,3 +1,9 @@
+2009-01-22  David Shaw  <dshaw@jabberwocky.com>
+
+	* README: Update.
+
+	* configure.ac: Preparing 1.0 release.
+
 2009-01-16  David Shaw  <dshaw@jabberwocky.com>
 
 	* paperkey.c (main): --version strings from autoconf.

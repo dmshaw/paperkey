@@ -69,18 +69,18 @@ Examples
 Take the secret key in key.gpg and generate a text file
 to-be-printed.txt that contains the secret data:
 
-$ paperkey --secret-key my-secret-key.gpg --output to-be-printed.txt
+  paperkey --secret-key my-secret-key.gpg --output to-be-printed.txt
 
 Take the secret key data in my-key-text-file.txt and combine it with
 my-public-key.gpg to reconstruct my-secret-key.gpg:
 
-$ paperkey --pubring my-public-key.gpg --secrets my-key-text-file.txt --output my-secret-key.gpg
+  paperkey --pubring my-public-key.gpg --secrets my-key-text-file.txt --output my-secret-key.gpg
 
 If --output is not specified, the output goes to stdout.  If
 --secret-key is not specified, the data is read from stdin so you can
 do things like:
 
-$ gpg --export-secret-key my-key | paperkey --output my-key-text-file.txt
+  gpg --export-secret-key my-key | paperkey --output my-key-text-file.txt
 
 Some other useful options are:
 
@@ -120,7 +120,7 @@ Universal Binaries on Apple OS X
 You can build a universal ("fat") binary that will work on both PPC
 and Intel Macs with:
 
-./configure CFLAGS="-arch ppc -arch i386" --disable-dependency-tracking
+  ./configure CFLAGS="-arch ppc -arch i386" --disable-dependency-tracking
 
 If you are doing the build on a OS X 10.4 (Tiger) PPC machine you may
 need to add the following to those CFLAGS:
@@ -140,5 +140,7 @@ RPM
 
 Paperkey ships with a RPM spec file.  You can build the RPM with the
 usual "rpmbuild -ta /path/to/the/paperkey/tarball.tar.gz".
+
+Paperkey is Copyright (C) 2007, 2008, 2009 by David Shaw
 
 $Id$

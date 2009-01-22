@@ -1,8 +1,8 @@
 #                                               -*- Autoconf -*-
 # Process this file with autoconf to produce a configure script.
 
-AC_PREREQ(2.63)
-AC_INIT([paperkey],[0.9-devel],[dshaw@jabberwocky.com])
+AC_PREREQ(2.61)
+AC_INIT([paperkey],[1.0],[dshaw@jabberwocky.com])
 AC_REVISION([$Id$])
 m4_define(_COPYRIGHT_STRING,
    [[Copyright (C) 2007, 2008, 2009 David Shaw <dshaw@jabberwocky.com>]])

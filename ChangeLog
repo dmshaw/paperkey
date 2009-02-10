@@ -1,3 +1,12 @@
+2009-02-10  David Shaw  <dshaw@jabberwocky.com>
+
+	* paperkey.1: Don't mention the README file.  It's not really
+	necessary here, and not all platfoms install it.  Noted by Todd
+	Zullinger.
+
+	* output.c (output_file_format, output_start): Some file format
+	documentation tweaks.
+
 2009-01-27  David Shaw  <dshaw@jabberwocky.com>
 
 	* paperkey.c (main): Properly set up stdin to be in binary mode on

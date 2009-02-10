@@ -104,17 +104,23 @@ void
 output_file_format(FILE *stream,const char *prefix)
 {
   fprintf(stream,"%sFile format:\n",prefix);
-  fprintf(stream,"%sa) 1 octet:  version of the paperkey format (currently 0).\n",prefix);
-  fprintf(stream,"%sb) 1 octet:  OpenPGP key version (currently 4)\n",prefix);
-  fprintf(stream,"%sc) n octets: Key fingerprint (20 octets for a version 4 key)\n",prefix);
+  fprintf(stream,"%sa) 1 octet:  Version of the paperkey format (currently 0).\n",prefix);
+  fprintf(stream,"%sb) 1 octet:  OpenPGP key or subkey version (currently 4)\n",prefix);
+  fprintf(stream,"%sc) n octets: Key fingerprint (20 octets for a version 4 key or subkey)\n",prefix);
   fprintf(stream,"%sd) 2 octets: 16-bit big endian length of the following secret data\n",prefix);
-  fprintf(stream,"%se) n octets: secret data: an OpenPGP secret key or subkey as specified in\n",prefix);
-  fprintf(stream,"%s             RFC 4880, starting with the string-to-key usage octet and\n",prefix);
-  fprintf(stream,"%s             continuing until the end of the packet.\n",prefix);
+  fprintf(stream,"%se) n octets: Secret data: a partial OpenPGP secret key or subkey packet as\n",prefix);
+  fprintf(stream,"%s             specified in RFC 4880, starting with the string-to-key usage\n",prefix);
+  fprintf(stream,"%s             octet and continuing until the end of the packet.\n",prefix);
   fprintf(stream,"%sRepeat fields b through e as needed to cover all subkeys.\n",prefix);
-  fprintf(stream,"%sTo recover, use the fingerprint to match an existing public key with the\n",prefix);
-  fprintf(stream,"%scorresponding secret data, then append field e to the public key to\n",prefix);
-  fprintf(stream,"%screate a secret key.\n",prefix);
+  fprintf(stream,"%s\n",prefix);
+  fprintf(stream,"%sTo recover a secret key without using the paperkey program, use the\n",prefix);
+  fprintf(stream,"%skey fingerprint to match an existing public key packet with the\n",prefix);
+  fprintf(stream,"%scorresponding secret data from the paper key.  Next, append this secret\n",prefix);
+  fprintf(stream,"%sdata to the public key packet.  Finally, switch the public key packet tag\n",prefix);
+  fprintf(stream,"%sfrom 6 to 5 (14 to 7 for subkeys).  This will recreate the original secret\n",prefix);
+  fprintf(stream,"%skey or secret subkey packet.  Repeat as needed for all public key or subkey\n",prefix);
+  fprintf(stream,"%spackets in the public key.  All other packets (user IDs, signatures, etc.)\n",prefix);
+  fprintf(stream,"%smay simply be copied from the public key.\n",prefix);
 }
 
 int
@@ -150,10 +156,10 @@ output_start(const char *name,enum data_type type,
 	fprintf(output,"# Secret portions of key ");
 	print_bytes(output,fingerprint,20);
 	fprintf(output,"\n");
-	fprintf(output,"# Base 16 data extracted %.24s\n",ctime(&now));
-	fprintf(output,"# Created with " PACKAGE_STRING " by David Shaw\n\n");
+	fprintf(output,"# Base16 data extracted %.24s\n",ctime(&now));
+	fprintf(output,"# Created with " PACKAGE_STRING " by David Shaw\n#\n");
 	output_file_format(output,"# ");
-	fprintf(output,"# Each base 16 line ends with a CRC-24 of that line.\n");
+	fprintf(output,"#\n# Each base16 line ends with a CRC-24 of that line.\n");
 	fprintf(output,"# The entire block of data ends with a CRC-24 of the entire block of data.\n\n");
 	if(comment)
 	  fprintf(output,"# %s\n\n",comment);

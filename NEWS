@@ -1,5 +1,10 @@
-Noteworthy changes in version 1.1 (unreleased)
+Noteworthy changes in version 1.1 (2009-02-10)
 ----------------------------------------------
+
+    * Minor bug fix for Windows platforms.
+
+    * Make the instructions on how to restore a key without paperkey a
+      bit clearer.
 
 
 Noteworthy changes in version 1.0 (2009-01-22)

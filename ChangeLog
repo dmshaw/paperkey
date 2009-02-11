@@ -1,5 +1,7 @@
 2009-02-10  David Shaw  <dshaw@jabberwocky.com>
 
+	* NEWS, configure.ac: Post-release commit.
+
 	* NEWS, configure.ac: Preparing 1.1 release.
 
 	* paperkey.1: Don't mention the README file.  It's not really

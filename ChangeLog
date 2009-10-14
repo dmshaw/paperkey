@@ -3,6 +3,9 @@
 	* paperkey.c (main): Force the umask to go-rwx, as we are going to
 	be creating files that contain secret key material.
 
+	* paperkey.1, paperkey.c (main, usage): Add -o as alias to
+	--output, and document -h (help), -V (version), and -v (verbose).
+
 2009-02-10  David Shaw  <dshaw@jabberwocky.com>
 
 	* NEWS, configure.ac: Post-release commit.

@@ -76,10 +76,10 @@ static void
 usage(void)
 {
   printf("Usage: paperkey [OPTIONS]\n");
-  printf("  --help\n");
-  printf("  --version\n");
+  printf("  --help (-h)\n");
+  printf("  --version (-V)\n");
   printf("  --verbose (-v)  be more verbose\n");
-  printf("  --output        write output to this file\n");
+  printf("  --output (-o)   write output to this file\n");
   printf("  --input-type    auto, base16 or raw (binary)\n");
   printf("  --output-type   base16 or raw (binary)\n");
   printf("  --output-width  maximum width of base16 output\n");
@@ -118,7 +118,7 @@ main(int argc,char *argv[])
      that contain secret key material. */
   umask(077);
 
-  while((arg=getopt_long(argc,argv,"hVv",long_options,NULL))!=-1)
+  while((arg=getopt_long(argc,argv,"hVvo:",long_options,NULL))!=-1)
     switch(arg)
       {
       case OPT_HELP:
@@ -144,6 +144,7 @@ main(int argc,char *argv[])
 	break;
 
       case OPT_OUTPUT:
+      case 'o':
 	outname=optarg;
 	break;
 

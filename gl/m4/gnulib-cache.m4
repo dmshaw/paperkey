@@ -15,13 +15,13 @@
 
 
 # Specification in the form of a command-line invocation:
-#   gnulib-tool --import --dir=. --lib=libgl --source-base=gl --m4-base=gl/m4 --doc-base=doc --tests-base=tests --aux-dir=. --no-libtool --macro-prefix=gl crypto/sha1 getopt
+#   gnulib-tool --import --dir=. --lib=libgl --source-base=gl --m4-base=gl/m4 --doc-base=doc --tests-base=tests --aux-dir=. --no-libtool --macro-prefix=gl crypto/sha1 getopt-gnu
 
 # Specification in the form of a few gnulib-tool.m4 macro invocations:
 gl_LOCAL_DIR([])
 gl_MODULES([
   crypto/sha1
-  getopt
+  getopt-gnu
 ])
 gl_AVOID([])
 gl_SOURCE_BASE([gl])

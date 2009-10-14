@@ -40,11 +40,7 @@ AC_TYPE_SSIZE_T
 
 # Checks for library functions.
 
-# Gnulib stuff.
-gl_SOURCE_BASE(gl)
-gl_M4_BASE(gl/m4)
-gl_LIB(libgl)
-gl_MODULES(getopt crypto/sha1)
+# Gnulib.
 gl_INIT
 
 AC_ARG_ENABLE(optimization,

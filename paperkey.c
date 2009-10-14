@@ -23,6 +23,8 @@ static const char RCSID[]="$Id$";
 #include <stdlib.h>
 #include <string.h>
 #include <errno.h>
+#include <sys/types.h>
+#include <sys/stat.h>
 #ifdef _WIN32
 #include <io.h>
 #include <fcntl.h>
@@ -111,6 +113,10 @@ main(int argc,char *argv[])
 #endif
 
   secret_key=secrets=stdin;
+
+  /* Force the umask to go-rwx, as we are going to be creating files
+     that contain secret key material. */
+  umask(077);
 
   while((arg=getopt_long(argc,argv,"hVv",long_options,NULL))!=-1)
     switch(arg)

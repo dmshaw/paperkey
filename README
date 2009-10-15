@@ -118,9 +118,13 @@ Universal Binaries on Apple OS X
 --------------------------------
 
 You can build a universal ("fat") binary that will work on both PPC
-and Intel Macs with:
+and Intel Macs, whether 32 or 64-bit, with the appropriate variation
+of:
 
   ./configure CFLAGS="-arch ppc -arch i386" --disable-dependency-tracking
+ 
+Available architectures are any combination of "i386", "x86_64",
+"ppc", or "ppc64".
 
 If you are doing the build on a OS X 10.4 (Tiger) PPC machine you may
 need to add the following to those CFLAGS:

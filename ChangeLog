@@ -1,5 +1,7 @@
 2009-10-14  David Shaw  <dshaw@jabberwocky.com>
 
+	* NEWS, configure.ac: Preparing 1.2 release.
+
 	* paperkey.c (main): Force the umask to go-rwx, as we are going to
 	be creating files that contain secret key material.
 

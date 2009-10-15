@@ -1,5 +1,11 @@
-Noteworthy changes in version 1.2 (unreleased)
+Noteworthy changes in version 1.2 (2009-10-14)
 ----------------------------------------------
+
+    * Minor documentation changes.
+
+    * Gnulib refresh.
+
+    * Generate output files with more restrictive permissions (go-rwx).
 
 
 Noteworthy changes in version 1.1 (2009-02-10)

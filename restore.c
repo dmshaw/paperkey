@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2007 David Shaw <dshaw@jabberwocky.com>
+ * Copyright (C) 2007, 2012 David Shaw <dshaw@jabberwocky.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -189,10 +189,13 @@ restore(FILE *pubring,FILE *secrets,
 			}
 		    }
 		}
-	      else if(pubkey->type==13 && did_pubkey)
+	      else if(did_pubkey)
 		{
 		  /* Copy the usual user ID, sigs, etc, so the key is
-		     well-formed */
+		     well-formed.  Note that for simplicity we always
+		     output new-style packets, which means that the
+		     resulting key will be functionally, but perhaps
+		     not byte-for-byte, identical. */
 		  ptag=0xC0|pubkey->type;
 		  output_bytes(&ptag,1);
 		  output_openpgp_length(pubkey->len);

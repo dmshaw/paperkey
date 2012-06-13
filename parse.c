@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2007, 2008 David Shaw <dshaw@jabberwocky.com>
+ * Copyright (C) 2007, 2008, 2012 David Shaw <dshaw@jabberwocky.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -287,6 +287,30 @@ extract_secrets(struct packet *packet)
       if(packet->len<=offset)
 	return -1;
       offset+=MPI_LENGTH(&packet->buf[offset]);
+      if(packet->len<=offset)
+	return -1;
+      offset+=MPI_LENGTH(&packet->buf[offset]);
+      if(packet->len<=offset)
+	return -1;
+      break;
+
+    case 18: /* ECDH */
+      /* Skip the curve ID and its length byte, plus an MPI, plus the
+	 KDF parameters and their length byte */
+      offset+=packet->buf[offset]+1;
+      if(packet->len<=offset)
+	return -1;
+      offset+=MPI_LENGTH(&packet->buf[offset]);
+      if(packet->len<=offset)
+	return -1;
+      offset+=packet->buf[offset]+1;
+      if(packet->len<=offset)
+	return -1;
+      break;
+
+    case 19: /* ECDSA */
+      /* Skip the curve ID and its length byte, plus an MPI */
+      offset+=packet->buf[offset]+1;
       if(packet->len<=offset)
 	return -1;
       offset+=MPI_LENGTH(&packet->buf[offset]);

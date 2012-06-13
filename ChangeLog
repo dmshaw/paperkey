@@ -1,5 +1,8 @@
 2012-06-13  David Shaw  <dshaw@jabberwocky.com>
 
+	* parse.c (extract_secrets): Add support for ECDH and ECDSA as per
+	RFC 6637.
+
 	* paperkey.1: Internet is capitalized.
 
 	* restore.c (restore): Fix problem with missing sigs on

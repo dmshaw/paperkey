@@ -147,4 +147,3 @@ usual "rpmbuild -ta /path/to/the/paperkey/tarball.tar.gz".
 
 Paperkey is Copyright (C) 2007, 2008, 2009 by David Shaw
 
-$Id$

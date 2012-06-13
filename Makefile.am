@@ -1,5 +1,3 @@
-# $Id$
-
 ACLOCAL_AMFLAGS=-I gl/m4
 EXTRA_DIST=paperkey.spec $(man_MANS)
 SUBDIRS=gl .

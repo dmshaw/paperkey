@@ -174,15 +174,14 @@ restore(FILE *pubring,FILE *secrets,
 			{
 			  if(pubkey->type==6)
 			    {
-			      ptag=0xC5;
+			      ptag=5;
 			      did_pubkey=1;
 			    }
 			  else
-			    ptag=0xC7;
+			    ptag=7;
 
 			  /* Match, so create a secret key. */
-			  output_bytes(&ptag,1);
-			  output_openpgp_length(pubkey->len
+			  output_openpgp_header(ptag,pubkey->len
 						+keyidx->packet->len);
 			  output_packet(pubkey);
 			  output_packet(keyidx->packet);
@@ -192,13 +191,8 @@ restore(FILE *pubring,FILE *secrets,
 	      else if(did_pubkey)
 		{
 		  /* Copy the usual user ID, sigs, etc, so the key is
-		     well-formed.  Note that for simplicity we always
-		     output new-style packets, which means that the
-		     resulting key will be functionally, but perhaps
-		     not byte-for-byte, identical. */
-		  ptag=0xC0|pubkey->type;
-		  output_bytes(&ptag,1);
-		  output_openpgp_length(pubkey->len);
+		     well-formed. */
+		  output_openpgp_header(pubkey->type,pubkey->len);
 		  output_packet(pubkey);
 		}
 

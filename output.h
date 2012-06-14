@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2007 David Shaw <dshaw@jabberwocky.com>
+ * Copyright (C) 2007, 2012 David Shaw <dshaw@jabberwocky.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,7 +33,7 @@ int output_start(const char *name,enum data_type type,
 ssize_t output_bytes(const unsigned char *buf,size_t length);
 #define output_packet(_packet) output_bytes((_packet)->buf,(_packet)->len)
 ssize_t output_length16(size_t length);
-ssize_t output_openpgp_length(size_t length);
+ssize_t output_openpgp_header(unsigned char tag,size_t length);
 void output_finish(void);
 
 #endif /* !_OUTPUT_H_ */

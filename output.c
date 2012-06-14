@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2007, 2008, 2009 David Shaw <dshaw@jabberwocky.com>
+ * Copyright (C) 2007, 2008, 2009, 2012 David Shaw <dshaw@jabberwocky.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -217,30 +217,39 @@ output_length16(size_t length)
 }
 
 ssize_t
-output_openpgp_length(size_t length)
+output_openpgp_header(unsigned char tag,size_t length)
 {
-  unsigned char encoded[5];
+  unsigned char encoded[6];
+  size_t bytes;
+
+  /* Note that for simplicity we always output new-style packets,
+     which means that the resulting key will be functionally, but
+     perhaps not byte-for-byte, identical. */
+
+  encoded[0]=0xC0|tag;
 
   if(length>8383)
     {
-      encoded[0]=0xFF;
-      encoded[1]=length>>24;
-      encoded[2]=length>>16;
-      encoded[3]=length>>8;
-      encoded[4]=length;
-      return output_bytes(encoded,5);
+      encoded[1]=0xFF;
+      encoded[2]=length>>24;
+      encoded[3]=length>>16;
+      encoded[4]=length>>8;
+      encoded[5]=length;
+      bytes=6;
     }
   else if(length>191)
     {
-      encoded[0]=192+((length-192)>>8);
-      encoded[1]=(length-192);
-      return output_bytes(encoded,2);
+      encoded[1]=192+((length-192)>>8);
+      encoded[2]=(length-192);
+      bytes=3;
     }
   else
     {
-      encoded[0]=length;
-      return output_bytes(encoded,1);
+      encoded[1]=length;
+      bytes=2;
     }
+
+  return output_bytes(encoded,bytes);
 }
 
 void

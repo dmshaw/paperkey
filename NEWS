@@ -1,6 +1,11 @@
 Noteworthy changes in version 1.3 (unreleased)
 ----------------------------------------------
 
+    * Added support for OpenPGP elliptic curve keys (ECDH and ECDSA)
+      as specified in RFC 6637.
+
+    * Minor bug fixes.
+
 
 Noteworthy changes in version 1.2 (2009-10-14)
 ----------------------------------------------

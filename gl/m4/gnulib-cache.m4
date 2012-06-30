@@ -27,7 +27,7 @@
 
 
 # Specification in the form of a command-line invocation:
-#   gnulib-tool --import --dir=. --lib=libgl --source-base=gl --m4-base=gl/m4 --doc-base=doc --tests-base=tests --aux-dir=. --no-conditional-dependencies --no-libtool --macro-prefix=gl crypto/sha1 getopt-gnu
+#   gnulib-tool --import --dir=. --lib=libgl --source-base=gl --m4-base=gl/m4 --doc-base=doc --tests-base=tests --aux-dir=. --with-tests --no-conditional-dependencies --no-libtool --macro-prefix=gl crypto/sha1 getopt-gnu
 
 # Specification in the form of a few gnulib-tool.m4 macro invocations:
 gl_LOCAL_DIR([])
@@ -41,6 +41,7 @@ gl_M4_BASE([gl/m4])
 gl_PO_BASE([])
 gl_DOC_BASE([doc])
 gl_TESTS_BASE([tests])
+gl_WITH_TESTS
 gl_LIB([libgl])
 gl_MAKEFILE_NAME([])
 gl_MACRO_PREFIX([gl])

@@ -1,3 +1,12 @@
+2012-11-29  David Shaw  <dshaw@jabberwocky.com>
+
+	* checks: Add tests for RSA and ECC keys.
+
+	* output.c (output_openpgp_header): Use the same "tag under 16,
+	use old-style packets" as other OpenPGP programs.  It's crazy to
+	have a roundtrip test that doesn't compare the result with the
+	input.
+
 2012-06-13  David Shaw  <dshaw@jabberwocky.com>
 
 	* parse.c (extract_secrets): Add support for ECDH and ECDSA as per
@@ -113,7 +122,7 @@
 
 	* output.h, output.c (output_file_format): New function to print
 	our file format into the archive.
-	
+
 	* paperkey.c (main), output.c (output_start): Use it here.
 	Suggested by Brendan Kidwell.
 

@@ -1,5 +1,8 @@
 2012-11-29  David Shaw  <dshaw@jabberwocky.com>
 
+	* checks/roundtrip.sh, checks/roundtrip-raw.sh: Use /bin/echo as
+	some shell builtin echoes don't understand "echo -n".
+
 	* checks: Add tests for RSA and ECC keys.
 
 	* output.c (output_openpgp_header): Use the same "tag under 16,

@@ -222,31 +222,62 @@ output_openpgp_header(unsigned char tag,size_t length)
   unsigned char encoded[6];
   size_t bytes;
 
-  /* Note that for simplicity we always output new-style packets,
-     which means that the resulting key will be functionally, but
-     perhaps not byte-for-byte, identical. */
+  /* We do the same "tag under 16, use old-style packets" that many
+     OpenPGP programs use.  This helps make the resulting key
+     byte-for-byte identical.  This is not a guarantee (it's legal for
+     the generating program to use whatever packet style it likes),
+     but does help avoid questions why the input to paperkey might not
+     equal the output. */
 
-  encoded[0]=0xC0|tag;
-
-  if(length>8383)
+  if(tag<16)
     {
-      encoded[1]=0xFF;
-      encoded[2]=length>>24;
-      encoded[3]=length>>16;
-      encoded[4]=length>>8;
-      encoded[5]=length;
-      bytes=6;
-    }
-  else if(length>191)
-    {
-      encoded[1]=192+((length-192)>>8);
-      encoded[2]=(length-192);
-      bytes=3;
+      if(length>65535)
+	{
+	  encoded[0]=0x80|(tag<<2)|2;
+	  encoded[1]=length>>24;
+	  encoded[2]=length>>16;
+	  encoded[3]=length>>8;
+	  encoded[4]=length;
+	  bytes=5;
+	}
+      else if(length>255)
+	{
+	  encoded[0]=0x80|(tag<<2)|1;
+	  encoded[1]=length>>8;
+	  encoded[2]=length;
+	  bytes=3;
+	}
+      else
+	{
+	  encoded[0]=0x80|(tag<<2);
+	  encoded[1]=length;
+	  bytes=2;
+	}
     }
   else
     {
-      encoded[1]=length;
-      bytes=2;
+      encoded[0]=0xC0|tag;
+
+      if(length>8383)
+	{
+	  encoded[1]=0xFF;
+	  encoded[2]=length>>24;
+	  encoded[3]=length>>16;
+	  encoded[4]=length>>8;
+	  encoded[5]=length;
+	  bytes=6;
+	}
+      else if(length>191)
+	{
+	  encoded[1]=192+((length-192)>>8);
+	  encoded[2]=(length-192);
+	  bytes=3;
+	}
+      else
+	{
+	  encoded[1]=length;
+	  bytes=2;
+	}
     }
 
   return output_bytes(encoded,bytes);

@@ -1,5 +1,8 @@
 #!/bin/sh
 
-../paperkey --secret-key ${srcdir}/papertest.sec --output papertest.txt || exit 1
-../paperkey --secrets papertest.txt --pubring ${srcdir}/papertest.pub --output regen.pgp || exit 1
-cmp ./regen.pgp ${srcdir}/papertest.sec
+for type in dsaelg ecc ; do
+    ../paperkey --secret-key ${srcdir}/papertest-${type}.sec --output papertest-${type}.txt || exit 1
+    ../paperkey --secrets papertest-${type}.txt --pubring ${srcdir}/papertest-${type}.pub --output regen.pgp || exit 1
+    cmp ./regen.pgp ${srcdir}/papertest-${type}.sec || exit 1
+    echo -n "$type "
+done

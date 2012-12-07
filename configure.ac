@@ -4,7 +4,7 @@
 AC_PREREQ(2.61)
 AC_INIT([paperkey],[1.3-devel],[dshaw@jabberwocky.com])
 m4_define(_COPYRIGHT_STRING,
-   [[Copyright (C) 2007, 2008, 2009 David Shaw <dshaw@jabberwocky.com>]])
+   [[Copyright (C) 2007, 2008, 2009, 2012 David Shaw <dshaw@jabberwocky.com>]])
 AC_COPYRIGHT(_COPYRIGHT_STRING)
 AC_USE_SYSTEM_EXTENSIONS
 AC_CONFIG_SRCDIR([paperkey.c])
@@ -49,6 +49,8 @@ AC_ARG_ENABLE(optimization,
    fi])
 
 AM_CONDITIONAL(USING_GCC, test "$GCC" = yes)
+
+AC_DEFINE_UNQUOTED(HOST_OS,"$host_os",[Build host OS])
 
 AC_CONFIG_FILES([gl/Makefile Makefile checks/Makefile paperkey.spec])
 AC_OUTPUT

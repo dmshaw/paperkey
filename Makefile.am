@@ -23,5 +23,5 @@ endif
 if MINGW32_BUILD
 EXTRA_DIST+=README.WIN32 paperkey.txt paperkey.exe
 paperkey.txt: paperkey.1
-	nroff -man paperkey.1 | col -b > paperkey.txt
+	nroff -u0 -man paperkey.1 | col -b > paperkey.txt
 endif

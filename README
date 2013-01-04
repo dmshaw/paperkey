@@ -80,15 +80,15 @@ If --output is not specified, the output goes to stdout.  If
 --secret-key is not specified, the data is read from stdin so you can
 do things like:
 
-  gpg --export-secret-key my-key | paperkey --output my-key-text-file.txt
+  gpg --export-secret-key my-key | paperkey | lpr
 
 Some other useful options are:
 
   --output-type      can be "base16" or "raw".  "base16" is human-readable,
 		     and "raw" is useful if you want to pass the
-		     output to another program like a bar code
-		     generator (though note that bar codes have many
-		     of the disadvantages discussed above).
+		     output to another program like a bar code or QR
+		     code generator (though note that scannable codes
+		     have some of the disadvantages discussed above).
 
   --input-type       same as --output-type, but for the restore side of
 		     things.  By default the input type is inferred
@@ -108,11 +108,15 @@ Security
 --------
 
 Note that paperkey does not change the security requirements of
-storing a secret key.  If your key has a passphrase on it (i.e. is
+storing a secret key.  In fact, paperkey doesn't do any crypto at all,
+but just saves and restores the original secret key, whether it is
+encrypted or not.  So, if your key has a passphrase on it (i.e. is
 encrypted), the paper copy is similarly encrypted.  If your key has no
 passphrase, neither does the paper copy.  Whatever the passphrase (or
 lack thereof) was on the original secret key will be the same on the
-reconstructed key.
+reconstructed key.  Also note that as with any backup or archiving
+system, it is prudent to verify you can restore the key from your
+paper copy before filing the paper away.
 
 Universal Binaries on Apple OS X
 --------------------------------
@@ -145,5 +149,4 @@ RPM
 Paperkey ships with a RPM spec file.  You can build the RPM with the
 usual "rpmbuild -ta /path/to/the/paperkey/tarball.tar.gz".
 
-Paperkey is Copyright (C) 2007, 2008, 2009 by David Shaw
-
+Paperkey is Copyright (C) 2007, 2008, 2009, 2012 by David Shaw

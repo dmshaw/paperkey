@@ -1,5 +1,7 @@
 2013-01-03  David Shaw  <dshaw@jabberwocky.com>
 
+	* NEWS, configure.ac: Post-release commit.
+
 	* NEWS, configure.ac: Preparing 1.3 release.
 
 	* README: Clarify language a bit.

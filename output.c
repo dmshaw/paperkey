@@ -222,10 +222,10 @@ output_openpgp_header(unsigned char tag,size_t length)
   unsigned char encoded[6];
   size_t bytes;
 
-  /* We do the same "tag under 16, use old-style packets" that many
-     OpenPGP programs use.  This helps make the resulting key
-     byte-for-byte identical.  This is not a guarantee (it's legal for
-     the generating program to use whatever packet style it likes),
+  /* We use the same "tag under 16, use old-style packets" rule that
+     many OpenPGP programs do.  This helps make the resulting key
+     byte-for-byte identical.  It's not a guarantee, as it is legal
+     for the generating program to use whatever packet style it likes,
      but does help avoid questions why the input to paperkey might not
      equal the output. */
 

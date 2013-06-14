@@ -1,4 +1,4 @@
-.\" paperkey manpage copyright (C) 2007, 2012 Peter Palfrader <peter@palfrader.org>
+.\" paperkey manpage copyright (C) 2007, 2012, 2013 Peter Palfrader <peter@palfrader.org>
 .\" Examples have been taken from David Shaw's README.
 .\"
 .\" This document is free software; you can redistribute it and/or modify
@@ -54,11 +54,11 @@ With GnuPG, PGP, or other OpenPGP implementations the secret key
 usually contains a lot more than just the secret numbers that are
 important.  They also hold all the public values of key pairs, user
 ids, expiration times and more.  In order to minimize the information
-that has to be entered manually or with the help of OCR software,
-\fBpaperkey\fR extracts just the secret information out of OpenPGP
-secret keys.  For recovering a secret key it is assumed that the
-public key is still available, for instance from public Internet
-keyservers.
+that has to be entered manually or with the help of OCR, QR code or
+similar software, \fBpaperkey\fR extracts just the secret information
+out of OpenPGP secret keys.  For recovering a secret key it is assumed
+that the public key is still available, for instance from public
+Internet keyservers.
 .SH DESCRIPTION
 \fBpaperkey\fR has two modes of operation:
 .PP

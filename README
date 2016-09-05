@@ -120,31 +120,6 @@ reconstructed key.  Also note that as with any backup or archiving
 system, it is prudent to verify you can restore the key from your
 paper copy before filing the paper away.
 
-Universal Binaries on Apple OS X
---------------------------------
-
-You can build a universal ("fat") binary that will work on both PPC
-and Intel Macs, whether 32 or 64-bit, with the appropriate variation
-of:
-
-  ./configure CFLAGS="-arch ppc -arch i386" --disable-dependency-tracking
- 
-Available architectures are any combination of "i386", "x86_64",
-"ppc", or "ppc64".
-
-If you are doing the build on a OS X 10.4 (Tiger) PPC machine you may
-need to add the following to those CFLAGS:
-
-  "-isysroot /Developer/SDKs/MacOSX10.4u.sdk"
-
-The additional isysroot is not necessary on Intel Tiger boxes, or any
-Leopard (or later) boxes.
-
-Note that there is little point in building a universal binary unless
-you plan to run the same binary on both a PPC and Intel Mac.
-Generally this is only useful if you are distributing the binary to
-other people and want it to work on older Macs.
-
 RPM
 ---
 

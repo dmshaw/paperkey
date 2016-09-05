@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2007, 2012 David Shaw <dshaw@jabberwocky.com>
+ * Copyright (C) 2007, 2012, 2016 David Shaw <dshaw@jabberwocky.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -35,5 +35,6 @@ ssize_t output_bytes(const unsigned char *buf,size_t length);
 ssize_t output_length16(size_t length);
 ssize_t output_openpgp_header(unsigned char tag,size_t length);
 void output_finish(void);
+void set_binary_mode(FILE *stream);
 
 #endif /* !_OUTPUT_H_ */

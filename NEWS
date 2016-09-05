@@ -1,6 +1,10 @@
 Noteworthy changes in version 1.4 (unreleased)
 ----------------------------------------------
 
+    * Fix binary vs text output mismatch when using "--output-type
+      raw" on Windows platforms.  Does not affect any non-Windows
+      platforms.  Found by Thierry Ambrus.
+
 
 Noteworthy changes in version 1.3 (2013-01-03)
 ----------------------------------------------

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2007, 2008, 2009, 2012 David Shaw <dshaw@jabberwocky.com>
+ * Copyright (C) 2007, 2008, 2009, 2012, 2016 David Shaw <dshaw@jabberwocky.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,6 +22,10 @@
 #include <stdlib.h>
 #include <time.h>
 #include <assert.h>
+#ifdef _WIN32
+#include <io.h>
+#include <fcntl.h>
+#endif
 #include "packets.h"
 #include "output.h"
 
@@ -137,7 +141,12 @@ output_start(const char *name,enum data_type type,
 	return -1;
     }
   else
-    output=stdout;
+    {
+      if(type==RAW)
+	set_binary_mode(stdout);
+
+      output=stdout;
+    }
 
   output_type=type;
 
@@ -287,4 +296,19 @@ void
 output_finish(void)
 {
   output_bytes(NULL,0);
+}
+
+void
+set_binary_mode(FILE *stream)
+{
+#ifdef _WIN32
+  if(_setmode(_fileno(stream),_O_BINARY)==-1)
+    {
+      fprintf(stderr,"Unable to set stream mode to binary: %s\n",
+	      strerror(errno));
+      exit(1);
+    }
+#else
+  (void)stream;
+#endif
 }

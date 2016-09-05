@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2007, 2008, 2009, 2012 David Shaw <dshaw@jabberwocky.com>
+ * Copyright (C) 2007, 2008, 2009, 2012, 2016 David Shaw <dshaw@jabberwocky.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,10 +24,6 @@
 #include <errno.h>
 #include <sys/types.h>
 #include <sys/stat.h>
-#ifdef _WIN32
-#include <io.h>
-#include <fcntl.h>
-#endif
 #include "output.h"
 #include "extract.h"
 #include "restore.h"
@@ -102,14 +98,7 @@ main(int argc,char *argv[])
   enum data_type output_type=BASE16;
   enum data_type input_type=AUTO;
 
-#ifdef _WIN32
-  if(_setmode(_fileno(stdin),_O_BINARY)==-1)
-    {
-      fprintf(stderr,"Unable to set stdin mode to binary: %s\n",
-	      strerror(errno));
-      exit(1);
-    }
-#endif
+  set_binary_mode(stdin);
 
   secret_key=secrets=stdin;
 

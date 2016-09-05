@@ -94,7 +94,9 @@ Some other useful options are:
 		     things.  By default the input type is inferred
 		     automatically from the input data.
 
-  --output-width     sets the width of base16 output
+  --output-width     sets the width of base16 output (i.e. given your font,
+  		     how many columns fit on the paper you're printing on)
+		     Defaults to 78.
 
   --ignore-crc-error allows paperkey to continue when reconstructing
 		     even if it detects data corruption in the input.

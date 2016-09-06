@@ -1,6 +1,8 @@
 2016-09-05  David Shaw  <dshaw@jabberwocky.com>
 
-	* NEWS, configure: Preparing 1.4 release.
+	* NEWS, configure.ac: Post-release commit.
+
+	* NEWS, configure.ac: Preparing 1.4 release.
 
 	* NEWS, output.h, output.c, paperkey.c (set_binary_mode): Fix
 	binary vs text output mismatch when using "--output-type raw" on

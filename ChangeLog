@@ -1,3 +1,17 @@
+2016-09-05  David Shaw  <dshaw@jabberwocky.com>
+
+	* NEWS, configure: Preparing 1.4 release.
+
+	* NEWS, output.h, output.c, paperkey.c (set_binary_mode): Fix
+	binary vs text output mismatch when using "--output-type raw" on
+	Windows platforms.  Does not affect any non-Windows platforms.
+	Found by Thierry Ambrus.
+
+	* README: Clarify output-width a bit.
+
+	* paperkey.spec.in: Use %license for the COPYING file and run the
+	self checks during build.
+
 2016-09-04  David Shaw  <dshaw@jabberwocky.com>
 
 	* README: PowerPC Macs are basically gone, so remove the OSX

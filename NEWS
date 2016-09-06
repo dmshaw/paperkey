@@ -1,4 +1,4 @@
-Noteworthy changes in version 1.4 (unreleased)
+Noteworthy changes in version 1.4 (2016-09-05)
 ----------------------------------------------
 
     * Fix binary vs text output mismatch when using "--output-type

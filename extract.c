@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2007 David Shaw <dshaw@jabberwocky.com>
+ * Copyright (C) 2007, 2017 David Shaw <dshaw@jabberwocky.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -68,6 +68,8 @@ extract(FILE *input,const char *outname,enum data_type output_type)
   while((packet=parse(input,7,5)))
     {
       offset=extract_secrets(packet);
+      if(offset==-1)
+      	return 1;
 
       if(verbose>1)
 	fprintf(stderr,"Secret subkey offset is %d\n",offset);

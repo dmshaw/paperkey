@@ -1,3 +1,10 @@
+2017-10-23  David Shaw  <dshaw@jabberwocky.com>
+
+	* parse.c (extract_secrets): Add support for EdDSA as per
+	https://tools.ietf.org/html/draft-koch-eddsa-for-openpgp-04.  Note
+	that this is an expired draft, but GnuPG is using algorithm 22 for
+	it.
+
 2016-09-05  David Shaw  <dshaw@jabberwocky.com>
 
 	* NEWS, configure.ac: Post-release commit.

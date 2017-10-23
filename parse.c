@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2007, 2008, 2012 David Shaw <dshaw@jabberwocky.com>
+ * Copyright (C) 2007, 2008, 2012, 2017 David Shaw <dshaw@jabberwocky.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -309,6 +309,9 @@ extract_secrets(struct packet *packet)
       break;
 
     case 19: /* ECDSA */
+    case 22: /* EdDSA - note that this is from an expired draft
+		https://tools.ietf.org/html/draft-koch-eddsa-for-openpgp-04,
+		but GnuPG is using algorithm 22 for it. */
       /* Skip the curve ID and its length byte, plus an MPI */
       offset+=packet->buf[offset]+1;
       if(packet->len<=offset)

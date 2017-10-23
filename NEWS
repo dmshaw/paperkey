@@ -1,6 +1,12 @@
 Noteworthy changes in version 1.5 (unreleased)
 ----------------------------------------------
 
+    * Added support for OpenPGP EdDSA elliptic curve keys as specified
+      in draft-koch-eddsa-for-openpgp-04.
+
+    * Properly handle a secret key where the primary key is of a known
+      type, but a subkey is not of a known type.
+
 
 Noteworthy changes in version 1.4 (2016-09-05)
 ----------------------------------------------

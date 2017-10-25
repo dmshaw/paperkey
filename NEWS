@@ -1,4 +1,4 @@
-Noteworthy changes in version 1.5 (unreleased)
+Noteworthy changes in version 1.5 (2017-10-25)
 ----------------------------------------------
 
     * Added support for OpenPGP EdDSA elliptic curve keys as specified

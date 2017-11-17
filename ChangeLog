@@ -1,3 +1,8 @@
+2017-11-17  David Shaw  <dshaw@jabberwocky.com>
+
+	* checks: Various improvements to allow running the selftests in
+	parallel (Debian bug 881792).  Reported by Peter Palfrader.
+
 2017-10-23  David Shaw  <dshaw@jabberwocky.com>
 
 	* extract.c (extract): Properly fail if we cannot parse a secret

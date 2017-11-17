@@ -6,7 +6,7 @@
 2017-10-23  David Shaw  <dshaw@jabberwocky.com>
 
 	* extract.c (extract): Properly fail if we cannot parse a secret
-	subkey packet.  Discovered by Osamu Aoki and Peter Palfrader.
+	subkey packet.  Reported by Osamu Aoki and Peter Palfrader.
 
 	* parse.c (extract_secrets): Add support for EdDSA as per
 	https://tools.ietf.org/html/draft-koch-eddsa-for-openpgp-04.  Note

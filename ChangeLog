@@ -1,7 +1,7 @@
 2017-11-17  David Shaw  <dshaw@jabberwocky.com>
 
 	* checks: Various improvements to allow running the selftests in
-	parallel (Debian bug 881792).  Reported by Peter Palfrader.
+	parallel (Debian bug 881792).  Reported by Daniel Kahn Gillmor.
 
 2017-10-23  David Shaw  <dshaw@jabberwocky.com>
 

@@ -8,6 +8,7 @@ etc) keys is to print them out on paper.  Paper and ink have amazingly
 long retention qualities - far longer than the magnetic or optical
 means that are generally used to back up computer data.
 
+
 Paper?  Seriously?
 ------------------
 
@@ -21,6 +22,7 @@ CD-R and/or tape cassette and/or USB key and/or hard drive the secret
 key is stored on becomes unusable, the paper copy can be used to
 restore the secret key.
 
+
 What paperkey does
 ------------------
 
@@ -28,40 +30,44 @@ Due to metadata and redundancy, OpenPGP secret keys are significantly
 larger than just the "secret bits".  In fact, the secret key contains
 a complete copy of the public key.  Since the public key generally
 doesn't need to be escrowed (most people have many copies of it on
-various keyservers, web pages, etc), only extracting the secret parts
-can be a real advantage.
+various keyservers, web pages, or similar), only archiving the secret
+parts can be a real advantage.
 
-Paperkey extracts just those secret bytes and prints them.  To
-reconstruct, you re-enter those bytes (whether by hand or via OCR) and
-paperkey can use them to transform your existing public key into a
-secret key.
+Paperkey extracts just those secret bytes and prints them in a easily
+handled format.  To reconstruct, you re-enter those bytes (whether by
+hand or via OCR) and paperkey uses them to transform your existing
+public key into a secret key.
 
 For example, the regular DSA+Elgamal secret key I just tested comes
 out to 1281 bytes.  The secret parts of that (plus some minor packet
 structure) come to only 149 bytes.  It's a lot easier to re-enter 149
 bytes correctly.
 
+As with any backup or archiving system, it is prudent to verify you
+can restore the key from your paper copy before filing the paper away.
+
+
 Aren't CD-Rs supposed to last a long time?
 ------------------------------------------
 
-They're certainly advertised to (I've seen some pretty incredible
+They're certainly advertised to (and I've seen some pretty incredible
 claims of 100 years or more), but in practice it doesn't really work
 out that way.  The manufacturing of the media, the burn quality, the
 burner quality, the storage, etc, all have a significant impact on how
 long an optical disc will last.  Some tests show that you're lucky to
 get 10 years.
 
-For paper, on the other hand, to claim it will last for 100 years is
-not even vaguely impressive.  High-quality paper with good ink
-regularly lasts many hundreds of years even under less than optimal
-conditions.
+In comparison, to claim that paper will last for 100 years is not even
+vaguely impressive.  High-quality paper with good ink regularly lasts
+many hundreds of years even under less than optimal conditions.
 
 Another bonus is that ink on paper is readable by humans.  Not all
 backup methods will be readable 50 years later, so even if you have
 the backup, you can't easily buy a drive to read it.  I doubt this
 will happen anytime soon with CD-R as there are just so many of them
-out there, but the storage industry is littered with old now-dead ways
-of storing data.
+out there, but the storage industry is littered with old, now-dead
+methods of storing data.
+
 
 Examples
 --------
@@ -84,11 +90,12 @@ do things like:
 
 Some other useful options are:
 
-  --output-type      can be "base16" or "raw".  "base16" is human-readable,
-		     and "raw" is useful if you want to pass the
-		     output to another program like a bar code or QR
-		     code generator (though note that scannable codes
-		     have some of the disadvantages discussed above).
+  --output-type      can be "base16" or "raw".  "base16" is human
+		     readable, and "raw" is useful if you want to pass
+		     the output to another program like a bar code or
+		     QR code generator (athough note that scannable
+		     codes have some of the longevity disadvantages
+		     discussed above).
 
   --input-type       same as --output-type, but for the restore side of
 		     things.  By default the input type is inferred
@@ -106,24 +113,24 @@ Some other useful options are:
 
 Full documentation for all options is in the man page.
 
+
 Security
 --------
 
 Note that paperkey does not change the security requirements of
 storing a secret key.  In fact, paperkey doesn't do any crypto at all,
 but just saves and restores the original secret key, whether it is
-encrypted or not.  So, if your key has a passphrase on it (i.e. is
+encrypted or not.  If your key has a passphrase on it (i.e. is
 encrypted), the paper copy is similarly encrypted.  If your key has no
 passphrase, neither does the paper copy.  Whatever the passphrase (or
 lack thereof) was on the original secret key will be the same on the
-reconstructed key.  Also note that as with any backup or archiving
-system, it is prudent to verify you can restore the key from your
-paper copy before filing the paper away.
+reconstructed key.
+
 
 RPM
 ---
 
-Paperkey ships with a RPM spec file.  You can build the RPM with the
+Paperkey ships with a RPM spec file.  You can build an RPM with the
 usual "rpmbuild -ta /path/to/the/paperkey/tarball.tar.gz".
 
-Paperkey is Copyright (C) 2007, 2008, 2009, 2012, 2016 by David Shaw
+Paperkey is Copyright (C) 2007-2018 by David Shaw

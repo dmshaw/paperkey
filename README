@@ -39,9 +39,17 @@ hand or via OCR) and paperkey uses them to transform your existing
 public key into a secret key.
 
 For example, the regular DSA+Elgamal secret key I just tested comes
-out to 1281 bytes.  The secret parts of that (plus some minor packet
-structure) come to only 149 bytes.  It's a lot easier to re-enter 149
-bytes correctly.
+out to 1281 bytes.  The secret parts of that key (plus some minor
+packet structure) come to only 149 bytes.  It's a lot easier to
+re-enter 149 bytes correctly.
+
+Different key algorithms will benefit to a different degree from this
+size reduction.  In general, DSA or Elgamal keys benefit the most,
+shrinking to around 10% of the original key size, and RSA keys benefit
+the least, only shrinking to about 50% of the original key size.  ECC
+keys are in between, shrinking to around 20-25% of the original, but
+of course, ECC keys are quite small to begin with, and 25% of a small
+number can compare well to 10% of a larger number.
 
 As with any backup or archiving system, it is prudent to verify you
 can restore the key from your paper copy before filing the paper away.
@@ -93,7 +101,7 @@ Some other useful options are:
   --output-type      can be "base16" or "raw".  "base16" is human
 		     readable, and "raw" is useful if you want to pass
 		     the output to another program like a bar code or
-		     QR code generator (athough note that scannable
+		     QR code generator (although note that scannable
 		     codes have some of the longevity disadvantages
 		     discussed above).
 

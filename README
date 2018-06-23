@@ -77,6 +77,19 @@ out there, but the storage industry is littered with old, now-dead
 methods of storing data.
 
 
+Security
+--------
+
+Note that paperkey does not change the security requirements of
+storing a secret key.  In fact, paperkey doesn't do any crypto at all,
+but just saves and restores the original secret key, whether it is
+encrypted or not.  If your key has a passphrase on it (i.e. is
+encrypted), the paper copy is similarly encrypted.  If your key has no
+passphrase, neither does the paper copy.  Whatever the passphrase (or
+lack thereof) was on the original secret key will be the same on the
+reconstructed key.
+
+
 Examples
 --------
 
@@ -120,19 +133,6 @@ Some other useful options are:
 		     multiple times for more verbosity.
 
 Full documentation for all options is in the man page.
-
-
-Security
---------
-
-Note that paperkey does not change the security requirements of
-storing a secret key.  In fact, paperkey doesn't do any crypto at all,
-but just saves and restores the original secret key, whether it is
-encrypted or not.  If your key has a passphrase on it (i.e. is
-encrypted), the paper copy is similarly encrypted.  If your key has no
-passphrase, neither does the paper copy.  Whatever the passphrase (or
-lack thereof) was on the original secret key will be the same on the
-reconstructed key.
 
 
 RPM

@@ -1,4 +1,4 @@
-Noteworthy changes in version 1.6 (unreleased)
+Noteworthy changes in version 1.6 (2018-10-19)
 ----------------------------------------------
 
     * Selftest updates to allow running tests in parallel via make -j

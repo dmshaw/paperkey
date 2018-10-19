@@ -1,6 +1,9 @@
 Noteworthy changes in version 1.6 (unreleased)
 ----------------------------------------------
 
+    * Selftest updates to allow running tests in parallel via make -j
+      (Debian bug 881792).  Reported by Daniel Kahn Gillmor.
+
 
 Noteworthy changes in version 1.5 (2017-10-25)
 ----------------------------------------------

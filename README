@@ -93,7 +93,7 @@ reconstructed key.
 Examples
 --------
 
-Take the secret key in key.gpg and generate a text file
+Take the secret key in my-secret-key.gpg and generate a text file
 to-be-printed.txt that contains the secret data:
 
   paperkey --secret-key my-secret-key.gpg --output to-be-printed.txt
@@ -116,7 +116,7 @@ Some other useful options are:
 		     the output to another program like a bar code or
 		     QR code generator (although note that scannable
 		     codes have some of the longevity disadvantages
-		     discussed above).
+		     discussed above).  Defaults to "base16".
 
   --input-type       same as --output-type, but for the restore side of
 		     things.  By default the input type is inferred
@@ -141,7 +141,7 @@ RPM
 Paperkey ships with a RPM spec file.  You can build an RPM with the
 usual "rpmbuild -ta /path/to/the/paperkey/tarball.tar.gz".
 
-Paperkey is Copyright (C) 2007-2018 by David Shaw
+Paperkey is Copyright (C) 2007-2020 by David Shaw
 
 -----BEGIN PGP PUBLIC KEY BLOCK-----
 

@@ -1,6 +1,6 @@
-		  Paperkey - an OpenPGP key archiver
-		  ----------------------------------
-		  David Shaw <dshaw@jabberwocky.com>
+# Paperkey - an OpenPGP key archiver
+
+### David Shaw <dshaw@jabberwocky.com>
 
 
 A reasonable way to achieve a long term backup of OpenPGP (GnuPG, PGP,
@@ -96,41 +96,41 @@ Examples
 Take the secret key in my-secret-key.gpg and generate a text file
 to-be-printed.txt that contains the secret data:
 
-  paperkey --secret-key my-secret-key.gpg --output to-be-printed.txt
+    paperkey --secret-key my-secret-key.gpg --output to-be-printed.txt
 
 Take the secret key data in my-key-text-file.txt and combine it with
 my-public-key.gpg to reconstruct my-secret-key.gpg:
 
-  paperkey --pubring my-public-key.gpg --secrets my-key-text-file.txt --output my-secret-key.gpg
+    paperkey --pubring my-public-key.gpg --secrets my-key-text-file.txt --output my-secret-key.gpg
 
 If --output is not specified, the output goes to stdout.  If
 --secret-key is not specified, the data is read from stdin so you can
 do things like:
 
-  gpg --export-secret-key my-key | paperkey | lpr
+    gpg --export-secret-key my-key | paperkey | lpr
 
 Some other useful options are:
 
-  --output-type      can be "base16" or "raw".  "base16" is human
-		     readable, and "raw" is useful if you want to pass
-		     the output to another program like a bar code or
-		     QR code generator (although note that scannable
-		     codes have some of the longevity disadvantages
-		     discussed above).  Defaults to "base16".
+    --output-type      can be "base16" or "raw".  "base16" is human
+                       readable, and "raw" is useful if you want to pass
+                       the output to another program like a bar code or
+                       QR code generator (although note that scannable
+                       codes have some of the longevity disadvantages
+                       discussed above).  Defaults to "base16".
 
-  --input-type       same as --output-type, but for the restore side of
-		     things.  By default the input type is inferred
-		     automatically from the input data.
+    --input-type       same as --output-type, but for the restore side of
+                       things.  By default the input type is inferred
+                       automatically from the input data.
 
-  --output-width     sets the width of base16 output (i.e. given your font,
-  		     how many columns fit on the paper you're printing on).
-		     Defaults to 78.
+    --output-width     sets the width of base16 output (i.e. given your font,
+              		     how many columns fit on the paper you're printing on).
+                       Defaults to 78.
 
-  --ignore-crc-error allows paperkey to continue when reconstructing
-		     even if it detects data corruption in the input.
+    --ignore-crc-error allows paperkey to continue when reconstructing
+                       even if it detects data corruption in the input.
 
-  --verbose (or -v)  be chatty about what is happening.  Repeat this
-		     multiple times for more verbosity.
+    --verbose (or -v)  be chatty about what is happening.  Repeat this
+                       multiple times for more verbosity.
 
 Full documentation for all options is in the man page.
 
@@ -139,10 +139,35 @@ RPM
 ---
 
 Paperkey ships with a RPM spec file.  You can build an RPM with the
-usual "rpmbuild -ta /path/to/the/paperkey/tarball.tar.gz".
+usual
+```
+rpmbuild -ta /path/to/the/paperkey/tarball.tar.gz
+```
+
+Building
+--------
+
+Paperkey uses [gnulib](https://www.gnu.org/software/gnulib/) to provide SHA-1 and getopt_long functionality as they're not available on all platforms. If you want to build directly from the github version, try this:
+
+```
+git clone git://git.savannah.gnu.org/gnulib.git  # there is also a github mirror at https://github.com/coreutils/gnulib.git
+git clone https://github.com/dmshaw/paperkey.git
+cd paperkey
+../gnulib/gnulib-tool --update
+autoreconf -f -i
+./configure
+make check
+```
+
+Alternately, you can use the [releases in github](https://github.com/dmshaw/paperkey/releases). Those include the gnulib code as part of the package.
+
+
+Copyright
+---------
 
 Paperkey is Copyright (C) 2007-2020 by David Shaw
 
+```
 -----BEGIN PGP PUBLIC KEY BLOCK-----
 
 mQILBDxUyXkBEACgg6vxNPigg9FQz14CkPtR/dEq3sCjK1r4+2oyeoRno+pqZ6Z7
@@ -211,3 +236,4 @@ OuMQNb7RSiuQ4KOLW4mirngWdIpxwtM4w0arnG4ueZ8dcSi1bkSKHKfjhI2AkjJW
 /L2IWEAA37ce96gg9YYHQSTTc9wu8NovK2fRO5BYsKUlbbK5w5OKytXE2tZN4Q5I
 =DSRI
 -----END PGP PUBLIC KEY BLOCK-----
+```

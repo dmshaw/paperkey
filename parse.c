@@ -223,6 +223,44 @@ calculate_fingerprint(struct packet *packet,size_t public_len,
 
 #define MPI_LENGTH(_start) (((((_start)[0]<<8 | (_start)[1]) + 7) / 8) + 2)
 
+/* Advance *offset past an MPI.  Returns -1 (leaving *offset alone) if
+   the MPI header or body would run past the end of the packet.  The
+   caller must ensure that *offset <= packet->len. */
+static int
+skip_mpi(const struct packet *packet,size_t *offset)
+{
+  size_t size;
+
+  if(packet->len-*offset<2)
+    return -1;
+
+  size=MPI_LENGTH(&packet->buf[*offset]);
+  if(size>packet->len-*offset)
+    return -1;
+
+  *offset+=size;
+  return 0;
+}
+
+/* Advance *offset past a length byte and the data it describes.
+   Returns -1 if that would run past the end of the packet.  The caller
+   must ensure that *offset <= packet->len. */
+static int
+skip_counted(const struct packet *packet,size_t *offset)
+{
+  size_t size;
+
+  if(*offset>=packet->len)
+    return -1;
+
+  size=packet->buf[*offset]+1;
+  if(size>packet->len-*offset)
+    return -1;
+
+  *offset+=size;
+  return 0;
+}
+
 ssize_t
 extract_secrets(struct packet *packet)
 {
@@ -257,39 +295,48 @@ extract_secrets(struct packet *packet)
     {
     case 1: /* RSA */
       /* Skip 2 MPIs */
-      offset+=MPI_LENGTH(&packet->buf[offset]);
+      if(skip_mpi(packet,&offset))
+	return -1;
       if(packet->len<=offset)
 	return -1;
-      offset+=MPI_LENGTH(&packet->buf[offset]);
+      if(skip_mpi(packet,&offset))
+	return -1;
       if(packet->len<=offset)
 	return -1;
       break;
 
     case 16: /* Elgamal */
       /* Skip 3 MPIs */
-      offset+=MPI_LENGTH(&packet->buf[offset]);
+      if(skip_mpi(packet,&offset))
+	return -1;
       if(packet->len<=offset)
 	return -1;
-      offset+=MPI_LENGTH(&packet->buf[offset]);
+      if(skip_mpi(packet,&offset))
+	return -1;
       if(packet->len<=offset)
 	return -1;
-      offset+=MPI_LENGTH(&packet->buf[offset]);
+      if(skip_mpi(packet,&offset))
+	return -1;
       if(packet->len<=offset)
 	return -1;
       break;
 
     case 17: /* DSA */
       /* Skip 4 MPIs */
-      offset+=MPI_LENGTH(&packet->buf[offset]);
+      if(skip_mpi(packet,&offset))
+	return -1;
       if(packet->len<=offset)
 	return -1;
-      offset+=MPI_LENGTH(&packet->buf[offset]);
+      if(skip_mpi(packet,&offset))
+	return -1;
       if(packet->len<=offset)
 	return -1;
-      offset+=MPI_LENGTH(&packet->buf[offset]);
+      if(skip_mpi(packet,&offset))
+	return -1;
       if(packet->len<=offset)
 	return -1;
-      offset+=MPI_LENGTH(&packet->buf[offset]);
+      if(skip_mpi(packet,&offset))
+	return -1;
       if(packet->len<=offset)
 	return -1;
       break;
@@ -297,13 +344,16 @@ extract_secrets(struct packet *packet)
     case 18: /* ECDH */
       /* Skip the curve ID and its length byte, plus an MPI, plus the
 	 KDF parameters and their length byte */
-      offset+=packet->buf[offset]+1;
+      if(skip_counted(packet,&offset))
+	return -1;
       if(packet->len<=offset)
 	return -1;
-      offset+=MPI_LENGTH(&packet->buf[offset]);
+      if(skip_mpi(packet,&offset))
+	return -1;
       if(packet->len<=offset)
 	return -1;
-      offset+=packet->buf[offset]+1;
+      if(skip_counted(packet,&offset))
+	return -1;
       if(packet->len<=offset)
 	return -1;
       break;
@@ -313,10 +363,12 @@ extract_secrets(struct packet *packet)
 		https://tools.ietf.org/html/draft-koch-eddsa-for-openpgp-04,
 		but GnuPG is using algorithm 22 for it. */
       /* Skip the curve ID and its length byte, plus an MPI */
-      offset+=packet->buf[offset]+1;
+      if(skip_counted(packet,&offset))
+	return -1;
       if(packet->len<=offset)
 	return -1;
-      offset+=MPI_LENGTH(&packet->buf[offset]);
+      if(skip_mpi(packet,&offset))
+	return -1;
       if(packet->len<=offset)
 	return -1;
       break;
